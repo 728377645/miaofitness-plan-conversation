@@ -41,8 +41,8 @@ def main():
          "--java", "gen",
          "--min-sdk-version", "21",
          "--target-sdk-version", "34",
-         "--version-code", "2",
-         "--version-name", "1.1",
+         "--version-code", "3",
+         "--version-name", "1.2",
          "--auto-add-overlay"])
 
     java_sources = glob.glob(os.path.join(ROOT, "src", "**", "*.java"), recursive=True)
@@ -67,7 +67,7 @@ def main():
              "-storepass", "fitness123", "-keypass", "fitness123",
              "-dname", "CN=Fitness Plan, OU=Personal, O=Personal, L=Unknown, ST=Unknown, C=CN"])
 
-    out = os.path.join(ROOT, "fitness-plan-v1.1.apk")
+    out = os.path.join(ROOT, "fitness-plan-v1.2.apk")
     run(["cmd", "/c", os.path.join(BT, "apksigner.bat"), "sign",
          "--ks", keystore, "--ks-key-alias", "fitness",
          "--ks-pass", "pass:fitness123", "--key-pass", "pass:fitness123",

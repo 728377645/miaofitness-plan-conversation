@@ -24,12 +24,13 @@
 ### 饮食与计划
 - 根据体测数据生成的饮食建议（高蛋白优先、粗细粮搭配、三餐加餐、训练后补充等），可自行编辑
 - AI 给出的计划修改建议可勾选应用，应用前自动保存快照，支持一键撤销
+- 一键填写到各板块：按档案、饮食、训练等分组勾选建议值，支持分组全选/全不选、手动添加字段、从分析文字离线提取，应用后可整体撤销
 
 ### AI 教练
 - 基于体测数据、体重趋势、训练打卡和当前计划生成分析，也可附加自定义问题
 - 支持 DeepSeek、硅基流动 SiliconFlow、自定义接口
 - 填好 API Key 后可自动从 `/models` 拉取模型列表，再手动选择文字模型与视觉模型；支持测试连接和手动输入兜底
-- 分析结果可复制、存入历史
+- 分析结果可复制、存入历史；历史记录支持一键载入对应的填写建议
 
 ### 数据管理
 - 档案、计划、饮食、体重和历史记录全部保存在设备本地
@@ -61,10 +62,10 @@
 ## 安装
 
 ### Android
-从本仓库 Releases 下载 `fitness-plan-v1.1.apk`，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。APK 为自签名，包名 `com.fitnessplan.app`，与 v1.0 使用同一签名，可直接覆盖升级。
+从本仓库 Releases 下载 `fitness-plan-v1.2.apk`，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。APK 为自签名，包名 `com.fitnessplan.app`，与 v1.0 / v1.1 使用同一签名，可直接覆盖升级。
 
 ### iOS
-Releases 提供 `fitness-plan-v1.1.ipa`，由 GitHub Actions 的 macOS runner 构建，版本 1.1（build 2），arm64，ad-hoc 签名。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
+Releases 提供 `fitness-plan-v1.2.ipa`，由 GitHub Actions 的 macOS runner 构建，版本 1.2（build 3），arm64，ad-hoc 签名。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
 
 ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltStore 配合免费 Apple ID 重签名，或用 Xcode 登录免费账号后直接 ▶ Run。
 

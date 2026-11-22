@@ -156,6 +156,21 @@ ul.tips li{margin-bottom:7px}
 .pch .rs{margin:5px 0 0 29px;font-size:11px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
 .pbox .pf{display:flex;gap:8px;padding:10px 12px;background:#fafdfa;border-top:1px solid var(--line)}
 .pbox .pf .btn{flex:1}
+.pbox .pt{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#fafdfa;border-bottom:1px solid var(--line)}
+.pbox .pt .tb{background:var(--g1);color:var(--g7);border:1px solid #d3e8d6;border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pbox .pt .tb.pri{background:var(--g7);color:#fff;border-color:var(--g7)}
+.pbox .pt .cnt{margin-left:auto;font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pgrp{margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.pgrp .gh{display:flex;align-items:center;gap:7px;background:var(--g0);padding:8px 10px;font-size:12px;font-weight:800;color:var(--g9);cursor:pointer;flex-wrap:wrap}
+.pgrp .gh .ic{font-size:14px}
+.pgrp .gh .nm{flex:1;white-space:nowrap}
+.pgrp .gh .num{font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap}
+.pgrp .gh .tb{background:#fff;color:var(--g7);border:1px solid #cfe3d2;border-radius:7px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pgrp .gb{padding:0 10px}
+.pgrp.closed .gb{display:none}
+.pgrp .pch:last-child{border-bottom:none}
+.ai-hist .acts{display:flex;align-items:center;gap:7px;flex:none}
+.ai-hist .hf{background:var(--g1);color:var(--g7);border:1px solid #d3e8d6;border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
 .streak{display:flex;align-items:center;gap:10px}
 .streak .fire{font-size:22px;line-height:1}
 .streak .txt{flex:1;font-size:12px;font-weight:800;color:var(--g9)}
@@ -280,11 +295,11 @@ ul.tips li{margin-bottom:7px}
 
     <section class="page" id="page-plan">
       <div class="seg">
-        <button class="on" onclick="switchSeg('body',this)"><!--pnid:JzIADDu872HZDFW4WYS5pN-->体测</button>
-        <button onclick="switchSeg('diet',this)"><!--pnid:jh7Xo8HlgkM1rBr85NPhV3-->饮食</button>
-        <button onclick="switchSeg('train',this)"><!--pnid:o4v3qt8hoMQuKk9QiGzR2Z-->训练</button>
-        <button onclick="switchSeg('log',this)"><!--pnid:ti84A2euPgylduA9iLIhux-->记录</button>
-        <button onclick="switchSeg('ai',this)"><!--pnid:JGafOADv5yqsyfY874Fev9-->AI</button>
+        <button class="on" data-seg="body" onclick="switchSeg('body',this)"><!--pnid:JzIADDu872HZDFW4WYS5pN-->体测</button>
+        <button data-seg="diet" onclick="switchSeg('diet',this)"><!--pnid:jh7Xo8HlgkM1rBr85NPhV3-->饮食</button>
+        <button data-seg="train" onclick="switchSeg('train',this)"><!--pnid:o4v3qt8hoMQuKk9QiGzR2Z-->训练</button>
+        <button data-seg="log" onclick="switchSeg('log',this)"><!--pnid:ti84A2euPgylduA9iLIhux-->记录</button>
+        <button data-seg="ai" onclick="switchSeg('ai',this)"><!--pnid:JGafOADv5yqsyfY874Fev9-->AI</button>
       </div>
       <div id="seg-body"></div>
       <div id="seg-diet" style="display:none"></div>
@@ -340,12 +355,21 @@ ul.tips li{margin-bottom:7px}
           <button class="btn ghost sm" onclick="saveAI()" style="flex:1"><!--pnid:WnKBJBvqp3xRwDhV6vbjHp-->存入历史</button>
           <button class="btn ghost sm" id="undoAutoBtn" onclick="undoPatch()" style="flex:1; display:none"><!--pnid:OBhXr5uLwKs7gPMbMUoqN9-->↩ 撤销</button>
         </div>
+        <div style="display:flex; gap:8px; margin-top:8px">
+          <button class="btn blue sm" onclick="extractFillFromText()" style="flex:1">📥 从分析文字提取</button>
+          <button class="btn ghost sm" onclick="addManualFill()" style="flex:1">+ 手动添加填写项</button>
+        </div>
           <div class="pbox" id="aiPatchBox" style="display:none">
-            <div class="ph"><!--pnid:nccfk8MKY9tQM2GQjngnKo-->✏️ AI 计划修改建议 <small><!--pnid:sXrM02HEsdlwWM4n0tpMO1-->勾选后应用 · 可先微调</small></div>
+            <div class="ph">📥 一键填写到各板块 <small>按部分勾选 · 可微调 · 应用后可撤销</small></div>
+            <div class="pt">
+              <button class="tb" onclick="fillSelectAll(true)">全选</button>
+              <button class="tb" onclick="fillSelectAll(false)">全不选</button>
+              <span class="cnt" id="fillCount"></span>
+            </div>
             <div class="pl" id="aiPatchList"></div>
             <div class="pf">
-              <button class="btn sm" onclick="applyPatches()"><!--pnid:lxJ781TebQ2p4lkEAfRVFi-->应用到计划</button>
-              <button class="btn ghost sm" onclick="undoPatch()"><!--pnid:YIyGVvKkZBfeBVW9Q4BR6j-->撤销上次应用</button>
+              <button class="btn sm" onclick="applyPatches()">✓ 一键填写选中项</button>
+              <button class="btn ghost sm" onclick="undoPatch()">↩ 撤销上次填写</button>
             </div>
           </div>
           <div class="note b" style="font-size:11px"><!--pnid:ZRAyEmy00g4XGuQIyQ3arQ-->AI 建议只是草稿，应用后仍可在各分段或「我的」页面手动改任何内容；应用前会自动保存快照，可一键撤销。</div>
@@ -1276,37 +1300,61 @@ function pickType(t){aiType=t;state.ai.lastType=t;save();renderAITypes();}
 function renderAIHistory(){
   var hs=state.ai.history||[];
   document.getElementById('aiHistory').innerHTML=hs.length?hs.slice().reverse().map(function(h,i){
+    var idx=hs.length-1-i;
     var nm=(AI_TYPES.filter(function(t){return t[0]===h.type;})[0]||['','自由提问'])[1];
-    return '<div class="ai-hist" onclick="viewHistory('+(hs.length-1-i)+')"><span>'+esc(nm)+' · '+esc(h.q||'综合分析')+'</span><span class="tm">'+esc(h.time)+'</span></div>';
+    var cnt=(h.patch&&h.patch.changes)?h.patch.changes.length:0;
+    return '<div class="ai-hist" onclick="viewHistory('+idx+')">'
+      +'<span>'+esc(nm)+' · '+esc(h.q||'综合分析')+'</span>'
+      +'<span class="acts"><span class="tm">'+esc(h.time)+'</span>'
+      +'<button class="hf" onclick="event.stopPropagation();fillFromHistory('+idx+')">📥 一键填写'+(cnt?' ('+cnt+')':'')+'</button></span></div>';
   }).join(''):'<div class="empty">还没有分析记录</div>';
 }
-function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析');}}
+function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析，可点「📥 一键填写」');}}
 
 function getPath(path){return path.split('.').reduce(function(o,k){return o[k];},state);}
 function setPath(path,v){var ps=path.split('.'),o=state;for(var i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=v;}
+var FILL_GROUPS=[
+  {k:'body',name:'体测 / 身体数据',icon:'📏',seg:'body'},
+  {k:'diet',name:'饮食计划',icon:'🥗',seg:'diet'},
+  {k:'train',name:'训练方案',icon:'🏋️',seg:'train'},
+  {k:'week',name:'每周训练安排',icon:'📅',seg:'train'},
+  {k:'lib',name:'动作库',icon:'📚',seg:'train'}
+];
+function fillGroupName(k){var g=FILL_GROUPS.filter(function(x){return x.k===k;})[0];return g?g.name:'其他';}
 function buildPatchFields(){
   var f={
-    'profile.goal':{label:'目标体重 (kg)',type:'num',min:30,max:150},
-    'profile.goalFat':{label:'目标体脂率 (%)',type:'num',min:10,max:40},
-    'profile.goalWhr':{label:'目标腰臀比',type:'num',min:0.6,max:1.0},
-    'profile.issues':{label:'需要改善的问题',type:'lines'},
-    'week':{label:'每周训练安排',type:'week'},
-    'library':{label:'动作库',type:'pairs2'},
-    'diet.cal':{label:'每日热量 (kcal)',type:'num',min:800,max:4000},
-    'diet.protein':{label:'蛋白质 (g)',type:'num',min:20,max:400},
-    'diet.fat':{label:'脂肪 (g)',type:'num',min:10,max:200},
-    'diet.carb':{label:'碳水 (g)',type:'num',min:20,max:600},
-    'diet.fiber':{label:'膳食纤维 (g)',type:'num',min:0,max:100},
-    'diet.water':{label:'饮水 (L)',type:'num',min:0.5,max:8},
-    'diet.meals':{label:'每日食谱',type:'meals'},
-    'diet.principles':{label:'饮食原则',type:'lines'}
+    'profile.gender':{label:'性别',type:'gender',g:'body'},
+    'profile.age':{label:'年龄 (岁)',type:'num',min:10,max:100,g:'body'},
+    'profile.height':{label:'身高 (cm)',type:'num',min:100,max:230,g:'body'},
+    'profile.start':{label:'起始体重 (kg)',type:'num',min:20,max:300,g:'body'},
+    'profile.bmi':{label:'BMI',type:'num',min:10,max:60,g:'body'},
+    'profile.bodyFat':{label:'体脂率 (%)',type:'num',min:3,max:60,g:'body'},
+    'profile.whr':{label:'腰臀比',type:'num',min:0.5,max:1.5,g:'body'},
+    'profile.muscle':{label:'骨骼肌 (kg)',type:'num',min:5,max:60,g:'body'},
+    'profile.bmr':{label:'基础代谢 (kcal)',type:'num',min:600,max:4000,g:'body'},
+    'profile.healthScore':{label:'健康评分',type:'num',min:0,max:100,g:'body'},
+    'profile.bodyAge':{label:'身体年龄',type:'num',min:10,max:100,g:'body'},
+    'profile.goal':{label:'目标体重 (kg)',type:'num',min:30,max:150,g:'body'},
+    'profile.goalFat':{label:'目标体脂率 (%)',type:'num',min:10,max:40,g:'body'},
+    'profile.goalWhr':{label:'目标腰臀比',type:'num',min:0.6,max:1.0,g:'body'},
+    'profile.issues':{label:'需要改善的问题',type:'lines',g:'body'},
+    'week':{label:'每周训练安排',type:'week',g:'week'},
+    'library':{label:'动作库',type:'pairs2',g:'lib'},
+    'diet.cal':{label:'每日热量 (kcal)',type:'num',min:800,max:4000,g:'diet'},
+    'diet.protein':{label:'蛋白质 (g)',type:'num',min:20,max:400,g:'diet'},
+    'diet.fat':{label:'脂肪 (g)',type:'num',min:10,max:200,g:'diet'},
+    'diet.carb':{label:'碳水 (g)',type:'num',min:20,max:600,g:'diet'},
+    'diet.fiber':{label:'膳食纤维 (g)',type:'num',min:0,max:100,g:'diet'},
+    'diet.water':{label:'饮水 (L)',type:'num',min:0.5,max:8,g:'diet'},
+    'diet.meals':{label:'每日食谱',type:'meals',g:'diet'},
+    'diet.principles':{label:'饮食原则',type:'lines',g:'diet'}
   };
   planKeys().forEach(function(k){
-    f['plans.'+k+'.title']={label:'方案 '+k+' 标题',type:'text'};
-    f['plans.'+k+'.sub']={label:'方案 '+k+' 副标题',type:'text'};
-    f['plans.'+k+'.moves']={label:'方案 '+k+' 动作清单',type:'moves'};
+    f['plans.'+k+'.title']={label:'方案 '+k+' 标题',type:'text',g:'train'};
+    f['plans.'+k+'.sub']={label:'方案 '+k+' 副标题',type:'text',g:'train'};
+    f['plans.'+k+'.moves']={label:'方案 '+k+' 动作清单',type:'moves',g:'train'};
   });
-  var hints={moves:'每行：动作 | 组数次数 | 说明',meals:'每行：餐次 | 时间 | 热量 | 内容',pairs2:'每行：动作 | 要点',week:'每行：周一：A；代号为已添加的方案字母，R=休息',lines:'每行一条'};
+  var hints={moves:'每行：动作 | 组数次数 | 说明',meals:'每行：餐次 | 时间 | 热量 | 内容',pairs2:'每行：动作 | 要点',week:'每行：周一：A；代号为已添加的方案字母，R=休息',lines:'每行一条',gender:'女 或 男'};
   Object.keys(f).forEach(function(k){
     f[k].get=function(){return getPath(k);};
     f[k].set=function(v){setPath(k,v);};
@@ -1336,6 +1384,7 @@ function normPatchValue(f,raw){
     var n=Number(raw);if(!isFinite(n)||(f.min!=null&&n<f.min)||(f.max!=null&&n>f.max))return null;
     return n;
   }
+  if(f.type==='gender'){var gd=String(raw==null?'':raw).trim();return (gd==='女'||gd==='男')?gd:null;}
   if(f.type==='text'){var t=String(raw==null?'':raw).trim();return t||null;}
   if(f.type==='lines'){
     var a=(Array.isArray(raw)?raw:lines(raw)).map(function(x){return String(x==null?'':x).trim();}).filter(Boolean);
@@ -1360,6 +1409,7 @@ function extractPatch(text){
   var s=m[1].trim().replace(/^```(?:json)?\s*/i,'').replace(/```$/,'').trim();
   try{var o=JSON.parse(s);return (o&&Array.isArray(o.changes))?o:null;}catch(e){return null;}
 }
+var fillGroupOpen={};
 function renderPatch(){
   var box=document.getElementById('aiPatchBox');
   var ub=document.getElementById('undoAutoBtn');
@@ -1370,22 +1420,58 @@ function renderPatch(){
     if(!c||typeof c!=='object')return;
     var f=PATCH_FIELDS[c.target];if(!f)return;
     var v=normPatchValue(f,c.value);if(v===null)return;
-    valid.push({c:c,f:f,v:v,target:c.target});
+    valid.push({c:c,f:f,v:v,target:c.target,g:f.g||'body'});
   });
   aiPatch&&(aiPatch._valid=valid);
   if(!valid.length){box.style.display='none';return;}
   box.style.display='';
-  document.getElementById('aiPatchList').innerHTML=valid.map(function(x,i){
-    var f=x.f,name=x.c.label||f.label;
-    return '<div class="pch" id="pch'+i+'">'
-      +'<div class="l1"><input type="checkbox" id="pcb'+i+'" checked>'
-      +'<div class="nm">'+esc(name)+'<small>'+esc(f.label)+'</small></div>'
-      +'<button class="tiny" onclick="togglePch(event)">展开</button>'
-      +'<button class="tiny" onclick="editPatchVal('+i+')">✎ 微调</button></div>'
-      +'<div class="df"><b>当前：</b>'+esc(fmtPatchValue(f,f.get()))+'\n<b>建议：</b>'+esc(fmtPatchValue(f,x.v))+'</div>'
-      +(x.c.reason?'<div class="rs">💬 '+esc(x.c.reason)+'</div>':'')
-      +'</div>';
-  }).join('');
+  var html='';
+  FILL_GROUPS.forEach(function(G){
+    var items=[];
+    valid.forEach(function(x,i){if(x.g===G.k)items.push({x:x,i:i});});
+    if(!items.length)return;
+    var closed=fillGroupOpen[G.k]===false;
+    html+='<div class="pgrp'+(closed?' closed':'')+'" id="pgrp_'+G.k+'">'
+      +'<div class="gh" onclick="toggleFillGroup(\''+G.k+'\')">'
+      +'<span class="ic">'+G.icon+'</span><span class="nm">'+esc(G.name)+'</span>'
+      +'<span class="num">'+items.length+' 项</span>'
+      +'<button class="tb" onclick="event.stopPropagation();fillGroupAll(\''+G.k+'\',true)">全选</button>'
+      +'<button class="tb" onclick="event.stopPropagation();fillGroupAll(\''+G.k+'\',false)">清空</button>'
+      +'</div><div class="gb">'
+      +items.map(function(o){
+        var x=o.x,i=o.i,f=x.f,name=x.c.label||f.label;
+        return '<div class="pch" id="pch'+i+'" data-g="'+G.k+'">'
+          +'<div class="l1"><input type="checkbox" id="pcb'+i+'" checked onchange="updateFillCount()">'
+          +'<div class="nm">'+esc(name)+'<small>'+esc(f.label)+'</small></div>'
+          +'<button class="tiny" onclick="togglePch(event)">展开</button>'
+          +'<button class="tiny" onclick="editPatchVal('+i+')">✎ 微调</button></div>'
+          +'<div class="df"><b>当前：</b>'+esc(fmtPatchValue(f,f.get()))+'\n<b>建议：</b>'+esc(fmtPatchValue(f,x.v))+'</div>'
+          +(x.c.reason?'<div class="rs">💬 '+esc(x.c.reason)+'</div>':'')
+          +'</div>';
+      }).join('')
+      +'</div></div>';
+  });
+  document.getElementById('aiPatchList').innerHTML=html;
+  updateFillCount();
+}
+function toggleFillGroup(g){fillGroupOpen[g]=fillGroupOpen[g]===false;renderPatch();}
+function fillSelectAll(on){
+  var list=document.getElementById('aiPatchList');if(!list)return;
+  var cbs=list.querySelectorAll('input[type=checkbox]');
+  for(var i=0;i<cbs.length;i++)cbs[i].checked=on;
+  updateFillCount();
+}
+function fillGroupAll(g,on){
+  var box=document.getElementById('pgrp_'+g);if(!box)return;
+  var cbs=box.querySelectorAll('input[type=checkbox]');
+  for(var i=0;i<cbs.length;i++)cbs[i].checked=on;
+  updateFillCount();
+}
+function updateFillCount(){
+  var el=document.getElementById('fillCount');if(!el)return;
+  var list=document.getElementById('aiPatchList'),n=0,total=0;
+  if(list){var cbs=list.querySelectorAll('input[type=checkbox]');total=cbs.length;for(var i=0;i<cbs.length;i++)if(cbs[i].checked)n++;}
+  el.textContent='已选 '+n+' / '+total+' 项';
 }
 function togglePch(e){
   var el=e.currentTarget.closest('.pch');if(!el)return;
@@ -1406,18 +1492,90 @@ function editPatchVal(i){
 function applyPatches(){
   var vs=(aiPatch&&aiPatch._valid)||[],sel=[];
   vs.forEach(function(x,i){var el=document.getElementById('pcb'+i);if(el&&el.checked)sel.push(x);});
-  if(!sel.length)return toast('请先勾选要应用的修改');
-  if(!confirm('将 '+sel.length+' 项修改应用到计划？应用前会自动保存快照。'))return;
+  if(!sel.length)return toast('请先勾选要填写的部分');
+  var gs={};sel.forEach(function(x){gs[x.g]=1;});
+  var gnames=Object.keys(gs).map(fillGroupName);
+  if(!confirm('将 '+sel.length+' 项填写到：'+gnames.join('、')+'？\n应用前会自动保存快照，可随时撤销。'))return;
   var undo=sel.map(function(x){return {target:x.target,old:clone(x.f.get())};});
   sel.forEach(function(x){x.f.set(clone(x.v));});
   state.ai.undo=undo;save();renderAll();renderPatch();
-  toast('已应用 '+sel.length+' 项修改，可随时撤销');
+  toast('已填写 '+sel.length+' 项到 '+gnames.length+' 个板块，可撤销');
 }
 function undoPatch(){
   var u=state.ai.undo;
-  if(!u||!u.length)return toast('没有可撤销的应用');
-  u.slice().reverse().forEach(function(x){var f=PATCH_FIELDS[x.target];if(f)f.set(clone(x.old));});
-  state.ai.undo=null;save();renderAll();renderPatch();toast('已撤销上次应用');
+  if(!u||!u.length)return toast('没有可撤销的填写');
+  u.slice().reverse().forEach(function(x){try{setPath(x.target,clone(x.old));}catch(e){}});
+  state.ai.undo=null;save();renderAll();renderPatch();toast('已撤销上次填写');
+}
+function gotoSeg(name){
+  switchTab('plan');
+  ['body','diet','train','log','ai'].forEach(function(n){document.getElementById('seg-'+n).style.display=n===name?'':'none';});
+  document.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-seg')===name);});
+}
+/* 历史记录：一键把该条分析的建议载入填写面板 */
+function fillFromHistory(i){
+  var h=state.ai.history[i];if(!h)return;
+  document.getElementById('aiOut').textContent=h.answer||'';
+  var changes=(h.patch&&h.patch.changes)||[];
+  aiPatch={changes:clone(changes)};
+  gotoSeg('ai');
+  renderPatch();
+  var box=document.getElementById('aiPatchBox');
+  if(box)box.scrollIntoView({block:'nearest'});
+  toast(changes.length?('已载入 '+changes.length+' 项建议，勾选要填写的部分'):'这条记录没有结构化建议，可点「从分析文字提取」');
+}
+/* 从分析文字里识别可填写的具体数值（离线启发式，用户可勾选/微调后再写入） */
+var EXTRACT_RULES=[
+  ['diet.cal',/(?:每日|每天|日)?(?:总)?(?:热量|摄入|千卡|大卡|kcal)[^\d\n]{0,6}(\d{3,4})\s*(?:kcal|千卡|大卡)?/i],
+  ['diet.protein',/(?:蛋白质|蛋白)[^\d\n]{0,6}(\d{2,3})\s*(?:g|克)?/i],
+  ['diet.fat',/脂肪[^\d\n]{0,6}(\d{2,3})\s*(?:g|克)?/],
+  ['diet.carb',/(?:碳水|碳水化合物)[^\d\n]{0,6}(\d{2,3})\s*(?:g|克)?/],
+  ['diet.fiber',/(?:膳食纤维|纤维)[^\d\n]{0,6}(\d{1,3})\s*(?:g|克)?/],
+  ['diet.water',/(?:饮水|喝水|水量)[^\d\n]{0,6}(\d(?:\.\d)?)\s*(?:L|l|升|公升)?/],
+  ['profile.goal',/目标体重[^\d\n]{0,6}(\d{2,3}(?:\.\d)?)\s*(?:kg|公斤|千克)?/],
+  ['profile.goalFat',/目标体脂(?:率)?[^\d\n]{0,6}(\d{2}(?:\.\d)?)\s*%?/],
+  ['profile.goalWhr',/目标腰臀比[^\d\n]{0,6}(0?\.\d{1,2})/],
+  ['profile.bodyFat',/体脂率[^\d\n]{0,6}(\d{2}(?:\.\d)?)\s*%?/],
+  ['profile.bmi',/BMI[^\d\n]{0,6}(\d{2}(?:\.\d)?)/i],
+  ['profile.bmr',/(?:基础代谢|基代)[^\d\n]{0,6}(\d{3,4})\s*(?:kcal|千卡|大卡)?/]
+];
+function extractFillFromText(){
+  var t=document.getElementById('aiOut').textContent||'';
+  if(!t.trim())return toast('还没有分析内容可提取');
+  var found=[];
+  EXTRACT_RULES.forEach(function(r){
+    var f=PATCH_FIELDS[r[0]];if(!f)return;
+    var m=t.match(r[1]);if(!m)return;
+    var v=parseFloat(m[1]);if(!isFinite(v))return;
+    if(f.type==='num'&&((f.min!=null&&v<f.min)||(f.max!=null&&v>f.max)))return;
+    found.push({target:r[0],value:v,label:f.label,reason:'从分析文字识别（请核对）'});
+  });
+  if(!found.length)return toast('未从文字中识别出可填写的数值，可点「+ 手动添加项」');
+  aiPatch={changes:found};
+  gotoSeg('ai');renderPatch();
+  var box=document.getElementById('aiPatchBox');if(box)box.scrollIntoView({block:'nearest'});
+  toast('识别出 '+found.length+' 项，请核对后勾选填写');
+}
+/* 手动选择要填写的部分与字段 */
+function addManualFill(){
+  var keys=Object.keys(PATCH_FIELDS),opts=[];
+  FILL_GROUPS.forEach(function(G){
+    keys.forEach(function(k){if(PATCH_FIELDS[k].g===G.k)opts.push([k,G.name+' · '+PATCH_FIELDS[k].label]);});
+  });
+  keys.forEach(function(k){if(!PATCH_FIELDS[k].g)opts.push([k,PATCH_FIELDS[k].label]);});
+  openEditor('手动添加填写项',[
+    {label:'要填写的部分 / 字段',v:opts[0][0],type:'select',opts:opts},
+    {label:'建议值',v:'',type:'textarea',rows:4,ph:'数字直接填；多行文本每行一条；动作/食谱用「|」分列',hint:'填好后点确定加入清单，再勾选并点「一键填写」。'}
+  ],function(v){
+    var f=PATCH_FIELDS[v[0]];if(!f)return;
+    var nv=normPatchValue(f,v[1]);if(nv===null)return toast('格式或范围不对，未添加');
+    var cur=(aiPatch&&aiPatch.changes)||[];
+    cur=cur.filter(function(c){return c.target!==v[0];});
+    cur.push({target:v[0],value:clone(nv),label:f.label,reason:'手动添加'});
+    aiPatch={changes:cur};
+    gotoSeg('ai');renderPatch();
+    toast('已加入清单，勾选后点「一键填写」');
+  });
 }
 
 /* ===== 图片识别导入 ===== */
@@ -1615,7 +1773,7 @@ function planSnapshot(){
   var s=state,pl={};
   planKeys().forEach(function(k){var q=s.plans[k];pl[k]={title:q.title,sub:q.sub,moves:q.moves};});
   return JSON.stringify({
-    profile:{goal:s.profile.goal,goalFat:s.profile.goalFat,goalWhr:s.profile.goalWhr,issues:s.profile.issues},
+    profile:{gender:s.profile.gender,age:s.profile.age,height:s.profile.height,start:s.profile.start,bmi:s.profile.bmi,bodyFat:s.profile.bodyFat,whr:s.profile.whr,muscle:s.profile.muscle,bmr:s.profile.bmr,healthScore:s.profile.healthScore,bodyAge:s.profile.bodyAge,goal:s.profile.goal,goalFat:s.profile.goalFat,goalWhr:s.profile.goalWhr,issues:s.profile.issues},
     week:WEEKNAME.map(function(n,i){return n+':'+s.week[i];}),
     plans:pl,library:s.library,
     diet:{cal:s.diet.cal,protein:s.diet.protein,fat:s.diet.fat,carb:s.diet.carb,fiber:s.diet.fiber,water:s.diet.water,meals:s.diet.meals,principles:s.diet.principles}
@@ -1636,7 +1794,7 @@ function buildPrompt(){
     train:'请重点评估训练安排的动作选择与强度，给出调整建议。',
     free:'请回答我的问题。'
   }[aiType];
-  var tail='\n\n【输出格式（必须严格遵守）】\n先写文字分析（分点、具体），然后在最后另起一行输出修改建议块。若本次不需要改计划，输出 {"changes":[]}。建议块格式严格如下：\n<<<PLAN_PATCH>>>\n{"changes":[{"target":"diet.cal","value":1550,"label":"每日热量","reason":"当前减脂速度偏慢，小幅下调热量"}]}\n<<<END_PATCH>>>\n规则：\n1) target 只能是：profile.goal / profile.goalFat / profile.goalWhr / profile.issues / week / plans.<方案代号>.title / plans.<方案代号>.sub / plans.<方案代号>.moves（代号以计划 JSON 中实际存在的方案为准，如 A/B/C/D）/ library / diet.cal / diet.protein / diet.fat / diet.carb / diet.fiber / diet.water / diet.meals / diet.principles。\n2) value 类型：profile.goal、profile.goalFat、profile.goalWhr 和 diet.cal/protein/fat/carb/fiber/water 为数字；profile.issues、diet.principles 为字符串数组；week 为 7 个代号(A/B/C/M/R)的数组；plans.*.moves 为二维数组，每行 [动作, 组数次数, 说明]；diet.meals 为二维数组，每行 [餐次, 时间, 热量, 内容]；library 为二维数组，每行 [动作, 要点]；plans.*.title/sub 为字符串。\n3) 只列确实要改的项，未列出的保持原样；label、reason 用中文简短说明；不要输出 from 字段；不要用 markdown 代码块包住 JSON。\n\n注意：如有疼痛或不适，避免大重量复合动作；建议以保守、安全、可持续为主。';
+  var tail='\n\n【输出格式（必须严格遵守）】\n先写文字分析（分点、具体），然后在最后另起一行输出修改建议块。这些建议会被用户按板块勾选后一键填写到体测、饮食、训练等各个部分。若本次不需要改任何数据，输出 {"changes":[]}。建议块格式严格如下：\n<<<PLAN_PATCH>>>\n{"changes":[{"target":"diet.cal","value":1550,"label":"每日热量","reason":"当前减脂速度偏慢，小幅下调热量"}]}\n<<<END_PATCH>>>\n规则：\n1) target 只能从下面这些里选（可填写到对应板块）：\n   体测/身体数据：profile.gender(女或男) / profile.age / profile.height / profile.start / profile.bmi / profile.bodyFat / profile.whr / profile.muscle / profile.bmr / profile.healthScore / profile.bodyAge / profile.goal / profile.goalFat / profile.goalWhr / profile.issues\n   饮食计划：diet.cal / diet.protein / diet.fat / diet.carb / diet.fiber / diet.water / diet.meals / diet.principles\n   训练方案：plans.<方案代号>.title / plans.<方案代号>.sub / plans.<方案代号>.moves（代号以计划 JSON 中实际存在的方案为准，如 A/B/C/D）\n   每周训练安排：week\n   动作库：library\n2) value 类型：上述 profile.* 的数值字段以及 diet.cal/protein/fat/carb/fiber/water 为数字；profile.gender 只能是"女"或"男"；profile.issues、diet.principles 为字符串数组；week 为 7 个已添加方案代号或 R(休息) 的数组；plans.*.moves 为二维数组，每行 [动作, 组数次数, 说明]；diet.meals 为二维数组，每行 [餐次, 时间, 热量, 内容]；library 为二维数组，每行 [动作, 要点]；plans.*.title/sub 为字符串。\n3) 只列确实要改的项，未列出的保持原样；label、reason 用中文简短说明；不要输出 from 字段；不要用 markdown 代码块包住 JSON。\n4) 体测的实测数值（如 bmi、bodyFat、bmr）只有在用户提供了新的体测结果时才改，不要凭空推测。\n\n注意：如有疼痛或不适，避免大重量复合动作；建议以保守、安全、可持续为主。';
   return base+'【本次任务】'+task+(q?'\n【我的补充问题】'+q:'')+tail;
 }
 async function callAI(){
