@@ -1,0 +1,17 @@
+# 构建产物
+ios/build/
+android/build/
+android/gen/
+android/classes/
+android/dex/
+android/base.apk
+android/aligned.apk
+android/compiled.flata
+android/assets/index.html
+*.ipa
+*.apk
+
+# 系统与编辑器
+.DS_Store
+*.xcuserstate
+DerivedData/

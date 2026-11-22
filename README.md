@@ -46,40 +46,40 @@
 ├── README.md
 ├── conversation-data.json        # 脱敏后的会话导出记录
 ├── .github/workflows/
-│   └── build-ios.yml             # macOS runner 自动构建 IPA
+│   └── build.yml                 # 一键构建 iOS IPA + Android APK 并发布
 ├── android/
 │   ├── AndroidManifest.xml
 │   ├── src/                      # WebView 壳 Activity
 │   ├── res/                      # 应用名称
-│   ├── assets/index.html         # 单文件应用界面（已脱敏）
-│   └── build_apk.py              # APK 构建脚本
+│   ├── release.p12               # 固定的自签名证书（保证每次构建签名一致）
+│   └── build_apk.py              # APK 构建脚本（跨平台，页面从 iOS 源同步）
 └── ios/
     ├── FitnessPlan.xcodeproj/    # Xcode 工程
-    ├── FitnessPlan/              # Swift 原生壳与内嵌 HTML
-    ├── preview.html              # 可直接在浏览器打开的界面预览
-    ├── miaomiao-fitness.ipa      # 已构建的 iOS 安装包（ad-hoc 签名）
+    ├── FitnessPlan/              # Swift 原生壳与内嵌 HTML（页面的唯一源文件）
     ├── build_ipa.sh              # iOS 出包脚本
     └── install_xcode.sh
 ```
 
+页面只有一份源文件 `ios/FitnessPlan/Resources/index.html`；Android 构建时自动同步到 `android/assets/`，仓库里不再保留重复副本。
+
 ## 安装
 
 ### iOS
-使用仓库内的 `ios/miaomiao-fitness.ipa`（arm64，ad-hoc 签名），或从 Releases 下载最新安装包。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
+从 Releases 下载 `miaomiao-fitness.ipa`（arm64，ad-hoc 签名）。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
 
 ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltStore 配合免费 Apple ID 重签名，或用 Xcode 登录免费账号后直接 ▶ Run。
 
 ### Android
-运行 `python android/build_apk.py` 自行构建 APK，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。
+从 Releases 下载 `miaomiao-fitness.apk`，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。包名 `com.fitnessplan.app`，Release 签名固定，可直接覆盖升级。
 
 ## 从源码构建
 
-- Android：需要 JDK 21、Android SDK（platform android-34、build-tools 35.0.0）。按本机环境设置 `ANDROID_SDK_ROOT` / `JAVA_HOME` 后运行 `python android/build_apk.py`。
 - iOS：macOS + Xcode，运行 `ios/build_ipa.sh`。
+- Android：需要 JDK 17+、Android SDK（platform android-34、build-tools 35.0.0），设置 `ANDROID_SDK_ROOT` / `JAVA_HOME` 后运行 `python3 android/build_apk.py`，产物在 `android/build/miaomiao-fitness.apk`。
 
-## GitHub Actions 自动出包
+## GitHub Actions 一键出双端包
 
-`.github/workflows/build-ios.yml` 在 `macos-latest` runner 上运行 `ios/build_ipa.sh`，生成 `FitnessPlan.ipa` 并上传为 artifact。可在 Actions 页手动触发，也会随 `ios/` 变更自动执行。当前账号下 `macos-14` 标签会因无法分配 runner 而立即取消，工作流统一使用 `macos-latest`。
+`.github/workflows/build.yml` 在 Actions 页点 **Run workflow** 即可：`macos-latest` 编译并 ad-hoc 签名出 IPA，`ubuntu-latest` 编译并签名出 APK，两个任务完成后由一个发布任务把 `miaomiao-fitness.ipa` 和 `miaomiao-fitness.apk` 一起覆盖上传到 `latest` 发布，文件名不带版本号。推送到 `main` 且改动 `ios/**`、`android/**` 时也会自动触发。
 
 ## 隐私说明
 

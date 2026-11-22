@@ -1,0 +1,111 @@
+name: Build IPA + APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - "android/**"
+      - ".github/workflows/build.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: miaomiao-build
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: iOS IPA
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 显示 Xcode 工具链
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep iphoneos
+
+      - name: 编译并 ad-hoc 签名
+        working-directory: ios
+        run: |
+          chmod +x build_ipa.sh
+          ./build_ipa.sh
+
+      - name: 上传 IPA 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipa
+          path: ios/build/ipa/FitnessPlan.ipa
+          if-no-files-found: error
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 安装 JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: 安装 Android SDK 工具
+        uses: android-actions/setup-android@v3
+
+      - name: 安装 platform / build-tools
+        run: |
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          sdkmanager --install "platforms;android-34" "build-tools;35.0.0" > /dev/null
+          sdkmanager --list_installed | sed -n '1,20p'
+
+      - name: 编译并签名 APK
+        run: python3 android/build_apk.py
+
+      - name: 上传 APK 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: android/build/miaomiao-fitness.apk
+          if-no-files-found: error
+
+  publish:
+    name: 更新 latest 发布
+    needs: [ios, android]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载全部产物
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: 统一命名（不带版本号）
+        run: |
+          mkdir -p out
+          cp dist/ipa/FitnessPlan.ipa out/miaomiao-fitness.ipa
+          cp dist/apk/miaomiao-fitness.apk out/miaomiao-fitness.apk
+          ls -lh out
+
+      - name: 上传到 latest Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! gh release view latest --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release create latest --repo "$GITHUB_REPOSITORY" \
+              --title "喵喵健身" \
+              --notes "iOS 与 Android 安装包由 GitHub Actions 自动构建。" \
+              --latest
+          fi
+          gh release upload latest \
+            out/miaomiao-fitness.ipa \
+            out/miaomiao-fitness.apk \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          gh release view latest --repo "$GITHUB_REPOSITORY" --json tagName,assets \
+            --jq '.tagName, (.assets[] | "\(.name) \(.size)")'

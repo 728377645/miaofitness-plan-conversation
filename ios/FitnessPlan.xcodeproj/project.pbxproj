@@ -21,7 +21,6 @@
 		1B0000000000000000000003 /* LocalWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
 		1B0000000000000000000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B0000000000000000000005 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		1B0000000000000000000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1B0000000000000000000007 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
 		1B0000000000000000000008 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		1C0000000000000000000001 /* FitnessPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,7 +54,6 @@
 				1B0000000000000000000002 /* ViewController.swift */,
 				1B0000000000000000000003 /* LocalWebServer.swift */,
 				1A0000000000000000000003 /* Resources */,
-				1B0000000000000000000006 /* Assets.xcassets */,
 				1B0000000000000000000004 /* Info.plist */,
 			);
 			path = FitnessPlan;
