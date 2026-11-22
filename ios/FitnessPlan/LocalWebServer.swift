@@ -29,27 +29,30 @@ final class LocalWebServer {
         return URL(string: "http://127.0.0.1:\(port)/")
     }
 
+    /// 固定端口。localStorage 按 origin（协议+主机+**端口**）隔离，
+    /// 端口每次随机变化会让上次保存的数据完全读不到，所以端口必须在多次启动间保持稳定。
+    static let defaultPort: UInt16 = 8765
+    private static let portKey = "miaoFitness_local_port"
+
     func start() throws {
-        let fd = socket(AF_INET, SOCK_STREAM, 0)
-        guard fd >= 0 else { throw ServerError.socketFailed }
-        listenFD = fd
+        // 优先复用上次成功使用的端口，其次用固定默认端口；两者都失败才退回系统分配。
+        // 即使偶发端口冲突，原生 state.json 备份也会在页面加载前注入恢复，数据不会丢。
+        let saved = UInt16(UserDefaults.standard.integer(forKey: Self.portKey))
+        var candidates: [UInt16] = saved > 0 ? [saved, Self.defaultPort] : [Self.defaultPort]
+        var seen = Set<UInt16>()
+        candidates = candidates.filter { seen.insert($0).inserted }
 
-        var reuse: Int32 = 1
-        _ = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse,
-                       socklen_t(MemoryLayout<Int32>.size))
-
-        var address = sockaddr_in()
-        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
-        address.sin_family = sa_family_t(AF_INET)
-        address.sin_port = 0 // 由系统分配空闲端口
-        address.sin_addr.s_addr = inet_addr("127.0.0.1")
-
-        let bindResult = withUnsafeMutablePointer(to: &address) { pointer -> Int32 in
-            pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPointer in
-                bind(fd, sockaddrPointer, socklen_t(MemoryLayout<sockaddr_in>.size))
+        var fd: Int32 = -1
+        for candidate in candidates {
+            if let bound = try? bindSocket(desiredPort: candidate) {
+                fd = bound
+                break
             }
         }
-        guard bindResult == 0 else { throw ServerError.bindFailed }
+        if fd < 0 {
+            fd = try bindSocket(desiredPort: 0) // 由系统分配空闲端口
+        }
+        listenFD = fd
         guard listen(fd, 16) == 0 else { throw ServerError.listenFailed }
 
         var bound = sockaddr_in()
@@ -61,11 +64,39 @@ final class LocalWebServer {
         }
         guard nameResult == 0 else { throw ServerError.bindFailed }
         port = UInt16(bigEndian: bound.sin_port)
+        // 记住本次端口，下次启动优先复用 → origin 长期稳定
+        UserDefaults.standard.set(Int(port), forKey: Self.portKey)
 
         active = true
         queue.async { [weak self] in
             self?.acceptLoop()
         }
+    }
+
+    private func bindSocket(desiredPort: UInt16) throws -> Int32 {
+        let fd = socket(AF_INET, SOCK_STREAM, 0)
+        guard fd >= 0 else { throw ServerError.socketFailed }
+
+        var reuse: Int32 = 1
+        _ = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse,
+                       socklen_t(MemoryLayout<Int32>.size))
+
+        var address = sockaddr_in()
+        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_port = desiredPort.bigEndian
+        address.sin_addr.s_addr = inet_addr("127.0.0.1")
+
+        let bindResult = withUnsafeMutablePointer(to: &address) { pointer -> Int32 in
+            pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPointer in
+                bind(fd, sockaddrPointer, socklen_t(MemoryLayout<sockaddr_in>.size))
+            }
+        }
+        guard bindResult == 0 else {
+            close(fd)
+            throw ServerError.bindFailed
+        }
+        return fd
     }
 
     func stop() {

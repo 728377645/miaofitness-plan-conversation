@@ -6,7 +6,7 @@
 <meta content="#2e7d32" name="theme-color">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
-<title>健身计划</title>
+<title>喵喵健身</title>
 <style>
 :root{
   --g9:#1b5e20;--g7:#2e7d32;--g5:#43a047;--g1:#e8f5e9;--g0:#f1f8e9;
@@ -672,7 +672,9 @@ function load(){
   }
   sortW();
   upgradeLibrary();
-  purgePersonalData();
+  // 不再做运行时数据清零：出厂 DEFAULT 已是纯净模板，而一次性 purge 在
+  // 新 origin（端口变化 / 首次安装）下会误把用户刚填的数据抹掉。
+  // 迁移标志由原生注入脚本在页面加载前预置，恢复的备份数据不会被清。
 }
 function merge(base,over){
   if(!over||typeof over!=='object')return base;
@@ -682,7 +684,16 @@ function merge(base,over){
   });
   return base;
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('本地存储写入失败');}}
+function save(){
+  var json=JSON.stringify(state);
+  try{localStorage.setItem(KEY,json);}catch(e){toast('本地存储写入失败');}
+  // 同步一份到 App 沙盒文件：本地服务器端口一旦变化，localStorage 的 origin 也会变，
+  // 读不到旧数据；原生备份不依赖 origin，保证退出重进仍在。浏览器预览里没有 webkit，静默跳过。
+  try{
+    if(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.fitnessStore)
+      window.webkit.messageHandlers.fitnessStore.postMessage({op:'save',json:json});
+  }catch(e){}
+}
 function purgePersonalData(){
   // 一次性迁移：清除旧版本残留的个人数据（排期/体重/打卡/临时动作/AI历史和密钥），
   // 恢复为出厂干净模板。只执行一次，之后用户自己填写的数据不会被动。
@@ -1937,6 +1948,12 @@ function switchSeg(name,btn){
 function renderAll(){PATCH_FIELDS=buildPatchFields();renderTop();renderToday();renderPlan();renderLog();renderMe();renderAITypes();renderAIHistory();renderPatch();}
 
 load();aiType=state.ai.lastType||'comprehensive';renderAll();renderAIConfig();
+// 页面被隐藏 / App 切后台时再存一次，避免最后一次编辑尚未落盘就被系统挂起
+(function(){function flush(){try{save();}catch(e){}}
+  window.addEventListener('pagehide',flush);
+  window.addEventListener('beforeunload',flush);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flush();});
+})();
 document.getElementById('logDate').value=todayKey();
 </script>
 </body>

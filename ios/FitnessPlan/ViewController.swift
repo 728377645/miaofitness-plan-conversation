@@ -13,7 +13,75 @@ final class ViewController: UIViewController {
         // 与页面 theme-color (#2e7d32) 一致，避免状态栏区域色差
         view.backgroundColor = UIColor(red: 0.18, green: 0.49, blue: 0.20, alpha: 1.0)
         setupWebView()
+        // 进入后台 / 锁屏前，再从页面取一次最新 state 落到磁盘，
+        // 避免个别情况下 messageHandler 的写入来不及完成。
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(persistBeforeBackground),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
         loadContent()
+    }
+
+    // MARK: - 原生持久化（不依赖 WebKit 站点数据）
+
+    private static let storeFileURL: URL = {
+        let directory = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("FitnessPlanStore", isDirectory: true)
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        return directory.appendingPathComponent("state.json")
+    }()
+
+    private static func loadNativeState() -> String? {
+        guard let data = try? Data(contentsOf: storeFileURL), !data.isEmpty,
+              let text = String(data: data, encoding: .utf8),
+              text.hasPrefix("{") else { return nil }
+        return text
+    }
+
+    private static func saveNativeState(_ json: String) {
+        guard json.hasPrefix("{"), let data = json.data(using: .utf8) else { return }
+        try? data.write(to: storeFileURL, options: .atomic)
+    }
+
+    /// 页面脚本执行前，把原生备份写回 localStorage。
+    /// 本地服务器端口一旦变化，WebKit 的 localStorage origin 就会变，站点数据读不到；
+    /// 这份文件备份始终在 App 沙盒里，保证用户数据能恢复。
+    /// 同时预置两个一次性迁移标志，避免恢复出来的数据被页面迁移逻辑清掉。
+    private var bootstrapScript: String {
+        guard let json = ViewController.loadNativeState(),
+              let literal = ViewController.jsStringLiteral(json),
+              !literal.isEmpty else {
+            return "(function(){})();"
+        }
+        return """
+        (function () {
+          try {
+            localStorage.setItem('miaoFitness_v2', \(literal));
+            localStorage.setItem('miaoFitness_purged_v1', '1');
+            localStorage.setItem('miaoFitness_lib_v2', '1');
+          } catch (e) {}
+        })();
+        """
+    }
+
+    /// 把任意字符串安全地转成 JS 字符串字面量（自带引号、完整转义）。
+    /// 用数组包装后交给 JSONSerialization，避免依赖 iOS 13+ 才支持的顶层 fragment 编码。
+    private static func jsStringLiteral(_ value: String) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: [value], options: []),
+              let wrapped = String(data: data, encoding: .utf8),
+              wrapped.hasPrefix("["), wrapped.hasSuffix("]") else { return nil }
+        return String(wrapped.dropFirst().dropLast())
+    }
+
+    @objc private func persistBeforeBackground() {
+        guard let webView = webView else { return }
+        webView.evaluateJavaScript("try{JSON.stringify(state)}catch(e){''}") { result, _ in
+            guard let json = result as? String, json.hasPrefix("{") else { return }
+            ViewController.saveNativeState(json)
+        }
     }
 
     private func setupWebView() {
@@ -23,6 +91,12 @@ final class ViewController: UIViewController {
         let controller = WKUserContentController()
         controller.add(WeakScriptMessageHandler(self), name: "fitnessSave")
         controller.add(WeakScriptMessageHandler(self), name: "fitnessCopy")
+        controller.add(WeakScriptMessageHandler(self), name: "fitnessStore")
+        controller.addUserScript(
+            WKUserScript(source: bootstrapScript,
+                         injectionTime: .atDocumentStart,
+                         forMainFrameOnly: true)
+        )
         controller.addUserScript(
             WKUserScript(source: Self.bridgeScript,
                          injectionTime: .atDocumentEnd,
@@ -154,6 +228,13 @@ extension ViewController: WKScriptMessageHandler {
                   let base64 = body["base64"] as? String,
                   let data = Data(base64Encoded: base64) else { return }
             saveAndShare(named: name, data: data)
+        case "fitnessStore":
+            // 页面每次 save() 都把完整 state 同步一份到 App 沙盒文件，
+            // 不依赖 localStorage 的 origin，因此端口变化也不会丢数据。
+            guard let body = message.body as? [String: Any],
+                  (body["op"] as? String) == "save",
+                  let json = body["json"] as? String else { return }
+            ViewController.saveNativeState(json)
         default:
             break
         }

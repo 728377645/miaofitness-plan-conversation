@@ -1,6 +1,6 @@
-# 健身计划（Fitness Plan）
+# 喵喵健身（Miao Fitness）
 
-一个离线优先的个人健身与体测管理应用。界面为单文件 HTML，iOS 侧提供 Xcode 原生壳工程，Android 侧提供 WebView 壳与已构建 APK。仓库内的档案与体重默认值均为通用空模板，原始个人数据未包含。
+一个离线优先的个人健身与体测管理应用。界面为单文件 HTML，iOS 侧提供 Xcode 原生壳工程，Android 侧提供 WebView 壳与构建脚本。仓库内的档案与体重默认值均为通用空模板，原始个人数据未包含。
 
 ## 功能
 
@@ -34,8 +34,9 @@
 
 ### 数据管理
 - 档案、计划、饮食、体重和历史记录全部保存在设备本地
+- iOS 端每次保存都会把完整数据同步备份到 App 沙盒文件，页面加载前自动回填；本地服务器使用固定端口，保证页面来源稳定，退出重进不会丢数据
 - JSON 备份导出/导入、体重 CSV 导出/导入、撤销上次导入/重置、恢复默认数据
-- 首次加载会一次性清理旧版本残留的个人数据；此后用户自行填写的内容不会被自动改动
+- 页面不会在运行时自动清理用户数据，只需自行填写一次即可长期保留
 - API Key 仅保存在本机浏览器或应用中，不写入分享链接；AI 分析时数据只发送给你选择的服务商
 
 ## 目录结构
@@ -55,19 +56,21 @@
 └── ios/
     ├── FitnessPlan.xcodeproj/    # Xcode 工程
     ├── FitnessPlan/              # Swift 原生壳与内嵌 HTML
+    ├── preview.html              # 可直接在浏览器打开的界面预览
+    ├── miaomiao-fitness.ipa      # 已构建的 iOS 安装包（ad-hoc 签名）
     ├── build_ipa.sh              # iOS 出包脚本
     └── install_xcode.sh
 ```
 
 ## 安装
 
-### Android
-从本仓库 Releases 下载 `fitness-plan-v1.2.apk`，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。APK 为自签名，包名 `com.fitnessplan.app`，与 v1.0 / v1.1 使用同一签名，可直接覆盖升级。
-
 ### iOS
-Releases 提供 `fitness-plan-v1.2.ipa`，由 GitHub Actions 的 macOS runner 构建，版本 1.2（build 3），arm64，ad-hoc 签名。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
+使用仓库内的 `ios/miaomiao-fitness.ipa`（arm64，ad-hoc 签名），或从 Releases 下载最新安装包。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
 
 ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltStore 配合免费 Apple ID 重签名，或用 Xcode 登录免费账号后直接 ▶ Run。
+
+### Android
+运行 `python android/build_apk.py` 自行构建 APK，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。
 
 ## 从源码构建
 
@@ -80,4 +83,4 @@ ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltS
 
 ## 隐私说明
 
-仓库与安装包中的档案、体重等默认值为通用空模板，原始个人数据未包含。页面首次加载会执行一次旧数据清理，之后只保留用户自己填写的内容。使用 AI 功能需要你自行配置 API Key，分析请求会发送到你选择的服务商。AI 建议仅供参考，不能替代医生或专业教练的诊断。
+仓库与安装包中的档案、体重等默认值为通用空模板，原始个人数据未包含。页面不会在运行时自动清理数据，所有内容只保留用户自己填写的结果。使用 AI 功能需要你自行配置 API Key，分析请求会发送到你选择的服务商。AI 建议仅供参考，不能替代医生或专业教练的诊断。

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================================
-# 健身计划 · iOS IPA 打包脚本
+# 喵喵健身 · iOS IPA 打包脚本
 #
 # 【本机已验证路径】无参数直接运行即可出包，不需要 Apple 账号、不需要 Team ID：
 #     ./build_ipa.sh
@@ -30,7 +30,7 @@
 #   FitnessPlan/ViewController.swift    WKWebView 壳 + JS 桥接 + 弹窗代理
 #   FitnessPlan/LocalWebServer.swift    本地静态服务器（页面拥有真实 origin）
 #   FitnessPlan/Resources/index.html    内嵌的 App 页面（完整离线可用）
-#   FitnessPlan/Resources/AppIcon.png   健身计划图标（1024x1024）
+#   FitnessPlan/Resources/AppIcon.png   喵喵健身图标（1024x1024）
 #   FitnessPlan/Info.plist              名称 / 权限 / ATS / 状态栏配置
 #   build/ipa/FitnessPlan.ipa           输出产物
 #
@@ -56,7 +56,7 @@ EXPORT="$BUILD/ipa"
 
 TEAM_ID="${1:-${DEVELOPMENT_TEAM:-}}"
 METHOD="${IPA_METHOD:-development}"
-BUNDLE_ID="${BUNDLE_ID:-com.fitnessplan.app}"
+BUNDLE_ID="${BUNDLE_ID:-com.miaomiao.FitnessPlan}"
 
 # 自动定位 Xcode
 if ! xcodebuild -version >/dev/null 2>&1 || xcodebuild -version 2>&1 | grep -q "requires Xcode"; then
@@ -87,7 +87,6 @@ echo "Xcode: $(xcodebuild -version | head -1)"
 if [[ -z "$TEAM_ID" ]]; then
   echo "[1/4] 编译 Release (arm64, CODE_SIGNING_ALLOWED=NO) ..."
   rm -rf "$OUT" "$BUILD/FitnessPlan.build"
-  mkdir -p "$BUILD"
   xcodebuild -project "$PROJECT" -target "$TARGET" \
     -configuration "$CONFIG" -sdk iphoneos \
     CODE_SIGNING_ALLOWED=NO \
