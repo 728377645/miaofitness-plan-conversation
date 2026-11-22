@@ -9,358 +9,468 @@
 <title>喵喵健身</title>
 <style>
 :root{
-  --g9:#1b5e20;--g7:#2e7d32;--g5:#43a047;--g1:#e8f5e9;--g0:#f1f8e9;
-  --orange:#ef6c00;--orange-bg:#fff3e0;--red:#c62828;--blue:#1565c0;--muted:#78909c;--line:#e3ebe5;
-  --ink:#263238;--bg:#f4f7f2;--white:#fff;--sh:0 2px 12px rgba(27,94,32,.07);
+  --paper:#F4EFE3;--surface:#FFFCF4;--ink:#17160F;--ink-2:#4C493C;--muted:#8C8574;
+  --rule:#DED6C2;--rule-soft:#EDE7D8;
+  --accent:#D2451C;--accent-soft:#FBE6DC;
+  --sage:#2E6B4F;--sage-soft:#E5EDE4;--gold:#A9761B;
+  --serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","STSong",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  --num:"DIN Alternate","SF Mono","Bahnschrift",ui-monospace,sans-serif;
+  --mono:"SF Mono","DIN Alternate",ui-monospace,monospace;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
-body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:#dfe7dd;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
-#app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:80px;box-shadow:0 0 30px rgba(0,0,0,.08)}
-.topbar{background:linear-gradient(135deg,#1b5e20,#43a047);color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 20px 18px;position:sticky;top:0;z-index:20}
-.topbar h1{font-size:19px;font-weight:800;margin:0;letter-spacing:.5px}
-.topbar p{margin:2px 0 0;font-size:12px;opacity:.85}
-.topbar .row{display:flex;justify-content:space-between;align-items:center}
-.pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 11px;font-size:11px;white-space:nowrap}
-main{padding:16px 14px}
-.page{display:none;animation:fade .25s ease}
+body{font-family:var(--sans);background:#E7E0CF;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(23,22,15,.045) .5px,transparent .6px);background-size:3px 3px}
+::selection{background:var(--accent);color:var(--paper)}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--paper);position:relative;padding-bottom:92px;
+  box-shadow:0 0 40px rgba(23,22,15,.14);border-left:1px solid rgba(23,22,15,.06);border-right:1px solid rgba(23,22,15,.06)}
+
+/* ---------- 报头 ---------- */
+.topbar{background:var(--paper);padding:calc(env(safe-area-inset-top) + 14px) 18px 12px;position:sticky;top:0;z-index:20;border-bottom:3px double var(--ink)}
+.mh-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mh-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.topbar h1{font-family:var(--serif);font-size:27px;font-weight:600;letter-spacing:.05em;margin:9px 0 0;line-height:1.15;display:flex;align-items:baseline;gap:9px}
+.topbar h1:after{content:"";width:8px;height:8px;background:var(--accent);display:inline-block;transform:translateY(-3px)}
+.topbar p{margin:5px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:.05em}
+.pill{font-family:var(--num);font-size:12px;font-weight:700;letter-spacing:.03em;font-variant-numeric:tabular-nums;
+  border:1px solid var(--ink);border-radius:0;padding:2px 8px;white-space:nowrap}
+
+main{padding:16px 16px 6px}
+.page{display:none}
 .page.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.card{background:var(--white);border-radius:15px;padding:16px;box-shadow:var(--sh);border:1px solid var(--line);margin-bottom:12px}
-.card h3{margin:0 0 12px;font-size:15px;color:var(--g9);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.card h3 .dot{width:7px;height:7px;border-radius:50%;background:var(--g5);flex:none}
-.card h3 .edit{margin-left:auto;font-size:11px;font-weight:700;color:var(--g7);background:var(--g1);border-radius:9px;padding:3px 9px;cursor:pointer}
-.sub{font-size:12px;color:var(--muted)}
-.today-hero{background:linear-gradient(135deg,#e8f5e9,#fff);border-left:4px solid var(--g5)}
-.today-hero .title{font-size:17px;font-weight:800;color:var(--g9)}
-.today-hero .meta{font-size:12px;color:var(--muted);margin-top:3px}
-.tag{display:inline-block;background:var(--g1);color:var(--g7);font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;margin-right:6px}
-.tag.o{background:var(--orange-bg);color:var(--orange)}
-.alldone{display:flex;align-items:center;gap:11px;padding:12px 13px;margin-bottom:8px;background:linear-gradient(135deg,#eef7ef,#e3f2e5);border:1.5px solid #cfe6d3;border-radius:11px;cursor:pointer}
-.alldone input[type=checkbox]{appearance:none;width:26px;height:26px;border:2px solid #a9cfb0;border-radius:8px;flex:none;position:relative;cursor:pointer;background:#fff}
-.alldone input[type=checkbox]:checked{background:var(--g5);border-color:var(--g5)}
-.alldone input[type=checkbox]:checked::after{content:"✓";position:absolute;left:5px;top:-3px;color:#fff;font-size:19px;font-weight:800}
+.page.active>*{animation:rise .34s cubic-bezier(.22,.61,.36,1) both}
+.page.active>*:nth-child(2){animation-delay:.05s}
+.page.active>*:nth-child(3){animation-delay:.1s}
+.page.active>*:nth-child(4){animation-delay:.15s}
+.page.active>*:nth-child(5){animation-delay:.2s}
+.page.active>*:nth-child(6){animation-delay:.25s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page.active>*{animation:none}}
+
+/* ---------- 卡片 ---------- */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:16px 15px 15px;margin-bottom:14px;box-shadow:none}
+.card h3{font-family:var(--serif);margin:0 0 12px;font-size:15px;font-weight:600;letter-spacing:.04em;color:var(--ink);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+.card h3 .dot{width:5px;height:5px;background:var(--accent);flex:none;transform:rotate(45deg)}
+.card h3 .edit{margin-left:auto;font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);
+  background:none;border:1px solid var(--rule);border-radius:0;padding:3px 7px;cursor:pointer}
+.card h3 .edit:active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.sub{font-size:11.5px;color:var(--muted);line-height:1.65}
+
+/* ---------- 今日票根 ---------- */
+.today-hero{background:var(--ink);border-color:var(--ink);padding:20px 17px;position:relative;overflow:hidden}
+.hero-folio{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.24em;
+  color:rgba(244,239,227,.5);margin-bottom:8px;position:relative}
+.hero-folio:before{content:"";width:14px;height:1px;background:var(--accent)}
+.today-hero .title{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--paper);letter-spacing:.04em;line-height:1.3;position:relative}
+.today-hero .meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:rgba(244,239,227,.62);margin-top:7px;position:relative}
+.today-hero #todayTags{position:relative}
+.today-hero .tag{background:none;border:1px solid rgba(244,239,227,.32);color:var(--paper)}
+.today-hero .tag.o{border-color:rgba(210,69,28,.85);color:#F2A48B;background:none}
+
+.tag{display:inline-block;background:none;border:1px solid var(--rule);color:var(--ink-2);font-size:10.5px;font-weight:600;
+  padding:2px 8px;border-radius:0;margin-right:6px;letter-spacing:.03em}
+.tag.o{background:var(--accent-soft);border-color:var(--accent-soft);color:#A33817}
+
+/* ---------- 今日动作 ---------- */
+.alldone{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:6px;background:none;border:1px solid var(--ink);border-radius:2px;cursor:pointer}
+.alldone input[type=checkbox]{appearance:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:0;flex:none;position:relative;cursor:pointer;background:transparent}
+.alldone input[type=checkbox]:checked{background:var(--ink)}
+.alldone input[type=checkbox]:checked::after{content:"✓";position:absolute;left:6px;top:-2px;color:var(--paper);font-size:15px;font-weight:700}
 .alldone .ad-t{flex:1}
-.alldone .ad-t b{font-size:14px;color:var(--g9);display:block}
-.alldone .ad-t small{font-size:11px;color:var(--g7)}
-.alldone.done{background:linear-gradient(135deg,#e0f2e2,#d3ecd7);border-color:var(--g5)}
-.move{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.alldone .ad-t b{font-size:13.5px;color:var(--ink);display:block;letter-spacing:.02em}
+.alldone .ad-t small{font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+.alldone.done{background:var(--sage-soft);border-color:var(--sage)}
+.alldone.done .ad-t b{color:var(--sage)}
+.alldone.done .ad-t small{color:#4E7F65}
+
+.move{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid var(--rule-soft)}
 .move:last-child{border-bottom:none}
-.move input[type=checkbox]{appearance:none;width:21px;height:21px;border:2px solid #c5d6c8;border-radius:6px;flex:none;margin-top:2px;position:relative;cursor:pointer}
-.move input[type=checkbox]:checked{background:var(--g5);border-color:var(--g5)}
-.move input[type=checkbox]:checked::after{content:"✓";position:absolute;left:3px;top:-3px;color:#fff;font-size:16px;font-weight:800}
+.move input[type=checkbox]{appearance:none;width:19px;height:19px;border:1.5px solid #B8AF99;border-radius:0;flex:none;margin-top:2px;position:relative;cursor:pointer;background:transparent}
+.move input[type=checkbox]:checked{background:var(--ink);border-color:var(--ink)}
+.move input[type=checkbox]:checked::after{content:"✓";position:absolute;left:4px;top:-2px;color:var(--paper);font-size:13px;font-weight:700}
 .move .info{flex:1;min-width:0}
-.move .info b{font-size:14px;color:var(--ink)}
-.move.done .info b{text-decoration:line-through;color:#9eaaa3}
-.move .info .d{font-size:12px;color:var(--g7);font-weight:600}
-.move .info .t{font-size:11px;color:var(--muted);line-height:1.45}
-.move .mdel{background:none;color:#c0cdc3;font-size:20px;line-height:1;padding:0 2px;flex:none;cursor:pointer}
-.addmove-btn{display:block;width:100%;margin-top:10px;background:#f4f9f5;color:var(--g7);border:1.5px dashed #b9d8c1;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer}
-.addmove-btn:active{background:#e8f3ea}
+.move .info b{font-size:14.5px;font-weight:600;color:var(--ink);letter-spacing:.01em}
+.move.done .info b{text-decoration:line-through;color:#ADA48C}
+.move .info .d{font-family:var(--num);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-top:2px}
+.move.done .info .d{color:#C0A79A}
+.move .info .t{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:1px}
+.move .mdel{background:none;color:#C4BBA5;font-size:19px;line-height:1;padding:0 2px;flex:none;cursor:pointer}
+.addmove-btn{display:block;width:100%;margin-top:12px;background:none;color:var(--ink-2);border:1px dashed #C9C0A9;border-radius:2px;
+  padding:10px;font-size:11.5px;font-weight:600;letter-spacing:.06em;cursor:pointer;font-family:var(--mono)}
+.addmove-btn:active{background:var(--paper)}
+
+/* ---------- 表单 ---------- */
 .input-row{display:flex;gap:8px;align-items:flex-end}
 .input-row.stack{flex-direction:column;align-items:stretch;gap:12px;max-width:280px;margin:0 auto}
 .input-row.stack .field{width:100%;flex:none}
 .input-row.stack input{height:46px;font-size:15px;min-width:0;text-align:center;-webkit-appearance:none;appearance:none}
 .input-row.stack .field label{text-align:center}
 .field{flex:1;min-width:0}
-.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
-input[type=number],input[type=date],input[type=text],input[type=password],textarea,select{width:100%;border:1.5px solid #d5e2d8;border-radius:10px;padding:10px 11px;font-size:15px;background:#fff;color:var(--ink);outline:none;font-family:inherit}
-input:focus,textarea:focus,select:focus{border-color:var(--g5)}
-textarea{resize:vertical;line-height:1.6;font-size:13px}
+.field label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+input[type=number],input[type=date],input[type=text],input[type=password],textarea,select{width:100%;border:1px solid var(--rule);border-radius:2px;
+  padding:10px 11px;font-size:15px;background:var(--surface);color:var(--ink);outline:none;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+textarea{resize:vertical;line-height:1.7;font-size:12.5px}
 button{border:none;font-family:inherit;cursor:pointer}
-.btn{background:var(--g7);color:#fff;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:700;white-space:nowrap}
-.btn:active{opacity:.8}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn.ghost{background:var(--g1);color:var(--g7)}
-.btn.warn{background:#ffebee;color:var(--red)}
-.btn.blue{background:#e3f2fd;color:var(--blue)}
+
+.btn{background:var(--ink);color:var(--paper);border-radius:2px;padding:11px 16px;font-size:13px;font-weight:600;letter-spacing:.05em;white-space:nowrap;border:1px solid var(--ink)}
+.btn:active{opacity:.82}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:var(--surface);color:var(--ink-2);border:1px solid var(--rule)}
+.btn.warn{background:var(--accent-soft);color:#A33817;border:1px solid var(--accent-soft)}
+.btn.blue{background:none;color:var(--accent);border:1px solid var(--accent)}
 .btn.full{width:100%;padding:12px}
-.btn.sm{padding:7px 11px;font-size:12px}
-.progress-wrap{margin-top:10px}
-.progress{height:9px;background:#e8efe9;border-radius:6px;overflow:hidden}
-.progress i{display:block;height:100%;background:linear-gradient(90deg,#81c784,#2e7d32);border-radius:6px;transition:width .4s}
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px;gap:4px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:var(--g0);border:1px solid #d9ecd9;border-radius:12px;padding:12px;text-align:center}
-.stat .v{font-size:21px;font-weight:800;color:var(--g9)}
-.stat .v small{font-size:11px}
-.stat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.btn.sm{padding:8px 11px;font-size:11.5px;letter-spacing:.04em}
+
+/* ---------- 进度 / 数据 ---------- */
+.progress-wrap{margin-top:14px}
+.progress{height:7px;background:var(--rule-soft);border-radius:0;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--ink);border-radius:0;transition:width .5s cubic-bezier(.22,.61,.36,1);position:relative}
+.progress i:after{content:"";position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;color:var(--muted);margin-top:7px;gap:4px;letter-spacing:.04em}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--rule)}
+.stat{background:none;border:none;border-bottom:1px solid var(--rule);border-radius:0;padding:13px 12px 11px 0;text-align:left}
+.stat:nth-child(odd){border-right:1px solid var(--rule)}
+.stat:nth-child(even){padding-left:14px}
+.stat .v{font-family:var(--num);font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:11px;font-family:var(--mono);font-weight:600;letter-spacing:.02em;color:var(--ink-2);margin-left:3px;vertical-align:1px}
+.stat .l{font-size:9.5px;letter-spacing:.12em;color:var(--muted);margin-top:3px;text-transform:uppercase}
+
 .chart-box{width:100%;overflow:hidden}
 .chart-box svg{width:100%;height:auto;display:block}
-.empty{text-align:center;color:var(--muted);font-size:13px;padding:26px 10px}
-.rec{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-bottom:1px solid var(--line);font-size:14px;gap:8px}
+.empty{text-align:center;color:var(--muted);font-size:12px;padding:28px 10px;letter-spacing:.04em}
+
+.rec{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule-soft);gap:8px}
 .rec:last-child{border-bottom:none}
-.rec .date{color:var(--muted);font-size:12px}
-.rec .val{font-weight:800;color:var(--g9)}
-.rec .acts{display:flex;gap:4px}
-.rec .acts button{background:none;color:#90a4ae;font-size:11px;padding:4px 6px;white-space:nowrap}
-.rec .acts .e{color:var(--g7)}
-.seg{display:flex;background:#e6eee7;border-radius:11px;padding:4px;margin-bottom:14px}
-.seg button{flex:1;background:none;border-radius:8px;padding:8px 0;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
-.seg button.on{background:#fff;color:var(--g7);box-shadow:0 1px 5px rgba(0,0,0,.08)}
-.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rec .val{font-family:var(--num);font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.rec .date{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.06em;margin-top:2px}
+.rec .acts{display:flex;gap:2px}
+.rec .acts button{background:none;color:var(--muted);font-size:10.5px;padding:4px 6px;white-space:nowrap;letter-spacing:.03em}
+.rec .acts .e{color:var(--ink-2)}
+
+/* ---------- 分段导航 ---------- */
+.seg{display:flex;gap:14px;background:none;border-radius:0;padding:0;margin:2px 0 16px;border-bottom:1px solid var(--rule);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.seg button{flex:1;background:none;border-radius:0;padding:9px 0 11px;font-size:12.5px;font-weight:600;color:var(--muted);
+  white-space:nowrap;position:relative;letter-spacing:.04em}
+.seg button.on{background:none;color:var(--ink);box-shadow:none;font-weight:700}
+.seg button.on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent)}
+
+.kv{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule-soft);font-size:12.5px}
 .kv:last-child{border-bottom:none}
-.kv span:first-child{color:var(--muted)}
-.kv b{color:var(--g9);text-align:right}
-.note{background:var(--g0);border-left:3px solid var(--g5);border-radius:0 9px 9px 0;padding:11px 13px;font-size:12px;color:#33691e;margin-top:10px}
-.note.o{background:var(--orange-bg);border-color:var(--orange);color:#a14300}
-.note.b{background:#e3f2fd;border-color:var(--blue);color:#0d47a1}
-.plan-block{margin-bottom:14px}
-.plan-block .head{background:var(--g7);color:#fff;border-radius:10px 10px 0 0;padding:9px 13px;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.plan-block .head .pedit{background:rgba(255,255,255,.2);border-radius:7px;padding:2px 8px;font-size:11px;cursor:pointer;white-space:nowrap}
-.plan-block table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;overflow:hidden}
-.plan-block td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.kv span:first-child{color:var(--muted);letter-spacing:.03em}
+.kv b{color:var(--ink);text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+
+.note{background:var(--paper);border-left:2px solid var(--ink);border-radius:0;padding:10px 12px;font-size:11.5px;color:var(--ink-2);margin-top:12px;line-height:1.7}
+.note.o{background:var(--accent-soft);border-color:var(--accent);color:#8E3216}
+.note.b{background:#F8F1DF;border-color:var(--gold);color:#6B4A12}
+
+/* ---------- 训练方案 ---------- */
+.plan-block{background:var(--surface);border:1px solid var(--rule);border-radius:2px;margin-bottom:14px;padding:0 14px 12px}
+.plan-block .head{background:none;color:var(--ink);border:none;border-bottom:1px solid var(--rule);border-radius:0;
+  padding:13px 0 9px;font-family:var(--serif);font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;letter-spacing:.03em}
+.plan-block .head .ptitle{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plan-block .head .phact{display:flex;align-items:center;gap:6px;flex:none}
+.plan-block .head .pedit{background:none;border:1px solid var(--rule);color:var(--ink-2);border-radius:0;padding:2px 7px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;cursor:pointer;white-space:nowrap}
+.plan-block .head .pdel{color:var(--muted);font-family:var(--mono);font-size:9px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+.plan-block td.pdx{width:20px;text-align:right;padding:9px 0 9px 2px}
+.plan-block td.pdx .pdel{font-size:13px;padding:0}
+.plan-block table{width:100%;border-collapse:collapse;font-size:12px;background:none;border:none;border-radius:0;overflow:visible}
+.plan-block td{padding:9px 6px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
 .plan-block tr:last-child td{border-bottom:none}
-.plan-block td:first-child{font-weight:700;color:var(--g9);width:40%}
-.plan-block td:nth-child(2){color:var(--g7);font-weight:600;width:21%}
-.plan-block .pdel{width:26px;text-align:center;color:#c0cdc3;font-size:17px;cursor:pointer;vertical-align:middle;padding:8px 2px}
-.plan-block .padd{display:block;margin-top:8px;background:#f4f9f5;color:var(--g7);border:1.5px dashed #b9d8c1;border-radius:9px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;width:100%}
-.plan-block .padd:active{background:#e8f3ea}
-.meal{font-size:13px;padding:10px 0;border-bottom:1px solid var(--line)}
+.plan-block tr.psub td{color:var(--muted);font-size:10.5px;letter-spacing:.06em;padding:9px 4px 7px;border-bottom:1px solid var(--rule)}
+.plan-block td:first-child{font-weight:600;color:var(--ink);width:34%}
+.plan-block td:nth-child(2){color:var(--accent);font-family:var(--num);font-weight:700;width:1%;white-space:nowrap;letter-spacing:.02em}
+.plan-block td:nth-child(3){color:var(--ink-2)}
+.plan-block .pdel{width:22px;text-align:center;color:#C4BBA5;font-size:15px;cursor:pointer;vertical-align:middle;padding:8px 2px}
+.plan-block .pdel:hover{color:var(--accent)}
+.plan-block .padd{display:block;margin-top:10px;background:none;color:var(--ink-2);border:1px dashed #C9C0A9;border-radius:2px;
+  padding:8px;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;width:100%;font-family:var(--mono)}
+.plan-block .padd:active{background:var(--paper)}
+
+.meal{font-size:12.5px;padding:13px 0;border-bottom:1px solid var(--rule-soft);line-height:1.75;color:var(--ink-2)}
 .meal:last-child{border-bottom:none}
-.meal b{color:var(--g9)}
-.meal .kc{float:right;color:var(--orange);font-size:12px;font-weight:700}
-.macro{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.macro div{background:var(--g0);border-radius:10px;padding:10px 4px;text-align:center}
-.macro .v{font-size:17px;font-weight:800;color:var(--g9)}
-.macro .l{font-size:10px;color:var(--muted)}
-ul.tips{margin:0;padding-left:18px;font-size:12.5px}
-ul.tips li{margin-bottom:7px}
-.about{font-size:12px;color:var(--muted);line-height:1.8}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-.chip{background:var(--g1);color:var(--g7);border-radius:18px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid transparent}
-.chip.on{background:var(--g7);color:#fff}
-.ai-out{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:13px;line-height:1.75;min-height:80px;white-space:pre-wrap;word-break:break-word;color:var(--ink)}
-.ai-out .cursor{display:inline-block;width:7px;height:14px;background:var(--g5);vertical-align:-2px;animation:blink .8s infinite}
+.meal b{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.03em;margin-right:6px}
+.meal .kc{float:right;color:var(--accent);font-size:10px;font-weight:700;font-family:var(--num);letter-spacing:.04em}
+.meal .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em}
+.macro{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 12px;border-top:1px solid var(--rule)}
+.macro>div{background:none;border:none;border-bottom:1px solid var(--rule);border-radius:0;padding:11px 8px;text-align:left}
+.macro>div:nth-child(3n-1),.macro>div:nth-child(3n){border-left:1px solid var(--rule);padding-left:12px}
+.macro .v{border:none;padding:0;font-family:var(--num);font-size:19px;font-weight:700;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.macro .l{border:none;padding:0;font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:3px}
+ul.tips{margin:0;padding-left:16px;font-size:12px;color:var(--ink-2)}
+ul.tips li{margin-bottom:8px;line-height:1.7}
+.about{font-size:11.5px;color:var(--muted);line-height:1.9}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:none;color:var(--ink-2);border:1px solid var(--rule);border-radius:0;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.03em}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ---------- AI ---------- */
+.ai-out{background:var(--paper);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:0;padding:14px;
+  font-size:12.5px;line-height:1.9;min-height:84px;white-space:pre-wrap;word-break:break-word;color:var(--ink-2)}
+.ai-out .cursor{display:inline-block;width:6px;height:13px;background:var(--accent);vertical-align:-2px;animation:blink .8s infinite}
 @keyframes blink{50%{opacity:0}}
-.ai-hist{padding:9px 2px;border-bottom:1px solid var(--line);font-size:12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.ai-hist{padding:11px 0;border-bottom:1px solid var(--rule-soft);font-size:11.5px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .ai-hist:last-child{border-bottom:none}
-.ai-hist span:first-child{color:var(--g9);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-hist .tm{color:var(--muted);white-space:nowrap}
-.pbox{margin-top:12px;border:1.5px solid #c8e6c9;border-radius:12px;overflow:hidden}
-.pbox .ph{background:var(--g1);padding:9px 12px;font-size:13px;font-weight:800;color:var(--g9);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.pbox .ph small{font-size:10px;font-weight:500;color:var(--muted)}
-.pbox .pl{padding:4px 12px 10px}
-.pch{border-bottom:1px solid var(--line);padding:10px 0}
+.ai-hist span:first-child{color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-hist .tm{color:var(--muted);white-space:nowrap;font-family:var(--mono);font-size:9px;letter-spacing:.04em}
+.ai-hist .acts{display:flex;align-items:center;gap:6px;flex:none}
+.ai-hist .hf{background:none;color:var(--ink-2);border:1px solid var(--rule);border-radius:0;padding:3px 8px;font-size:9.5px;font-weight:600;cursor:pointer;white-space:nowrap;letter-spacing:.04em}
+
+.pbox{margin-top:14px;border:1px solid var(--rule);border-left:2px solid var(--ink);border-radius:0;overflow:hidden}
+.pbox .ph{background:var(--paper);padding:10px 12px;font-family:var(--serif);font-size:13.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--rule)}
+.pbox .ph small{font-family:var(--sans);font-size:9.5px;font-weight:400;color:var(--muted);letter-spacing:.04em}
+.pbox .pl{padding:2px 12px 8px}
+.pch{border-bottom:1px solid var(--rule-soft);padding:11px 0}
 .pch:last-child{border-bottom:none}
 .pch .l1{display:flex;align-items:flex-start;gap:9px}
-.pch input[type=checkbox]{appearance:none;width:20px;height:20px;border:2px solid #c5d6c8;border-radius:6px;flex:none;margin-top:1px;cursor:pointer;position:relative}
-.pch input[type=checkbox]:checked{background:var(--g5);border-color:var(--g5)}
-.pch input[type=checkbox]:checked::after{content:"✓";position:absolute;left:3px;top:-4px;color:#fff;font-size:16px;font-weight:800}
-.pch .nm{flex:1;font-size:13px;font-weight:700;color:var(--g9);min-width:0}
-.pch .nm small{display:block;font-size:10px;font-weight:500;color:var(--muted)}
-.pch .tiny{background:none;color:var(--g7);font-size:11px;font-weight:700;padding:2px 4px;white-space:nowrap}
-.pch .df{margin:7px 0 0 29px;font-size:11.5px;line-height:1.55;max-height:42px;overflow:hidden;position:relative;background:var(--g0);border-radius:8px;padding:7px 9px;color:#33691e;white-space:pre-wrap;word-break:break-word;cursor:pointer}
+.pch input[type=checkbox]{appearance:none;width:18px;height:18px;border:1.5px solid #B8AF99;border-radius:0;flex:none;margin-top:1px;cursor:pointer;position:relative;background:transparent}
+.pch input[type=checkbox]:checked{background:var(--ink);border-color:var(--ink)}
+.pch input[type=checkbox]:checked::after{content:"✓";position:absolute;left:4px;top:-2px;color:var(--paper);font-size:12px;font-weight:700}
+.pch .nm{flex:1;font-size:12.5px;font-weight:600;color:var(--ink);min-width:0}
+.pch .nm small{display:block;font-size:9.5px;font-weight:400;color:var(--muted);margin-top:1px}
+.pch .tiny{background:none;color:var(--ink-2);border:1px solid var(--rule);border-radius:0;font-family:var(--mono);font-size:9px;padding:2px 5px;white-space:nowrap;letter-spacing:.04em}
+.pch .df{margin:8px 0 0 27px;font-size:11px;line-height:1.6;max-height:44px;overflow:hidden;position:relative;background:var(--paper);
+  border-radius:0;padding:8px 9px;color:var(--ink-2);white-space:pre-wrap;word-break:break-word;cursor:pointer;border-left:1px solid var(--rule)}
 .pch.open .df{max-height:none}
-.pch .df b{color:var(--g9)}
-.pch .rs{margin:5px 0 0 29px;font-size:11px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
-.pbox .pf{display:flex;gap:8px;padding:10px 12px;background:#fafdfa;border-top:1px solid var(--line)}
+.pch .df b{color:var(--accent);font-weight:700}
+.pch .rs{margin:6px 0 0 27px;font-size:10.5px;color:var(--muted);white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.pbox .pf{display:flex;gap:8px;padding:10px 12px;background:var(--paper);border-top:1px solid var(--rule)}
 .pbox .pf .btn{flex:1}
-.pbox .pt{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#fafdfa;border-bottom:1px solid var(--line)}
-.pbox .pt .tb{background:var(--g1);color:var(--g7);border:1px solid #d3e8d6;border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-.pbox .pt .tb.pri{background:var(--g7);color:#fff;border-color:var(--g7)}
-.pbox .pt .cnt{margin-left:auto;font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap}
-.pgrp{margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
-.pgrp .gh{display:flex;align-items:center;gap:7px;background:var(--g0);padding:8px 10px;font-size:12px;font-weight:800;color:var(--g9);cursor:pointer;flex-wrap:wrap}
-.pgrp .gh .ic{font-size:14px}
-.pgrp .gh .nm{flex:1;white-space:nowrap}
-.pgrp .gh .num{font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap}
-.pgrp .gh .tb{background:#fff;color:var(--g7);border:1px solid #cfe3d2;border-radius:7px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pbox .pt{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.pbox .pt .tb{background:none;color:var(--ink-2);border:1px solid var(--rule);border-radius:0;padding:3px 8px;font-size:9.5px;font-weight:600;cursor:pointer;white-space:nowrap;letter-spacing:.04em}
+.pbox .pt .tb.pri{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pbox .pt .cnt{margin-left:auto;font-family:var(--num);font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap;letter-spacing:.04em}
+.pgrp{margin-top:10px;border:1px solid var(--rule);border-radius:0;overflow:hidden;background:var(--surface)}
+.pgrp .gh{display:flex;align-items:center;gap:8px;background:var(--paper);padding:8px 10px;font-size:11.5px;font-weight:700;color:var(--ink);cursor:pointer;flex-wrap:wrap;border-bottom:1px solid var(--rule)}
+.pgrp.closed .gh{border-bottom:none}
+.pgrp .gh .ic{font-family:var(--num);font-size:10px;color:var(--accent);letter-spacing:.06em;font-weight:700}
+.pgrp .gh .nm{flex:1;white-space:nowrap;letter-spacing:.03em}
+.pgrp .gh .num{font-family:var(--num);font-size:9.5px;font-weight:500;color:var(--muted);white-space:nowrap}
+.pgrp .gh .tb{background:none;color:var(--ink-2);border:1px solid var(--rule);border-radius:0;padding:2px 7px;font-size:9px;font-weight:600;cursor:pointer;white-space:nowrap;letter-spacing:.04em}
 .pgrp .gb{padding:0 10px}
 .pgrp.closed .gb{display:none}
-.pgrp .pch:last-child{border-bottom:none}
-.ai-hist .acts{display:flex;align-items:center;gap:7px;flex:none}
-.ai-hist .hf{background:var(--g1);color:var(--g7);border:1px solid #d3e8d6;border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-.streak{display:flex;align-items:center;gap:10px}
-.streak .fire{font-size:22px;line-height:1}
-.streak .txt{flex:1;font-size:12px;font-weight:800;color:var(--g9)}
-.streak .txt small{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-top:1px}
-.dots{display:flex;gap:5px;margin-top:10px}
-.dots .d{flex:1;text-align:center;font-size:9px;color:var(--muted)}
-.dots .d i{display:block;width:100%;height:7px;border-radius:4px;background:#e8efe9;margin-bottom:3px}
-.dots .d.done i{background:var(--g5)}
-.dots .d.plan i{background:var(--orange-bg);border:1px solid var(--orange)}
-.dots .d.today b{color:var(--g7)}
-.insight{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.insight .badge{background:var(--g1);color:var(--g7);border-radius:9px;padding:5px 9px;font-size:11px;font-weight:800}
-.insight .badge.down{background:#e8f5e9;color:#1b5e20}
-.insight .badge.flat{background:var(--orange-bg);color:#a14300}
-.insight .badge.up{background:#ffebee;color:#c62828}
-.undobar{display:none;align-items:center;justify-content:space-between;gap:8px;background:var(--orange-bg);color:#a14300;border-radius:9px;padding:8px 11px;font-size:12px;margin-bottom:10px}
+
+/* ---------- 连续 / 周视图 ---------- */
+.streak{display:flex;align-items:center;gap:13px}
+.streak .fire{width:24px;height:26px;flex:none;color:var(--accent)}
+.streak .fire svg{width:24px;height:26px;display:block}
+.streak .txt{flex:1;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.sk-n{font-family:var(--num);font-size:38px;line-height:.95;font-weight:700;letter-spacing:-.02em}
+.sk-t{font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.03em}
+.sk-t small{display:block;font-size:9.5px;font-weight:400;color:var(--muted);margin-top:3px;letter-spacing:.04em}
+.dots{display:flex;gap:4px;margin-top:14px;border-top:1px solid var(--rule-soft);padding-top:10px}
+.dots .d{flex:1;text-align:center;font-size:8.5px;color:var(--muted);letter-spacing:.02em}
+.dots .d i{display:block;width:100%;height:3px;border-radius:0;background:var(--rule-soft);margin-bottom:5px}
+.dots .d.done i{background:var(--sage)}
+.dots .d.plan i{background:var(--accent-soft);border:1px solid var(--accent)}
+.dots .d.today b{color:var(--ink)}
+.insight{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.insight .badge{background:none;border:1px solid var(--rule);color:var(--ink-2);border-radius:0;padding:4px 8px;font-size:10px;font-weight:600;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.insight .badge.down{background:var(--sage-soft);border-color:var(--sage-soft);color:#255D45}
+.insight .badge.flat{background:var(--accent-soft);border-color:var(--accent-soft);color:#A33817}
+.insight .badge.up{background:#F6E1DC;border-color:#F6E1DC;color:#8E3216}
+.undobar{display:none;align-items:center;justify-content:space-between;gap:8px;background:var(--accent-soft);color:#8E3216;border-radius:0;padding:8px 11px;font-size:11px;margin-bottom:10px;border-left:2px solid var(--accent)}
 .undobar.show{display:flex}
-.undobar button{background:none;color:var(--orange);font-weight:800;font-size:12px}
-.chart-range{display:flex;gap:6px;margin-bottom:8px}
-.chart-range button{background:var(--g1);color:var(--g7);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700}
-.chart-range button.on{background:var(--g7);color:#fff}
-.modal{position:fixed;inset:0;background:rgba(20,30,22,.45);z-index:60;display:none;align-items:flex-end;justify-content:center}
+.undobar button{background:none;color:var(--accent);font-weight:700;font-size:11px;letter-spacing:.03em}
+.chart-range{display:flex;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--rule-soft)}
+.chart-range button{background:none;color:var(--muted);border-radius:0;padding:4px 0 7px;font-size:10px;font-weight:600;letter-spacing:.06em;border-bottom:2px solid transparent;margin-bottom:-1px}
+.chart-range button.on{background:none;color:var(--ink);border-bottom-color:var(--accent)}
+
+/* ---------- 弹层 ---------- */
+.modal{position:fixed;inset:0;background:rgba(20,18,10,.5);z-index:60;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .modal.show{display:flex}
-.modal-box{background:#fff;width:100%;max-width:480px;border-radius:18px 18px 0 0;max-height:88vh;display:flex;flex-direction:column;animation:up .25s ease}
-@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
-.modal-head{padding:15px 18px 11px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--g9);font-size:16px}
-.modal-head .x{background:none;font-size:24px;color:#9eaaa3;line-height:1}
-.modal-body{padding:14px 18px;overflow-y:auto;flex:1}
-.modal-foot{padding:12px 18px calc(env(safe-area-inset-bottom) + 12px);border-top:1px solid var(--line);display:flex;gap:10px}
+.modal-box{background:var(--paper);width:100%;max-width:480px;border-radius:0;max-height:88vh;display:flex;flex-direction:column;
+  animation:up .26s cubic-bezier(.22,.61,.36,1);border-top:2px solid var(--ink)}
+@keyframes up{from{transform:translateY(28px);opacity:.6}to{transform:none;opacity:1}}
+.modal-head{padding:16px 18px 11px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--serif);font-weight:600;color:var(--ink);font-size:17px;letter-spacing:.04em}
+.modal-head .x{background:none;font-size:24px;color:var(--muted);line-height:1}
+.modal-body{padding:14px 18px;overflow-y:auto;flex:1;background:var(--surface)}
+.modal-foot{padding:12px 18px calc(env(safe-area-inset-bottom) + 12px);border-top:1px solid var(--rule);display:flex;gap:10px;background:var(--paper)}
 .modal-foot .btn{flex:1;padding:12px}
-.mf{margin-bottom:13px}
-.mf label{display:block;font-size:12px;font-weight:700;color:var(--g7);margin-bottom:5px}
-.mf .hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.mf{margin-bottom:14px}
+.mf label{display:block;font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--ink-2);letter-spacing:.08em;margin-bottom:6px}
+.mf .hint{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.6}
+
+/* ---------- OCR ---------- */
 .ocr-prev{margin-top:10px;text-align:center}
-.ocr-prev img{max-width:100%;max-height:190px;border-radius:10px;border:1px solid var(--line)}
-.ocr-fields{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
-.ocr-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.ocr-prev img{max-width:100%;max-height:190px;border-radius:0;border:1px solid var(--rule)}
+.ocr-fields{margin-top:10px;border-top:1px solid var(--rule);padding-top:6px}
+.ocr-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:12px}
 .ocr-row:last-child{border-bottom:none}
-.ocr-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--g5)}
-.ocr-row .n{flex:1;color:var(--g9)}
-.ocr-row .chg{color:var(--muted);font-size:11.5px;text-align:right;line-height:1.4}
-.ocr-row .chg b{color:var(--g7)}
-.ocr-acts{display:flex;gap:8px;margin-top:11px}
-.ocr-loading{font-size:12px;color:var(--muted);padding:12px 0;text-align:center}
+.ocr-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--ink)}
+.ocr-row .n{flex:1;color:var(--ink)}
+.ocr-row .chg{color:var(--muted);font-size:10.5px;text-align:right;line-height:1.45;font-variant-numeric:tabular-nums}
+.ocr-row .chg b{color:var(--accent)}
+.ocr-acts{display:flex;gap:8px;margin-top:12px}
+.ocr-loading{font-size:11.5px;color:var(--muted);padding:12px 0;text-align:center;letter-spacing:.04em}
+
+/* ---------- 动作选择器 ---------- */
 .pick-bar{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.pick-bar .n{font-size:12px;font-weight:700;color:var(--g7);margin-right:auto}
-.pick-bar .op{font-size:12px;font-weight:700;color:var(--g7);background:var(--g1);border-radius:8px;padding:4px 10px;cursor:pointer}
-.pick-list{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:10px}
-.pick-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-bottom:1px solid var(--line);cursor:pointer}
+.pick-bar .n{font-size:11px;font-weight:600;color:var(--ink-2);margin-right:auto;letter-spacing:.03em}
+.pick-bar .op{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--ink-2);background:none;border:1px solid var(--rule);border-radius:0;padding:3px 8px;cursor:pointer;letter-spacing:.04em}
+.pick-list{max-height:300px;overflow-y:auto;border:1px solid var(--rule);border-radius:0}
+.pick-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-bottom:1px solid var(--rule-soft);cursor:pointer}
 .pick-item:last-child{border-bottom:none}
-.pick-item.sel{background:#eef7ef}
-.pick-item input[type=checkbox]{appearance:none;width:19px;height:19px;border:2px solid #c5d6c8;border-radius:5px;flex:none;position:relative;cursor:pointer;margin:0}
-.pick-item input[type=checkbox]:checked{background:var(--g5);border-color:var(--g5)}
-.pick-item input[type=checkbox]:checked::after{content:"✓";position:absolute;left:2px;top:-4px;color:#fff;font-size:14px;font-weight:800}
-.pi-name{font-size:13px;font-weight:700;color:var(--g9);flex:none}
-.pi-desc{font-size:11px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.35}
-.pick-sec{font-size:12px;font-weight:700;color:var(--g7);margin:13px 0 8px;padding-top:12px;border-top:1px dashed var(--line)}
-.lib-search{width:100%;border:1.5px solid #d5e2d8;border-radius:10px;padding:9px 11px;font-size:14px;background:#fff;color:var(--ink);outline:none;margin-bottom:8px}
-.lib-search:focus{border-color:var(--g5)}
-.lib-list{max-height:300px;overflow-y:auto;border-top:1px solid var(--line)}
-.lib-empty{padding:14px 0;color:var(--muted);font-size:12px;text-align:center}
+.pick-item.sel{background:var(--paper)}
+.pick-item input[type=checkbox]{appearance:none;width:18px;height:18px;border:1.5px solid #B8AF99;border-radius:0;flex:none;position:relative;cursor:pointer;margin:0;background:transparent}
+.pick-item input[type=checkbox]:checked{background:var(--ink);border-color:var(--ink)}
+.pick-item input[type=checkbox]:checked::after{content:"✓";position:absolute;left:4px;top:-2px;color:var(--paper);font-size:12px;font-weight:700}
+.pi-name{font-size:12.5px;font-weight:600;color:var(--ink);flex:none}
+.pi-desc{font-size:10px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.4}
+.pick-sec{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--ink-2);letter-spacing:.08em;margin:14px 0 8px;padding-top:12px;border-top:1px dashed var(--rule)}
+.lib-search{width:100%;border:1px solid var(--rule);border-radius:0;padding:9px 11px;font-size:13px;background:var(--surface);color:var(--ink);outline:none;margin-bottom:9px}
+.lib-search:focus{border-color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+.lib-list{max-height:300px;overflow-y:auto;border-top:1px solid var(--rule)}
+.lib-list .kv{font-size:12px;padding:9px 10px;align-items:baseline;gap:12px;border-bottom:1px solid var(--rule-soft)}
+.lib-list .kv span:first-child{color:var(--ink);font-weight:600;white-space:nowrap;letter-spacing:.01em}
+.lib-list .kv b{color:var(--muted);font-weight:400;font-size:10.5px;text-align:right;line-height:1.5}
+.lib-empty{padding:14px 0;color:var(--muted);font-size:11.5px;text-align:center}
 .pick-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.pick-cat{font-size:11.5px;padding:5px 10px;border-radius:14px;background:#eef4ef;color:var(--g7);cursor:pointer;white-space:nowrap;line-height:1.2;transition:background .15s,color .15s}
-.pick-cat.on{background:var(--g5);color:#fff;font-weight:700}
-.pick-group{border-bottom:1px solid var(--line)}
+.pick-cat{font-size:10.5px;padding:4px 9px;border-radius:0;background:none;border:1px solid var(--rule);color:var(--ink-2);cursor:pointer;white-space:nowrap;line-height:1.3;transition:background .15s,color .15s}
+.pick-cat.on{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:600}
+.pick-group{border-bottom:1px solid var(--rule-soft)}
 .pick-group:last-child{border-bottom:none}
-.pick-group-head{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#f4f8f4;cursor:pointer;user-select:none}
-.pick-group-head .pg-cat{font-size:12px;font-weight:800;color:var(--g7)}
-.pick-group-head .pg-n{font-size:11px;color:var(--muted)}
-.pick-group-head .pg-op{font-size:11px;font-weight:700;color:var(--g6);padding:2px 6px;border-radius:6px;background:#fff;margin-left:auto}
+.pick-group-head{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--paper);cursor:pointer;user-select:none;border-bottom:1px solid var(--rule-soft)}
+.pick-group-head .pg-cat{font-family:var(--serif);font-size:12px;font-weight:600;color:var(--ink);letter-spacing:.04em}
+.pick-group-head .pg-n{font-family:var(--num);font-size:9.5px;color:var(--muted)}
+.pick-group-head .pg-op{font-size:9px;font-weight:600;color:var(--ink-2);padding:2px 6px;border:1px solid var(--rule);background:none;margin-left:auto;letter-spacing:.03em}
 .pick-group-head .pg-op+.pg-op{margin-left:0}
-.pick-group-head .pg-arrow{font-size:11px;color:var(--muted);transition:transform .18s}
+.pick-group-head .pg-arrow{font-size:10px;color:var(--muted);transition:transform .18s}
 .pick-group.collapsed .pick-group-head .pg-arrow{transform:rotate(-90deg)}
 .pick-group.collapsed .pick-group-body{display:none}
 .pick-group-body .pick-item:last-child{border-bottom:none}
-.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:flex;padding:7px 0 calc(env(safe-area-inset-bottom) + 7px);z-index:30;backdrop-filter:blur(8px)}
-.tabbar button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#9eaaa3;font-size:9.5px;font-weight:600;padding:0 1px}
-.tabbar button .ic{font-size:19px;line-height:1}
-.tabbar button.on{color:var(--g7)}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(38,50,56,.94);color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- 底栏 / 提示 ---------- */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(244,239,227,.97);
+  border-top:1px solid var(--ink);display:flex;padding:9px 0 calc(env(safe-area-inset-bottom) + 8px);z-index:30;backdrop-filter:blur(10px)}
+.tabbar button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:5px;color:#A79E87;font-size:9px;font-weight:600;
+  letter-spacing:.08em;padding:0 1px;position:relative}
+.tabbar button .ic{display:block;height:21px;line-height:0}
+.tabbar button .ic svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:var(--ink)}
+.tabbar button.on:before{content:"";position:absolute;top:-9px;width:16px;height:2px;background:var(--accent)}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);
+  padding:9px 18px;border-radius:0;font-size:11.5px;letter-spacing:.03em;z-index:80;opacity:0;pointer-events:none;transition:.25s;
+  white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;border-left:2px solid var(--accent)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="topbar">
-    <div class="row">
-      <div><h1><!--pnid:i6cOjsIlLFDm7JxR63YYoz-->🌱 塑形计划</h1><p id="topSub"><!--pnid:wfVMGnBGqePTlijThYv5QL-->减脂塑形</p></div>
-      <span class="pill" id="topPill"><!--pnid:nCUktvOGYORzKll4xFWUkQ-->-- kg</span>
+    <div class="mh-row">
+      <span class="mh-kicker">MIAO FITNESS · 训练台账</span>
+      <span class="pill" id="topPill">-- kg</span>
     </div>
+    <h1>塑形计划</h1>
+    <p id="topSub">减脂塑形</p>
   </div>
 
   <main>
     <section class="page active" id="page-today">
       <div class="card today-hero">
+        <div class="hero-folio">TODAY</div>
         <div class="title" id="todayTitle"></div>
         <div class="meta" id="todayDate"></div>
         <div id="todayTags" style="margin-top:8px"></div>
       </div>
       <div class="card">
-        <div class="streak"><div class="fire"><!--pnid:xCp3nWU9ckelNW6JbgbIR6-->🔥</div><div class="txt" id="streakText"></div></div>
+        <div class="streak"><div class="fire" aria-hidden="true"><svg viewBox="0 0 24 26" fill="none"><path d="M12 2.5c.8 3.2 4.9 5.4 4.9 10.2a4.9 4.9 0 1 1-9.8 0c0-2.2 1.1-3.4 2.2-5 .5 1.3 1.2 2 1.9 2.3-.4-2.4-.9-4.9.8-7.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 14.6c1.3 1.2 1.9 2 1.9 3.1a1.9 1.9 0 1 1-3.8 0c0-.9.7-1.8 1.9-3.1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></div><div class="txt" id="streakText"></div></div>
         <div class="dots" id="weekDots"></div>
       </div>
       <div class="card" id="todayMovesCard">
-        <h3><span class="dot"></span><!--pnid:tDMz3BnEMX2EtQskSK6Pep-->今日动作清单 <span class="sub" id="checkProgress" style="margin-left:auto; font-weight:400"></span></h3>
-        <label class="alldone" id="allDoneRow"><input id="allDoneBox" onchange="toggleAllDone()" type="checkbox"><span class="ad-t"><b id="allDoneTitle"><!--pnid:33B6hacWL3qvVxZqw8UFex-->今日已完成</b><small id="allDoneSub"><!--pnid:TJi8HnNhsTA9005bPnV8wI-->勾选即完成全部动作</small></span></label>
+        <h3><span class="dot"></span>今日动作清单 <span class="sub" id="checkProgress" style="margin-left:auto; font-weight:400"></span></h3>
+        <label class="alldone" id="allDoneRow"><input id="allDoneBox" onchange="toggleAllDone()" type="checkbox"><span class="ad-t"><b id="allDoneTitle">今日已完成</b><small id="allDoneSub">勾选即完成全部动作</small></span></label>
         <div id="todayMoves"></div>
-        <button class="addmove-btn" onclick="addTodayMove()"><!--pnid:m3vO3rr37xn9psG6wvlpBj-->+ 添加动作（仅当天）</button>
+        <button class="addmove-btn" onclick="addTodayMove()">+ 添加动作（仅当天）</button>
       </div>
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:nd7czTC9z6ZJSzO6kaD8Ck-->快速记体重</h3>
+        <h3><span class="dot"></span>快速记体重</h3>
         <div class="input-row">
-          <div class="field"><label><!--pnid:lEbQMe28QfNWudnJ3u0pmW-->体重 (kg)</label><input id="quickWeight" max="150" min="30" placeholder="例如 59.2" step="0.1" type="number"></div>
-          <button class="btn" onclick="quickAdd()"><!--pnid:eSAgfRxuVlAjaKRqXbtcTv-->保存</button>
+          <div class="field"><label>体重 (kg)</label><input id="quickWeight" max="150" min="30" placeholder="例如 59.2" step="0.1" type="number"></div>
+          <button class="btn" onclick="quickAdd()">保存</button>
         </div>
         <div class="progress-wrap">
           <div class="progress"><i id="quickBar" style="width:0%"></i></div>
-          <div class="progress-label"><span id="lblStart"><!--pnid:o2Mhf3d9Qo8Xr2pyQt2jax-->起始 --</span><span id="quickGap"></span><span id="lblGoal"><!--pnid:E0Qp6gKdDXjfSnbE4SpV4J-->目标 --</span></div>
+          <div class="progress-label"><span id="lblStart">起始 --</span><span id="quickGap"></span><span id="lblGoal">目标 --</span></div>
         </div>
       </div>
     </section>
 
     <section class="page" id="page-plan">
       <div class="seg">
-        <button class="on" data-seg="body" onclick="switchSeg('body',this)"><!--pnid:JzIADDu872HZDFW4WYS5pN-->体测</button>
-        <button data-seg="diet" onclick="switchSeg('diet',this)"><!--pnid:jh7Xo8HlgkM1rBr85NPhV3-->饮食</button>
-        <button data-seg="train" onclick="switchSeg('train',this)"><!--pnid:o4v3qt8hoMQuKk9QiGzR2Z-->训练</button>
-        <button data-seg="log" onclick="switchSeg('log',this)"><!--pnid:ti84A2euPgylduA9iLIhux-->记录</button>
-        <button data-seg="ai" onclick="switchSeg('ai',this)"><!--pnid:JGafOADv5yqsyfY874Fev9-->AI</button>
+        <button class="on" data-seg="body" onclick="switchSeg('body',this)">体测</button>
+        <button data-seg="diet" onclick="switchSeg('diet',this)">饮食</button>
+        <button data-seg="train" onclick="switchSeg('train',this)">训练</button>
+        <button data-seg="log" onclick="switchSeg('log',this)">记录</button>
+        <button data-seg="ai" onclick="switchSeg('ai',this)">AI</button>
       </div>
       <div id="seg-body"></div>
       <div id="seg-diet" style="display:none"></div>
       <div id="seg-train" style="display:none"></div>
       <div id="seg-log" style="display:none">
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:yYPWwoJ4RSmAcv1U7A4SWk-->体重概况</h3>
+          <h3><span class="dot"></span>体重概况</h3>
           <div class="stats">
-            <div class="stat"><div class="v" id="stCur"><!--pnid:gumTfHoNqgIYOExu9ZQtcG-->--</div><div class="l"><!--pnid:NAigsYbPYKZcbyVpsNARiA-->当前体重</div></div>
-            <div class="stat"><div class="v" id="stChange"><!--pnid:JXb10anMxWmN8doSQcODJd-->--</div><div class="l"><!--pnid:PcpsVOkwNFs7cOcoMKm0kj-->累计变化</div></div>
-            <div class="stat"><div class="v" id="stGap"><!--pnid:fQYHqgHzFy7l2T1sIq1yaL-->--</div><div class="l"><!--pnid:FXbDQnEMZ6EaMebkVKOMGN-->距目标</div></div>
-            <div class="stat"><div class="v" id="stCount"><!--pnid:vxqV0AmyNd9LUvEWCek8DB-->0</div><div class="l"><!--pnid:JTXTHkNj3Vi5PlvFcjrTV1-->记录次数</div></div>
+            <div class="stat"><div class="v" id="stCur">--</div><div class="l">当前体重</div></div>
+            <div class="stat"><div class="v" id="stChange">--</div><div class="l">累计变化</div></div>
+            <div class="stat"><div class="v" id="stGap">--</div><div class="l">距目标</div></div>
+            <div class="stat"><div class="v" id="stCount">0</div><div class="l">记录次数</div></div>
           </div>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:fXMelqoUs3nhgqAJyKSDmp-->趋势洞察</h3>
+          <h3><span class="dot"></span>趋势洞察</h3>
           <div class="insight" id="weightInsight"></div>
           <div class="sub" id="insightNote" style="margin-top:8px"></div>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:cWHJH4XODAvLoyK293EVS1-->体重趋势 <span class="sub" style="margin-left:auto; font-weight:400"><!--pnid:2Y3s3PcE1z9FWkQI9Jg8nB-->点数据点看数值</span></h3>
+          <h3><span class="dot"></span>体重趋势 <span class="sub" style="margin-left:auto; font-weight:400">点数据点看数值</span></h3>
           <div class="chart-range" id="chartRange"></div>
           <div class="chart-box" id="chart"></div>
           <div class="sub" id="chartNote" style="text-align:center"></div>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:0vNCUylPq1kAwT8HKj7aav-->新增记录</h3>
+          <h3><span class="dot"></span>新增记录</h3>
           <div class="input-row stack">
-            <div class="field"><label><!--pnid:YQuDgCEZNi5SqUiIwExk5W-->日期</label><input id="logDate" type="date"></div>
-            <div class="field"><label><!--pnid:BUHrskLghkYErNpVZQNP4S-->体重 (kg)</label><input id="logWeight" max="150" min="30" placeholder="59.0" step="0.1" type="number"></div>
+            <div class="field"><label>日期</label><input id="logDate" type="date"></div>
+            <div class="field"><label>体重 (kg)</label><input id="logWeight" max="150" min="30" placeholder="59.0" step="0.1" type="number"></div>
           </div>
-          <button class="btn full" onclick="addRecord()" style="margin:11px auto 0; max-width:280px; display:block"><!--pnid:19LGjWcRX9T3OBz9o9Jknr-->保存记录</button>
+          <button class="btn full" onclick="addRecord()" style="margin:11px auto 0; max-width:280px; display:block">保存记录</button>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:ttMm6I5qx9LSe4PATmp5Vm-->历史记录 <span class="sub" style="margin-left:auto; font-weight:400"><!--pnid:IiAGlX5kJRAsTMIN8gasDO-->可修改 / 删除</span></h3>
-          <div class="undobar" id="undoDel"><!--pnid:h54RlyqJNIVXQZgI2UimET-->已删除 <b id="undoDelName"></b><button onclick="undoDelete()"><!--pnid:LDkDMPbLXY6oktM90udGSr-->撤销</button></div>
+          <h3><span class="dot"></span>历史记录 <span class="sub" style="margin-left:auto; font-weight:400">可修改 / 删除</span></h3>
+          <div class="undobar" id="undoDel">已删除 <b id="undoDelName"></b><button onclick="undoDelete()">撤销</button></div>
           <div id="recList"></div>
         </div>
       </div>
       <div id="seg-ai" style="display:none">
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:OGCGz2DtFADaTEhezhK7Ik-->AI 教练分析 <span class="edit" onclick="switchTab('settings')"><!--pnid:fGLZBWWPzpYFdYgAMuY3Xc-->设置密钥 ›</span></h3>
-          <div class="sub"><!--pnid:QDsIgzrR44bFn6j39dNoP0-->基于你的体测数据、体重趋势、训练打卡和当前计划生成分析。选「计划调整」可直接得到能应用到计划里的修改建议。数据只发给你选择的 AI 服务商。</div>
+          <h3><span class="dot"></span>AI 教练分析 <span class="edit" onclick="switchTab('settings')">设置密钥 ›</span></h3>
+          <div class="sub">基于你的体测数据、体重趋势、训练打卡和当前计划生成分析。选「计划调整」可直接得到能应用到计划里的修改建议。数据只发给你选择的 AI 服务商。</div>
           <div class="chips" id="aiTypes" style="margin-top:12px"></div>
-          <div class="mf"><label><!--pnid:z1d5lGBG0dhcOrSX07Px6u-->想额外问的问题（可选）</label><textarea id="aiQuestion" placeholder="例如：最近腰围没变化，是不是训练强度不够？" rows="2"></textarea></div>
-          <button class="btn full" id="aiGen" onclick="aiGenerate()"><!--pnid:w9XwQlHgsMc2V6Mfd47Xjb-->✨ 生成分析</button>
+          <div class="mf"><label>想额外问的问题（可选）</label><textarea id="aiQuestion" placeholder="例如：最近腰围没变化，是不是训练强度不够？" rows="2"></textarea></div>
+          <button class="btn full" id="aiGen" onclick="aiGenerate()">生成分析</button>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:m8BseqfovBknWqDPZG4ZQP-->分析结果 <span class="edit" id="aiStop" onclick="aiStop()" style="display:none"><!--pnid:gJdhusnBmw9u7fvuB5PmmW-->停止</span></h3>
-          <div class="ai-out" id="aiOut"><!--pnid:wkrdjSsl2M59s2blvRUtQ7-->点击上方「生成分析」，结果会显示在这里。</div>
+          <h3><span class="dot"></span>分析结果 <span class="edit" id="aiStop" onclick="aiStop()" style="display:none">停止</span></h3>
+          <div class="ai-out" id="aiOut">点击上方「生成分析」，结果会显示在这里。</div>
         <div style="display:flex; gap:8px; margin-top:10px">
-          <button class="btn ghost sm" onclick="copyAI()" style="flex:1"><!--pnid:TmwXVrSwjfGvmjVHGkQyvQ-->复制结果</button>
-          <button class="btn ghost sm" onclick="saveAI()" style="flex:1"><!--pnid:WnKBJBvqp3xRwDhV6vbjHp-->存入历史</button>
-          <button class="btn ghost sm" id="undoAutoBtn" onclick="undoPatch()" style="flex:1; display:none"><!--pnid:OBhXr5uLwKs7gPMbMUoqN9-->↩ 撤销</button>
+          <button class="btn ghost sm" onclick="copyAI()" style="flex:1">复制结果</button>
+          <button class="btn ghost sm" onclick="saveAI()" style="flex:1">存入历史</button>
+          <button class="btn ghost sm" id="undoAutoBtn" onclick="undoPatch()" style="flex:1; display:none">↩ 撤销</button>
         </div>
         <div style="display:flex; gap:8px; margin-top:8px">
-          <button class="btn blue sm" onclick="extractFillFromText()" style="flex:1">📥 从分析文字提取</button>
+          <button class="btn blue sm" onclick="extractFillFromText()" style="flex:1">从分析文字提取</button>
           <button class="btn ghost sm" onclick="addManualFill()" style="flex:1">+ 手动添加填写项</button>
         </div>
           <div class="pbox" id="aiPatchBox" style="display:none">
-            <div class="ph">📥 一键填写到各板块 <small>按部分勾选 · 可微调 · 应用后可撤销</small></div>
+            <div class="ph">一键填写到各板块 <small>按部分勾选 · 可微调 · 应用后可撤销</small></div>
             <div class="pt">
               <button class="tb" onclick="fillSelectAll(true)">全选</button>
               <button class="tb" onclick="fillSelectAll(false)">全不选</button>
@@ -368,14 +478,14 @@ ul.tips li{margin-bottom:7px}
             </div>
             <div class="pl" id="aiPatchList"></div>
             <div class="pf">
-              <button class="btn sm" onclick="applyPatches()">✓ 一键填写选中项</button>
+              <button class="btn sm" onclick="applyPatches()">应用选中项</button>
               <button class="btn ghost sm" onclick="undoPatch()">↩ 撤销上次填写</button>
             </div>
           </div>
-          <div class="note b" style="font-size:11px"><!--pnid:ZRAyEmy00g4XGuQIyQ3arQ-->AI 建议只是草稿，应用后仍可在各分段或「我的」页面手动改任何内容；应用前会自动保存快照，可一键撤销。</div>
+          <div class="note b" style="font-size:11px">AI 建议只是草稿，应用后仍可在各分段或「我的」页面手动改任何内容；应用前会自动保存快照，可一键撤销。</div>
         </div>
         <div class="card">
-          <h3><span class="dot"></span><!--pnid:pzdlSAxde846iLgviks1JF-->分析历史</h3>
+          <h3><span class="dot"></span>分析历史</h3>
           <div id="aiHistory"></div>
         </div>
       </div>
@@ -383,56 +493,56 @@ ul.tips li{margin-bottom:7px}
 
     <section class="page" id="page-me">
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:zLKHVTexV91OiOzyYqN4Vw-->个人档案 <span class="edit" onclick="editProfile()"><!--pnid:g30TEGivtRuPYgDpe5JXXs-->编辑</span></h3>
+        <h3><span class="dot"></span>个人档案 <span class="edit" onclick="editProfile()">编辑</span></h3>
         <div id="profileView"></div>
       </div>
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:ZXLivC7CHcnzfqN9NTcDaU-->训练日安排 <span class="edit" onclick="editWeek()"><!--pnid:WyrQItVv66BJYNlx1ToNHI-->编辑</span></h3>
+        <h3><span class="dot"></span>训练日安排 <span class="edit" onclick="editWeek()">编辑</span></h3>
         <div id="weekView"></div>
       </div>
       <div class="card" onclick="switchTab('settings')" style="cursor:pointer">
-        <h3><span class="dot"></span><!--pnid:hgOrDKs2J0CfmeDMUBUthY-->设置 <span style="margin-left:auto; color:var(--muted); font-size:12px; font-weight:400"><!--pnid:oPelWQ6pW1zvKRmWlEtw1q-->AI 接口 / 数据 / 关于 ›</span></h3>
-        <div class="sub"><!--pnid:8Bo66PR3LlIQn0jlctLRrE-->API 密钥、备份导入导出、关于说明已移到独立的「设置」页</div>
+        <h3><span class="dot"></span>设置 <span style="margin-left:auto; color:var(--muted); font-size:12px; font-weight:400">AI 接口 / 数据 / 关于 ›</span></h3>
+        <div class="sub">API 密钥、备份导入导出、关于说明已移到独立的「设置」页</div>
       </div>
     </section>
 
     <section class="page" id="page-settings">
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:lVkFbbdzWCw3RscIWDDi7n-->AI 接口设置</h3>
-        <div class="mf"><label><!--pnid:ZvWjaDWzTtY7hOILFxN7v1-->服务商</label><select id="aiProvider" onchange="onProviderChange()"><option value="deepseek"><!--pnid:SKwFup5EouqGvsDAdkiB5r-->DeepSeek</option><option value="silicon"><!--pnid:OnQS4Uga3PVHIW2p8cXc5i-->硅基流动 SiliconFlow</option><option value="custom"><!--pnid:9jnIjjGqRi68DrAEIC5EOj-->自定义接口</option></select></div>
-        <div class="mf"><label id="keyLabel"><!--pnid:Mpq9EHlW5S2GvPJeWMcTy3-->API Key</label><input id="aiKey" placeholder="sk-..." type="password"><div class="hint" id="keyHint"></div></div>
+        <h3><span class="dot"></span>AI 接口设置</h3>
+        <div class="mf"><label>服务商</label><select id="aiProvider" onchange="onProviderChange()"><option value="deepseek">DeepSeek</option><option value="silicon">硅基流动 SiliconFlow</option><option value="custom">自定义接口</option></select></div>
+        <div class="mf"><label id="keyLabel">API Key</label><input id="aiKey" placeholder="sk-..." type="password"><div class="hint" id="keyHint"></div></div>
         <div class="mf"><label>模型名称（文字分析用）</label><select id="aiModel" onchange="onModelPick()"><option value="">— 请先拉取模型 —</option></select><input id="aiModelCustom" placeholder="或手动输入模型名" type="text" style="display:none;margin-top:6px" oninput="onModelPick()"><div class="hint" id="modelHint"></div></div>
         <div class="mf"><label>视觉模型（识别体测图片用）</label><select id="aiVision" onchange="onModelPick()"><option value="">— 请先拉取模型 —</option></select><input id="aiVisionCustom" placeholder="或手动输入视觉模型名" type="text" style="display:none;margin-top:6px" oninput="onModelPick()"><div class="hint" id="visionHint">需支持图片输入；拉取后从列表中选择</div></div>
-        <div class="mf"><button class="btn blue" onclick="fetchModels(event)" id="fetchModelsBtn" style="width:100%">🔄 拉取可用模型</button><div class="hint" id="fetchHint">填好 API Key（自定义接口还需填地址）后点击，自动获取该账户可用模型，再在上方选择。</div></div>
-        <div class="mf" id="urlWrap" style="display:none"><label><!--pnid:03WHAxBdbI5qXKP0PlSpZS-->接口地址</label><input id="aiUrl" placeholder="https://.../v1" type="text"><div class="hint"><!--pnid:RNFH0IIiPOA04ElqlZ5Xvp-->以 /v1 结尾，程序会自动补 /chat/completions</div></div>
+        <div class="mf"><button class="btn ghost" onclick="fetchModels(event)" id="fetchModelsBtn" style="width:100%">拉取可用模型</button><div class="hint" id="fetchHint">填好 API Key（自定义接口还需填地址）后点击，自动获取该账户可用模型，再在上方选择。</div></div>
+        <div class="mf" id="urlWrap" style="display:none"><label>接口地址</label><input id="aiUrl" placeholder="https://.../v1" type="text"><div class="hint">以 /v1 结尾，程序会自动补 /chat/completions</div></div>
         <div style="display:flex; gap:8px">
-          <button class="btn ghost" onclick="saveAIConfig()" style="flex:1"><!--pnid:abSv70y1Q62RK3vwiADkz8-->保存配置</button>
-          <button class="btn blue" onclick="testAI(event)" style="flex:1"><!--pnid:2jrw8fw4U74SjGxa5qbUwm-->测试连接</button>
+          <button class="btn ghost" onclick="saveAIConfig()" style="flex:1">保存配置</button>
+          <button class="btn blue" onclick="testAI(event)" style="flex:1">测试连接</button>
         </div>
-        <div class="note b"><!--pnid:hQoULKVrQDoGPlCoR66MdQ-->密钥只保存在这台设备的浏览器里，不会上传到任何服务器，也不会写进分享链接。请勿在公用电脑保存密钥。若浏览器直接调用被跨域(CORS)拦截，可在「自定义接口」里填自己的中转地址。</div>
+        <div class="note b">密钥只保存在这台设备的浏览器里，不会上传到任何服务器，也不会写进分享链接。请勿在公用电脑保存密钥。若浏览器直接调用被跨域(CORS)拦截，可在「自定义接口」里填自己的中转地址。</div>
       </div>
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:ZmNp9N25izirXwcLhy6vjg-->数据管理</h3>
+        <h3><span class="dot"></span>数据管理</h3>
         <div class="input-row" style="margin-bottom:10px">
-          <button class="btn ghost" onclick="exportJSON()" style="flex:1"><!--pnid:Bm2cQb6HAWuwGDfNuK22gM-->📥 导出备份</button>
-          <button class="btn ghost" onclick="document.getElementById('importFile').click()" style="flex:1"><!--pnid:tF7Z0v83rIB0R9cOnF1f42-->📤 导入备份</button>
+          <button class="btn ghost" onclick="exportJSON()" style="flex:1">导出备份</button>
+          <button class="btn ghost" onclick="document.getElementById('importFile').click()" style="flex:1">导入备份</button>
         </div>
         <input accept=".json" id="importFile" onchange="importJSON(event)" type="file" style="display:none">
         <div class="input-row" style="margin-bottom:10px">
-          <button class="btn ghost" onclick="exportCSV()" style="flex:1"><!--pnid:Zcxdy2IZIyIVbAMpS2TO0L-->导出体重 CSV</button>
-          <button class="btn ghost" onclick="document.getElementById('importCsvFile').click()" style="flex:1"><!--pnid:CDcU11tO4LDeYse7PydKDa-->导入体重 CSV</button>
+          <button class="btn ghost" onclick="exportCSV()" style="flex:1">导出体重 CSV</button>
+          <button class="btn ghost" onclick="document.getElementById('importCsvFile').click()" style="flex:1">导入体重 CSV</button>
         </div>
         <input accept=".csv" id="importCsvFile" onchange="importCSV(event)" type="file" style="display:none">
-        <button class="btn ghost full" onclick="undoImport()" style="margin-bottom:10px"><!--pnid:lCXDFcplOoCHQ4jlLvN118-->↩ 撤销上次导入 / 重置</button>
-        <button class="btn warn full" onclick="resetAll()"><!--pnid:u9cyGJ4zbwN57MzkPxUhVR-->恢复默认数据</button>
-        <div class="sub" style="margin-top:9px"><!--pnid:nmUi0ImCbBqWwAJFigCjgu-->所有数据（档案、计划、饮食、体重、历史）都存本地；换设备可用「导出备份 / 导入备份」迁移。</div>
+        <button class="btn ghost full" onclick="undoImport()" style="margin-bottom:10px">↩ 撤销上次导入 / 重置</button>
+        <button class="btn warn full" onclick="resetAll()">恢复默认数据</button>
+        <div class="sub" style="margin-top:9px">所有数据（档案、计划、饮食、体重、历史）都存本地；换设备可用「导出备份 / 导入备份」迁移。</div>
       </div>
       <div class="card">
-        <h3><span class="dot"></span><!--pnid:y0htfHHiI4heAk6mDl3RoB-->关于</h3>
-        <div class="about"><!--pnid:GCC4fCUESMuYfgruj0HLXb-->
-          所有内容均为通用示例，可自行编辑并填入自己的数据。<br><!--pnid:G7U0PwEruSMQNDNMAkwifP-->
-          训练只在无痛范围内进行，出现疼痛或刺痛请立即停止。<br><!--pnid:rgTsgP9wYx1kCPTsMfiaRW-->
-          体重有日常波动，请关注每周趋势而非单日数字。<br><!--pnid:iUHeVl0xQKQnbl1Odl4ZZG-->
+        <h3><span class="dot"></span>关于</h3>
+        <div class="about">
+          所有内容均为通用示例，可自行编辑并填入自己的数据。<br>
+          训练只在无痛范围内进行，出现疼痛或刺痛请立即停止。<br>
+          体重有日常波动，请关注每周趋势而非单日数字。<br>
           AI 分析仅供参考，不能替代医生或专业教练的诊断。
         </div>
       </div>
@@ -440,19 +550,19 @@ ul.tips li{margin-bottom:7px}
   </main>
 
   <nav class="tabbar">
-    <button class="on" data-tab="today" onclick="switchTab('today')"><span class="ic"><!--pnid:YYiuGYTuScEcR8rHiK5RXW-->📅</span><!--pnid:BCyGRn3Il1AvECsyHjcxCA-->今日</button>
-    <button data-tab="plan" onclick="switchTab('plan')"><span class="ic"><!--pnid:aKOEKr9KsCyY647kdnzQP2-->📋</span><!--pnid:uJ3HoSfeiITol7sBFDCCSy-->计划</button>
-    <button data-tab="me" onclick="switchTab('me')"><span class="ic"><!--pnid:GQBPWGVqKC62Wp0cuJljRB-->👤</span><!--pnid:wA6t6fxUdQGcULL7G70rJJ-->我的</button>
-    <button data-tab="settings" onclick="switchTab('settings')"><span class="ic"><!--pnid:MA7uFADhfAoNCniuWxqJ58-->⚙️</span><!--pnid:poIWieXok7H75Tyi7NCjOd-->设置</button>
+    <button class="on" data-tab="today" onclick="switchTab('today')"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5"/><path d="M3.5 9.6h17M8.2 3.2v3.6M15.8 3.2v3.6"/></svg></span>今日</button>
+    <button data-tab="plan" onclick="switchTab('plan')"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4.2 6.4h15.6M4.2 12h15.6M4.2 17.6h9.6"/></svg></span>计划</button>
+    <button data-tab="me" onclick="switchTab('me')"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.6"/><path d="M4.8 20.2c.7-3.7 3.6-6 7.2-6s6.5 2.3 7.2 6"/></svg></span>我的</button>
+    <button data-tab="settings" onclick="switchTab('settings')"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 7.2h9.4M17.4 7.2H20M4 16.8h3.2M11.2 16.8H20"/><circle cx="15.4" cy="7.2" r="2.2"/><circle cx="9.2" cy="16.8" r="2.2"/></svg></span>设置</button>
   </nav>
   <div class="toast" id="toast"></div>
 </div>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
-    <div class="modal-head"><span id="modalTitle"><!--pnid:ugbtrpU1LBLNMhmb2pzcLU-->编辑</span><button class="x" onclick="closeModal()"><!--pnid:EaPVV3Ko7vvFRDhMsnTzSX-->×</button></div>
+    <div class="modal-head"><span id="modalTitle">编辑</span><button class="x" onclick="closeModal()">×</button></div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()"><!--pnid:pPzQWuMTwog3m4SLDKx6eh-->取消</button><button class="btn" id="modalOk"><!--pnid:R0bo6QwR0vvnEvy0xbH1pB-->保存</button></div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">取消</button><button class="btn" id="modalOk">保存</button></div>
   </div>
 </div>
 
@@ -558,10 +668,10 @@ var DEFAULT={
   ],
   diet:{cal:1600,protein:110,fat:50,carb:178,fiber:25,water:2,
     meals:[
-      ['🌅 早餐','07:30','420','燕麦 40g + 牛奶 250ml；水煮蛋 2 个；蓝莓或小番茄 100g'],
-      ['🍱 午餐','12:30','550','糙米饭 150g（熟）；鸡胸肉 120g；西兰花 200g + 胡萝卜 50g；橄榄油 5g'],
-      ['🍎 加餐','15:30','200','无糖希腊酸奶 150g；原味杏仁 10g。傍晚训练则移到训练前 1 小时'],
-      ['🌙 晚餐','18:30','430','蒸红薯 150g；清蒸鱼 / 虾仁 120g；蒜蓉菠菜或芦笋 200g']],
+      ['早餐','07:30','420','燕麦 40g + 牛奶 250ml；水煮蛋 2 个；蓝莓或小番茄 100g'],
+      ['午餐','12:30','550','糙米饭 150g（熟）；鸡胸肉 120g；西兰花 200g + 胡萝卜 50g；橄榄油 5g'],
+      ['加餐','15:30','200','无糖希腊酸奶 150g；原味杏仁 10g。傍晚训练则移到训练前 1 小时'],
+      ['晚餐','18:30','430','蒸红薯 150g；清蒸鱼 / 虾仁 120g；蒜蓉菠菜或芦笋 200g']],
     principles:['高蛋白优先：每餐都有肉 / 蛋 / 奶 / 豆制品。','主食粗细搭配：糙米、燕麦、红薯替代部分精米白面。','针对腰臀比：严格限制含糖饮料、甜点、酒精。','补足无机盐：每天奶制品 250–300ml + 深绿叶菜 + 少量坚果。','足量蔬菜：每天 500g 以上，深色占一半。']},
   ai:{provider:'deepseek',providers:{
     deepseek:{key:'',model:'deepseek-chat',vision:'deepseek-flash',url:'https://api.deepseek.com/v1',models:[],modelsAt:0},
@@ -604,6 +714,7 @@ var ocrImage=null,ocrFields=null,ocrBusy=false;
 
 function clone(o){return JSON.parse(JSON.stringify(o));}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function trimIcon(s){return String(s==null?'':s).replace(/^[\s\u2600-\u27BF\uD83C-\uDBFF\uDC00-\uDFFF\uFE0F]+/,'');}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2400);}
 function todayKey(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function sortW(){state.weights.sort(function(a,b){return a.date.localeCompare(b.date);});}
@@ -753,7 +864,7 @@ function openMovePicker(title,cb){
   var chips='<span class="pick-cat on" data-cat="全部" onclick="setPickCat(\'全部\')">全部 '+(state.library||[]).length+'</span>';
   chips+=order.map(function(c){return '<span class="pick-cat" data-cat="'+esc(c)+'" onclick="setPickCat(\''+pickJsStr(c)+'\')">'+esc(c)+' '+counts[c]+'</span>';}).join('');
   document.getElementById('modalBody').innerHTML=
-    '<input id="pickSearch" class="lib-search" type="text" placeholder="🔍 搜索动作（名称或要点）" oninput="renderPickList()">'+
+    '<input id="pickSearch" class="lib-search" type="text" placeholder="搜索动作（名称或要点）" oninput="renderPickList()">'+
     '<div class="pick-cats" id="pickCats">'+chips+'</div>'+
     '<div class="pick-bar"><span class="n" id="pickCount">动作库 · 可多选</span><span class="op" onclick="pickAll(true)">全选</span><span class="op" onclick="pickAll(false)">清空</span></div>'+
     '<div class="pick-list" id="pickList"></div>'+
@@ -1008,7 +1119,7 @@ function renderTop(){
   document.getElementById('quickBar').style.width=pct+'%';
   document.getElementById('lblStart').textContent='起始 '+p.start.toFixed(1);
   document.getElementById('lblGoal').textContent='目标 '+p.goal.toFixed(1);
-  document.getElementById('quickGap').textContent=cur>p.goal?'还差 '+(cur-p.goal).toFixed(1)+' kg':'已达成 🎉';
+  document.getElementById('quickGap').textContent=cur>p.goal?'还差 '+(cur-p.goal).toFixed(1)+' kg':'已达成';
 }
 function renderToday(){
   var d=new Date(),key=todayKey(),code=state.week[d.getDay()],p=state.plans[code]||state.plans.R;
@@ -1016,7 +1127,7 @@ function renderToday(){
   document.getElementById('todayTitle').textContent=p.title;
   document.getElementById('todayTags').innerHTML='<span class="tag">'+esc(p.sub)+'</span>'+(code==='R'?'':'<span class="tag o">循序渐进 · 动作标准优先</span>');
   var ts=trainingStats();
-  document.getElementById('streakText').innerHTML='连续 '+ts.streak+' 次训练<small>本周完成 '+ts.done+' / '+ts.planned+' 次计划训练</small>';
+  document.getElementById('streakText').innerHTML='<span class="sk-n">'+ts.streak+'</span><span class="sk-t">连续训练<small>本周完成 '+ts.done+' / '+ts.planned+' 次计划训练</small></span>';
   document.getElementById('weekDots').innerHTML=ts.dots.map(function(x){
     return '<div class="d'+(x.done?' done':(x.plan?' plan':''))+(x.today?' today':'')+'"><i></i><b>'+x.label+'</b></div>';
   }).join('');
@@ -1031,7 +1142,7 @@ function renderToday(){
     var t='x'+i,ck=done.indexOf(t)>=0;
     html+='<div class="move'+(ck?' done':'')+'"><input type="checkbox" '+(ck?'checked':'')+' onclick="toggleExtraCheck('+i+')"><div class="info"><b>'+esc(m[0])+'</b><div class="d">'+esc(m[1])+'</div><div class="t">'+esc(m[2])+'</div></div><button class="mdel" onclick="delTodayMove('+i+')" title="删除">×</button></div>';
   });
-  if(!p.moves.length&&!extra.length)html='<div class="empty" style="padding:14px 0">今天是休息日，好好恢复 💚</div>';
+  if(!p.moves.length&&!extra.length)html='<div class="empty" style="padding:14px 0">今天是休息日，好好恢复</div>';
   document.getElementById('todayMoves').innerHTML=html;
   var total=p.moves.length+extra.length;
   var cnt=done.filter(function(i){return (typeof i==='number'&&i<p.moves.length)||(typeof i==='string'&&i.charAt(0)==='x'&&parseInt(i.slice(1))<extra.length);}).length;
@@ -1095,7 +1206,7 @@ function toggleAllDone(){
 }
 function renderPlan(){
   var p=state.profile;
-  var h='<div class="card"><h3><span class="dot"></span>📷 拍照识别导入 <span class="sub" style="margin-left:auto;font-weight:400">AI 自动填表</span></h3>'+
+  var h='<div class="card"><h3><span class="dot"></span>拍照识别导入 <span class="sub" style="margin-left:auto;font-weight:400">AI 自动填表</span></h3>'+
     '<div class="sub">上传体测报告截图，AI 自动识别并归类到下方资料。识别结果会先让你确认，不会直接覆盖。需在「设置」里配好视觉模型。</div>'+
     '<input type="file" id="ocrFile" accept="image/*" style="display:none" onchange="onPickImage(event)">'+
     '<button class="btn full" style="margin-top:11px" onclick="document.getElementById(\'ocrFile\').click()">选择 / 拍摄体测报告图片</button>'+
@@ -1116,21 +1227,21 @@ function renderPlan(){
     '<div><div class="v">'+d.carb+'g</div><div class="l">碳水</div></div><div><div class="v">'+d.fiber+'g</div><div class="l">膳食纤维</div></div><div><div class="v">'+d.water+'L</div><div class="l">饮水</div></div></div>'+
     '<div class="note">热量缺口约 300–500 kcal，每周减重 0.2–0.4 kg，不易反弹也不易掉肌肉。</div></div>';
   h+='<div class="card"><h3><span class="dot"></span>一日食谱 <span class="edit" onclick="editDiet()">编辑</span></h3>'+d.meals.map(function(m){
-    return '<div class="meal"><b>'+esc(m[0])+'</b> <span class="sub">'+esc(m[1])+'</span><span class="kc">'+esc(m[2])+' kcal</span><br>'+esc(m[3])+'</div>';
+    return '<div class="meal"><b>'+esc(trimIcon(m[0]))+'</b> <span class="sub">'+esc(m[1])+'</span><span class="kc">'+esc(m[2])+' kcal</span><br>'+esc(m[3])+'</div>';
   }).join('')+'</div>';
   h+='<div class="card"><h3><span class="dot"></span>饮食原则 <span class="edit" onclick="editDiet()">编辑</span></h3><ul class="tips">'+d.principles.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>';
   document.getElementById('seg-diet').innerHTML=h;
   h='<div class="card"><h3><span class="dot"></span>动作库 <span class="edit" onclick="editLibrary()">编辑</span></h3>'+
-    '<input id="libSearch" class="lib-search" type="text" placeholder="🔍 搜索动作（名称或要点）" oninput="renderLibRows()">'+
+    '<input id="libSearch" class="lib-search" type="text" placeholder="搜索动作（名称或要点）" oninput="renderLibRows()">'+
     '<div class="pick-cats" id="libCats"></div>'+
     '<div id="libList" class="lib-list"></div></div>';
   planKeys().forEach(function(k){
     var pl=state.plans[k];
-    h+='<div class="plan-block"><div class="head"><span>'+esc(pl.title)+'</span><span class="pedit" onclick="editPlan(\''+k+'\')">✎ 编辑</span><span class="pdel" style="font-size:11px;margin-left:8px" onclick="delPlan(\''+k+'\')">删除</span></div><table>'+
-      '<tr style="background:#f6faf6"><td colspan="3" style="color:#78909c;font-size:11px">'+esc(pl.sub)+'</td></tr>'+
+    h+='<div class="plan-block"><div class="head"><span class="ptitle">'+esc(pl.title)+'</span><span class="phact"><span class="pedit" onclick="editPlan(\''+k+'\')">编辑</span><span class="pdel" onclick="delPlan(\''+k+'\')">删除</span></span></div><table>'+
+      '<tr class="psub"><td colspan="4">'+esc(pl.sub)+'</td></tr>'+
       (pl.moves.length?pl.moves.map(function(m,i){
-        return '<tr><td>'+esc(m[0])+'</td><td>'+esc(m[1])+'</td><td>'+esc(m[2])+' <span class="pdel" onclick="delPlanMove(\''+k+'\','+i+')" title="删除">×</span></td></tr>';
-      }).join(''):'<tr><td colspan="3" style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0">暂无动作，点下方「+ 添加动作」从动作库勾选</td></tr>')+
+        return '<tr><td>'+esc(m[0])+'</td><td>'+esc(m[1])+'</td><td>'+esc(m[2])+'</td><td class="pdx"><span class="pdel" onclick="delPlanMove(\''+k+'\','+i+')" title="删除">×</span></td></tr>';
+      }).join(''):'<tr><td colspan="4" style="color:var(--muted);font-size:12px;text-align:center;padding:16px 0">暂无动作，点下方「+ 添加动作」从动作库勾选</td></tr>')+
       '</table><button class="padd" onclick="addPlanMove(\''+k+'\')">+ 添加动作</button></div>';
   });
   h+='<button class="padd" style="width:100%;margin-top:4px" onclick="addPlan()">+ 添加方案（D / E / F ...）</button>';
@@ -1179,23 +1290,23 @@ function drawChart(){
   var Y=function(v){return T+(mx-v)*(H-T-B)/(mx-mn);};
   var ap=[];
   if(ws.length>=2)ws.forEach(function(w){var a=avgWindow(w.date,7);if(a!==null)ap.push(X(w.date)+','+Y(a));});
-  document.getElementById('chartNote').textContent='绿线=每次称重'+(ap.length>1?' · 橙虚线=7日平均':'')+' · 黄虚线=目标 '+Number(goal).toFixed(1)+' kg';
+  document.getElementById('chartNote').textContent='墨线=每次称重'+(ap.length>1?' · 朱红虚线=7日平均':'')+' · 金虚线=目标 '+Number(goal).toFixed(1)+' kg';
   var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
   [0,.5,1].forEach(function(f){
     var v=mn+(mx-mn)*(1-f),y=T+f*(H-T-B);
-    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#e8efe9" stroke-width="1"/>';
-    s+='<text x="'+(L-5)+'" y="'+(y+3)+'" text-anchor="end" font-size="9" fill="#90a4ae">'+v.toFixed(1)+'</text>';
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#E7E0CE" stroke-width="1"/>';
+    s+='<text x="'+(L-5)+'" y="'+(y+3)+'" text-anchor="end" font-size="9" fill="#8C8574">'+v.toFixed(1)+'</text>';
   });
-  s+='<line x1="'+L+'" y1="'+Y(goal)+'" x2="'+(W-R)+'" y2="'+Y(goal)+'" stroke="#f9a825" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  s+='<line x1="'+L+'" y1="'+Y(goal)+'" x2="'+(W-R)+'" y2="'+Y(goal)+'" stroke="#A9761B" stroke-width="1.5" stroke-dasharray="4 3"/>';
   var pts=ws.map(function(w){return X(w.date)+','+Y(w.value);}).join(' ');
   if(ws.length>1){
-    s+='<polygon points="'+X(ws[0].date)+','+(H-B)+' '+pts+' '+X(ws[ws.length-1].date)+','+(H-B)+'" fill="rgba(67,160,71,.12)"/>';
-    s+='<polyline points="'+pts+'" fill="none" stroke="#2e7d32" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    s+='<polygon points="'+X(ws[0].date)+','+(H-B)+' '+pts+' '+X(ws[ws.length-1].date)+','+(H-B)+'" fill="rgba(23,22,15,.07)"/>';
+    s+='<polyline points="'+pts+'" fill="none" stroke="#17160F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
   }
-  if(ap.length>1)s+='<polyline points="'+ap.join(' ')+'" fill="none" stroke="#ef6c00" stroke-width="2" stroke-dasharray="5 3" stroke-linejoin="round" stroke-linecap="round"/>';
-  ws.forEach(function(w){s+='<circle cx="'+X(w.date)+'" cy="'+Y(w.value)+'" r="3.4" fill="#fff" stroke="#2e7d32" stroke-width="2"><title>'+w.date+' · '+w.value.toFixed(1)+' kg</title></circle>';});
+  if(ap.length>1)s+='<polyline points="'+ap.join(' ')+'" fill="none" stroke="#D2451C" stroke-width="2" stroke-dasharray="5 3" stroke-linejoin="round" stroke-linecap="round"/>';
+  ws.forEach(function(w){s+='<circle cx="'+X(w.date)+'" cy="'+Y(w.value)+'" r="3.4" fill="#FFFCF4" stroke="#17160F" stroke-width="2"><title>'+w.date+' · '+w.value.toFixed(1)+' kg</title></circle>';});
   var idxs=ws.length<=6?ws.map(function(w,i){return i;}):[0,Math.floor(ws.length/2),ws.length-1];
-  idxs.forEach(function(i){s+='<text x="'+X(ws[i].date)+'" y="'+(H-8)+'" text-anchor="middle" font-size="8.5" fill="#90a4ae">'+ws[i].date.slice(5)+'</text>';});
+  idxs.forEach(function(i){s+='<text x="'+X(ws[i].date)+'" y="'+(H-8)+'" text-anchor="middle" font-size="8.5" fill="#8C8574">'+ws[i].date.slice(5)+'</text>';});
   s+='</svg>';box.innerHTML=s;
 }
 function renderMe(){
@@ -1214,16 +1325,15 @@ function renderMe(){
 function renderModelSelect(id,list,current){
   var el=document.getElementById(id),custom=document.getElementById(id+'Custom');
   if(!el)return;
+  var list2=(list||[]).slice();
+  // 当前值不在拉取列表里时，作为一项并入列表，避免下拉与手动输入同时出现两个框
+  if(current&&list2.indexOf(current)<0)list2.unshift(current);
   var opts=['<option value="">— 请选择模型 —</option>'];
-  (list||[]).forEach(function(m){opts.push('<option value="'+esc(m)+'">'+esc(m)+'</option>');});
-  opts.push('<option value="__custom__">✏️ 手动输入模型名…</option>');
+  list2.forEach(function(m){opts.push('<option value="'+esc(m)+'">'+esc(m)+'</option>');});
+  opts.push('<option value="__custom__">手动输入模型名…</option>');
   el.innerHTML=opts.join('');
-  var inList=!current||(list||[]).indexOf(current)>=0;
-  // 当前值不在拉取列表中：视为手动输入的模型，选中"手动输入"选项并回填
-  if(current&&!inList){
-    el.value='__custom__';
-    if(custom){custom.value=current;custom.style.display='';}
-  }else{el.value=current||'';if(custom)custom.style.display='none';}
+  el.value=current||'';
+  if(custom){custom.value='';custom.style.display='none';}
 }
 function currentModelValue(id){
   var el=document.getElementById(id),custom=document.getElementById(id+'Custom');
@@ -1286,13 +1396,13 @@ async function fetchModels(ev){
     if(!c.model||list.indexOf(c.model)<0)c.model=list[0];
     if(!c.vision||list.indexOf(c.vision)<0)c.vision=vis;
     save();renderAIConfig();
-    if(hint)hint.textContent='✅ 拉取到 '+list.length+' 个模型，已在上方列出，请手动选择。';
+    if(hint)hint.textContent='已拉取到 '+list.length+' 个模型，已在上方列出，请手动选择。';
     toast('拉取成功：'+list.length+' 个模型');
   }catch(e){
     var msg=e&&e.message||'请求失败';
-    if(hint)hint.textContent='❌ 拉取失败：'+msg+'。（可手动在下方输入框填写模型名）';
+    if(hint)hint.textContent='拉取失败：'+msg+'。（可手动在下方输入框填写模型名）';
     toast('拉取失败：'+msg);
-  }finally{if(btn){btn.disabled=false;btn.textContent='🔄 拉取可用模型';}}
+  }finally{if(btn){btn.disabled=false;btn.textContent='拉取可用模型';}}
 }
 function saveAIConfig(){
   var pr=document.getElementById('aiProvider').value,c=state.ai.providers[pr];
@@ -1317,19 +1427,19 @@ function renderAIHistory(){
     return '<div class="ai-hist" onclick="viewHistory('+idx+')">'
       +'<span>'+esc(nm)+' · '+esc(h.q||'综合分析')+'</span>'
       +'<span class="acts"><span class="tm">'+esc(h.time)+'</span>'
-      +'<button class="hf" onclick="event.stopPropagation();fillFromHistory('+idx+')">📥 一键填写'+(cnt?' ('+cnt+')':'')+'</button></span></div>';
+      +'<button class="hf" onclick="event.stopPropagation();fillFromHistory('+idx+')">一键填写'+(cnt?' ('+cnt+')':'')+'</button></span></div>';
   }).join(''):'<div class="empty">还没有分析记录</div>';
 }
-function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析，可点「📥 一键填写」');}}
+function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析，可点「一键填写」');}}
 
 function getPath(path){return path.split('.').reduce(function(o,k){return o[k];},state);}
 function setPath(path,v){var ps=path.split('.'),o=state;for(var i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=v;}
 var FILL_GROUPS=[
-  {k:'body',name:'体测 / 身体数据',icon:'📏',seg:'body'},
-  {k:'diet',name:'饮食计划',icon:'🥗',seg:'diet'},
-  {k:'train',name:'训练方案',icon:'🏋️',seg:'train'},
-  {k:'week',name:'每周训练安排',icon:'📅',seg:'train'},
-  {k:'lib',name:'动作库',icon:'📚',seg:'train'}
+  {k:'body',name:'体测 / 身体数据',icon:'01',seg:'body'},
+  {k:'diet',name:'饮食计划',icon:'02',seg:'diet'},
+  {k:'train',name:'训练方案',icon:'03',seg:'train'},
+  {k:'week',name:'每周训练安排',icon:'04',seg:'train'},
+  {k:'lib',name:'动作库',icon:'05',seg:'train'}
 ];
 function fillGroupName(k){var g=FILL_GROUPS.filter(function(x){return x.k===k;})[0];return g?g.name:'其他';}
 function buildPatchFields(){
@@ -1453,11 +1563,11 @@ function renderPatch(){
         var x=o.x,i=o.i,f=x.f,name=x.c.label||f.label;
         return '<div class="pch" id="pch'+i+'" data-g="'+G.k+'">'
           +'<div class="l1"><input type="checkbox" id="pcb'+i+'" checked onchange="updateFillCount()">'
-          +'<div class="nm">'+esc(name)+'<small>'+esc(f.label)+'</small></div>'
+          +'<div class="nm">'+esc(name)+(f.label&&f.label!==name?'<small>'+esc(f.label)+'</small>':'')+'</div>'
           +'<button class="tiny" onclick="togglePch(event)">展开</button>'
-          +'<button class="tiny" onclick="editPatchVal('+i+')">✎ 微调</button></div>'
+          +'<button class="tiny" onclick="editPatchVal('+i+')">微调</button></div>'
           +'<div class="df"><b>当前：</b>'+esc(fmtPatchValue(f,f.get()))+'\n<b>建议：</b>'+esc(fmtPatchValue(f,x.v))+'</div>'
-          +(x.c.reason?'<div class="rs">💬 '+esc(x.c.reason)+'</div>':'')
+          +(x.c.reason?'<div class="rs">'+esc(x.c.reason)+'</div>':'')
           +'</div>';
       }).join('')
       +'</div></div>';
@@ -1629,7 +1739,7 @@ function onPickImage(e){
 }
 function showOcrPreview(){
   var box=document.getElementById('ocrPreview');if(!box)return;
-  box.innerHTML=ocrImage?'<div class="ocr-prev"><img src="'+ocrImage+'" alt="体测报告预览"><button class="btn full" style="margin-top:9px" onclick="startOCR()"'+(ocrBusy?' disabled':'')+'>'+(ocrBusy?'识别中…':'🔍 开始识别')+'</button></div>':'';
+  box.innerHTML=ocrImage?'<div class="ocr-prev"><img src="'+ocrImage+'" alt="体测报告预览"><button class="btn full" style="margin-top:9px" onclick="startOCR()"'+(ocrBusy?' disabled':'')+'>'+(ocrBusy?'识别中…':'开始识别')+'</button></div>':'';
 }
 function ocrPrompt(){
   return '你是一个体测报告数据提取助手。请仔细读取这张健身房身体成分报告图片，把能识别到的数值提取出来。\n'+
@@ -1769,7 +1879,7 @@ async function ocrAdjustPlan(){
     if(state.ai.history.length>30)state.ai.history.pop();
     save();renderAll();renderAIHistory();
     aiPatch=null;renderPatch();
-    if(out)out.textContent='✅ 已根据新的体测数据自动调整计划，共 '+valid.length+' 项。\n\n调整明细：\n'+changed.map(function(c,i){return (i+1)+'. '+c.label+'：'+fmtPatchValue(PATCH_FIELDS[c.target],c.from)+' → '+fmtPatchValue(PATCH_FIELDS[c.target],c.to);}).join('\n')+'\n\n可在下方「分析历史」或「撤销」中回退。';
+    if(out)out.textContent='已根据新的体测数据自动调整计划，共 '+valid.length+' 项。\n\n调整明细：\n'+changed.map(function(c,i){return (i+1)+'. '+c.label+'：'+fmtPatchValue(PATCH_FIELDS[c.target],c.from)+' → '+fmtPatchValue(PATCH_FIELDS[c.target],c.to);}).join('\n')+'\n\n可在下方「分析历史」或「撤销」中回退。';
     toast('已自动应用 '+valid.length+' 项调整，可撤销');
   }catch(e){
     toast('自动调整失败：'+(e.name==='AbortError'?'已取消':(e.message||'请求失败')));
@@ -1858,14 +1968,14 @@ async function aiGenerate(){
     }
   }catch(e){
     var msg=e.name==='AbortError'?'已停止生成':(e.message||'请求失败');
-    out.textContent='❌ '+msg+'\n\n排查建议：\n1) 确认密钥、模型名正确且账户有余额；\n2) 若提示 CORS / Failed to fetch，可在「设置」页切换到「自定义接口」填入支持跨域的中转地址；\n3) 密钥仅在本机浏览器与服务商之间通信，本 App 不保存也不上传。';
+    out.textContent='请求失败：'+msg+'\n\n排查建议：\n1) 确认密钥、模型名正确且账户有余额；\n2) 若提示 CORS / Failed to fetch，可在「设置」页切换到「自定义接口」填入支持跨域的中转地址；\n3) 密钥仅在本机浏览器与服务商之间通信，本 App 不保存也不上传。';
   }finally{btn.disabled=false;stop.style.display='none';aiAbort=null;}
 }
 function aiStop(){if(aiAbort)aiAbort.abort();}
 function copyAI(){var t=document.getElementById('aiOut').textContent;if(!t)return toast('暂无内容');if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){toast('已复制');},function(){toast('复制失败，请长按选择');});else toast('请长按选择复制');}
 function saveAI(){
   var t=document.getElementById('aiOut').textContent;
-  if(!t||t.indexOf('❌')===0)return toast('暂无可保存的分析');
+  if(!t||t.indexOf('请求失败：')===0)return toast('暂无可保存的分析');
   var q=document.getElementById('aiQuestion').value.trim(),changes=[];
   if(aiPatch&&aiPatch._valid)changes=aiPatch._valid.map(function(x){var c=clone(x.c);c.value=clone(x.v);return c;});
   state.ai.history.push({type:aiType,q:q,answer:t,time:new Date().toLocaleString('zh-CN'),patch:changes.length?{changes:changes}:null});
