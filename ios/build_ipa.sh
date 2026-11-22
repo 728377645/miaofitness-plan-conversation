@@ -86,6 +86,7 @@ echo "Xcode: $(xcodebuild -version | head -1)"
 # ---------- 路径 A：无 Team ID，直接编译 + ad-hoc 签名出包（本机验证可行）----------
 if [[ -z "$TEAM_ID" ]]; then
   echo "[1/4] 编译 Release (arm64, CODE_SIGNING_ALLOWED=NO) ..."
+  mkdir -p "$BUILD"
   rm -rf "$OUT" "$BUILD/FitnessPlan.build"
   xcodebuild -project "$PROJECT" -target "$TARGET" \
     -configuration "$CONFIG" -sdk iphoneos \
