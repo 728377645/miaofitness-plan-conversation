@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html data-page-node-id="83cdMeeKqDbWuY9CI8kfna" lang="zh-CN">
-<head data-page-node-id="X3jiY9odTnGO2po5gUvTmi">
-
-<meta data-page-node-id="Kh6DRgDT5lQYo5bctpCBB0" charset="UTF-8">
-<meta data-page-node-id="fHi64hrGhBlawqH50VKNTC" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" name="viewport">
-<meta data-page-node-id="5M8kC3BiFr4WmXJr29lHSw" content="#2e7d32" name="theme-color">
-<meta data-page-node-id="BIzAbsYd7pHlUTqB3rnAg9" content="yes" name="apple-mobile-web-app-capable">
-<meta data-page-node-id="aEsEUmEO1o7Z6Q0P1QfjCC" content="black-translucent" name="apple-mobile-web-app-status-bar-style">
-<title data-page-node-id="r0L1u8w5DttZBLeafXUIfx" data-pnid-children="1UZrkcHlhlexpzd55tt4uM">健身计划</title>
-<style data-page-node-id="9u2oZgShOR2b37x1MxKBvB" data-pnid-children="VeruC5JOI56rwlN5H1YVxJ">
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="#2e7d32" name="theme-color">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<title>健身计划</title>
+<style>
 :root{
   --g9:#1b5e20;--g7:#2e7d32;--g5:#43a047;--g1:#e8f5e9;--g0:#f1f8e9;
   --orange:#ef6c00;--orange-bg:#fff3e0;--red:#c62828;--blue:#1565c0;--muted:#78909c;--line:#e3ebe5;
@@ -204,7 +203,7 @@ ul.tips li{margin-bottom:7px}
 .pick-bar{display:flex;align-items:center;gap:8px;margin-bottom:9px}
 .pick-bar .n{font-size:12px;font-weight:700;color:var(--g7);margin-right:auto}
 .pick-bar .op{font-size:12px;font-weight:700;color:var(--g7);background:var(--g1);border-radius:8px;padding:4px 10px;cursor:pointer}
-.pick-list{max-height:236px;overflow-y:auto;border:1px solid var(--line);border-radius:10px}
+.pick-list{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:10px}
 .pick-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-bottom:1px solid var(--line);cursor:pointer}
 .pick-item:last-child{border-bottom:none}
 .pick-item.sel{background:#eef7ef}
@@ -214,6 +213,24 @@ ul.tips li{margin-bottom:7px}
 .pi-name{font-size:13px;font-weight:700;color:var(--g9);flex:none}
 .pi-desc{font-size:11px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.35}
 .pick-sec{font-size:12px;font-weight:700;color:var(--g7);margin:13px 0 8px;padding-top:12px;border-top:1px dashed var(--line)}
+.lib-search{width:100%;border:1.5px solid #d5e2d8;border-radius:10px;padding:9px 11px;font-size:14px;background:#fff;color:var(--ink);outline:none;margin-bottom:8px}
+.lib-search:focus{border-color:var(--g5)}
+.lib-list{max-height:300px;overflow-y:auto;border-top:1px solid var(--line)}
+.lib-empty{padding:14px 0;color:var(--muted);font-size:12px;text-align:center}
+.pick-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pick-cat{font-size:11.5px;padding:5px 10px;border-radius:14px;background:#eef4ef;color:var(--g7);cursor:pointer;white-space:nowrap;line-height:1.2;transition:background .15s,color .15s}
+.pick-cat.on{background:var(--g5);color:#fff;font-weight:700}
+.pick-group{border-bottom:1px solid var(--line)}
+.pick-group:last-child{border-bottom:none}
+.pick-group-head{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#f4f8f4;cursor:pointer;user-select:none}
+.pick-group-head .pg-cat{font-size:12px;font-weight:800;color:var(--g7)}
+.pick-group-head .pg-n{font-size:11px;color:var(--muted)}
+.pick-group-head .pg-op{font-size:11px;font-weight:700;color:var(--g6);padding:2px 6px;border-radius:6px;background:#fff;margin-left:auto}
+.pick-group-head .pg-op+.pg-op{margin-left:0}
+.pick-group-head .pg-arrow{font-size:11px;color:var(--muted);transition:transform .18s}
+.pick-group.collapsed .pick-group-head .pg-arrow{transform:rotate(-90deg)}
+.pick-group.collapsed .pick-group-body{display:none}
+.pick-group-body .pick-item:last-child{border-bottom:none}
 .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:flex;padding:7px 0 calc(env(safe-area-inset-bottom) + 7px);z-index:30;backdrop-filter:blur(8px)}
 .tabbar button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#9eaaa3;font-size:9.5px;font-weight:600;padding:0 1px}
 .tabbar button .ic{font-size:19px;line-height:1}
@@ -222,251 +239,298 @@ ul.tips li{margin-bottom:7px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
-<body data-page-node-id="ZbP6QsZ1YCdqwk1IbroCdb">
-<div data-page-node-id="9Gioftfuxhpfzyc6Aw4zn8" id="app">
-  <div data-page-node-id="fDOyPDEWcBpeck2IWW5ITl" class="topbar">
-    <div data-page-node-id="QnoI8vPIlNA30rHE7iv8ir" class="row">
-      <div data-page-node-id="sn4q0scooAYDYDTqdSZ0mM"><h1 data-page-node-id="zdtUUNjzsxntBYBE896AyG"><!--pnid:i6cOjsIlLFDm7JxR63YYoz-->🌱 塑形计划</h1><p data-page-node-id="J4yAUo9KTdaR7GKxNo3JOT" id="topSub"><!--pnid:wfVMGnBGqePTlijThYv5QL-->减脂塑形</p></div>
-      <span data-page-node-id="sMdoW9gD8TQgike8ATSP5o" class="pill" id="topPill"><!--pnid:nCUktvOGYORzKll4xFWUkQ-->-- kg</span>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="row">
+      <div><h1><!--pnid:i6cOjsIlLFDm7JxR63YYoz-->🌱 塑形计划</h1><p id="topSub"><!--pnid:wfVMGnBGqePTlijThYv5QL-->减脂塑形</p></div>
+      <span class="pill" id="topPill"><!--pnid:nCUktvOGYORzKll4xFWUkQ-->-- kg</span>
     </div>
   </div>
 
-  <main data-page-node-id="1RdCmbi9qnohwlU0z5ZadH">
-    <section data-page-node-id="BWtAiMgaNvZb9Whd1FJJDL" class="page active" id="page-today">
-      <div data-page-node-id="NMl2IF0MemJNSo9U9KfXaT" class="card today-hero">
-        <div data-page-node-id="sFy5EwbDc8PgxNhZB0dUzT" class="title" id="todayTitle"></div>
-        <div data-page-node-id="Oc30ALzr9PPbr8A4XzadrX" class="meta" id="todayDate"></div>
-        <div data-page-node-id="kEH3Eck9awpIfwacqrAVme" id="todayTags" style="margin-top:8px"></div>
+  <main>
+    <section class="page active" id="page-today">
+      <div class="card today-hero">
+        <div class="title" id="todayTitle"></div>
+        <div class="meta" id="todayDate"></div>
+        <div id="todayTags" style="margin-top:8px"></div>
       </div>
-      <div data-page-node-id="OnQYIZnN76IdKh97AKO9zw" class="card">
-        <div data-page-node-id="LVFr7n6cgFkeyalXKElYCI" class="streak"><div data-page-node-id="5jspapKwc5rCCs3aleFXBl" class="fire"><!--pnid:xCp3nWU9ckelNW6JbgbIR6-->🔥</div><div data-page-node-id="rHEvV8ymTsvBFppzttouKS" class="txt" id="streakText"></div></div>
-        <div data-page-node-id="f9nOmwZcUDuX8dnFWYIUoV" class="dots" id="weekDots"></div>
+      <div class="card">
+        <div class="streak"><div class="fire"><!--pnid:xCp3nWU9ckelNW6JbgbIR6-->🔥</div><div class="txt" id="streakText"></div></div>
+        <div class="dots" id="weekDots"></div>
       </div>
-      <div data-page-node-id="TRo3A8wW9gnKJFAPWTsRCB" class="card" id="todayMovesCard">
-        <h3 data-page-node-id="Z4JSPYVcGp8PledZBniOUZ"><span data-page-node-id="3ZCBCJolHUHihFT90VDDH1" class="dot"></span><!--pnid:tDMz3BnEMX2EtQskSK6Pep-->今日动作清单 <span data-page-node-id="fq1OrREgAEpba9YEqpyDK8" class="sub" id="checkProgress" style="margin-left:auto; font-weight:400"></span></h3>
-        <label data-page-node-id="PmJjAaS6a47MRZsRepZjoE" class="alldone" id="allDoneRow"><input data-page-node-id="I5QwmulmO2N89nIGXZbOf6" id="allDoneBox" onchange="toggleAllDone()" type="checkbox"><span data-page-node-id="dJXYLXmp2Ep0rLcRDNVm1a" class="ad-t"><b data-page-node-id="wwYEO28DdFwzZVNhUd23tb" id="allDoneTitle"><!--pnid:33B6hacWL3qvVxZqw8UFex-->今日已完成</b><small data-page-node-id="HeZSIvRvFwSw6NBurhODCs" id="allDoneSub"><!--pnid:TJi8HnNhsTA9005bPnV8wI-->勾选即完成全部动作</small></span></label>
-        <div data-page-node-id="UObV4DZfmZBJLGfhzZDTDC" id="todayMoves"></div>
-        <button data-page-node-id="HKqOxjqCeTCgw3JgNL9VZ6" class="addmove-btn" onclick="addTodayMove()"><!--pnid:m3vO3rr37xn9psG6wvlpBj-->+ 添加动作（仅当天）</button>
+      <div class="card" id="todayMovesCard">
+        <h3><span class="dot"></span><!--pnid:tDMz3BnEMX2EtQskSK6Pep-->今日动作清单 <span class="sub" id="checkProgress" style="margin-left:auto; font-weight:400"></span></h3>
+        <label class="alldone" id="allDoneRow"><input id="allDoneBox" onchange="toggleAllDone()" type="checkbox"><span class="ad-t"><b id="allDoneTitle"><!--pnid:33B6hacWL3qvVxZqw8UFex-->今日已完成</b><small id="allDoneSub"><!--pnid:TJi8HnNhsTA9005bPnV8wI-->勾选即完成全部动作</small></span></label>
+        <div id="todayMoves"></div>
+        <button class="addmove-btn" onclick="addTodayMove()"><!--pnid:m3vO3rr37xn9psG6wvlpBj-->+ 添加动作（仅当天）</button>
       </div>
-      <div data-page-node-id="aMlsriEezF23t5svQce4Ay" class="card">
-        <h3 data-page-node-id="dN8xT7tN2HjRgdkb3S1um1"><span data-page-node-id="dqdM1qCtXPwRhG03UoL82D" class="dot"></span><!--pnid:nd7czTC9z6ZJSzO6kaD8Ck-->快速记体重</h3>
-        <div data-page-node-id="TYOT25OWOw11UBT1ujJI6H" class="input-row">
-          <div data-page-node-id="K0xusoPHC6vY7rVETVcu2t" class="field"><label data-page-node-id="VRyRiN3dHwwA6wQOUZCCud"><!--pnid:lEbQMe28QfNWudnJ3u0pmW-->体重 (kg)</label><input data-page-node-id="AIIuqNAJ3ZwgPwgjTKgIZX" id="quickWeight" max="150" min="30" placeholder="例如 59.2" step="0.1" type="number"></div>
-          <button data-page-node-id="4F8U0cHhruaJds6XcAVHpO" class="btn" onclick="quickAdd()"><!--pnid:eSAgfRxuVlAjaKRqXbtcTv-->保存</button>
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:nd7czTC9z6ZJSzO6kaD8Ck-->快速记体重</h3>
+        <div class="input-row">
+          <div class="field"><label><!--pnid:lEbQMe28QfNWudnJ3u0pmW-->体重 (kg)</label><input id="quickWeight" max="150" min="30" placeholder="例如 59.2" step="0.1" type="number"></div>
+          <button class="btn" onclick="quickAdd()"><!--pnid:eSAgfRxuVlAjaKRqXbtcTv-->保存</button>
         </div>
-        <div data-page-node-id="ucyUIXTxp6f5SlbtFOjtfQ" class="progress-wrap">
-          <div data-page-node-id="szaYVJmk7bLmbfqrjTPnzf" class="progress"><i data-page-node-id="Qt0tOprZTzikCQnFvDeRLm" id="quickBar" style="width:0%"></i></div>
-          <div data-page-node-id="Hs1GS5SoPzJnNJ9VoBpLR9" class="progress-label"><span data-page-node-id="zmYNEd6xPWuGjd0LOc8jb5" id="lblStart"><!--pnid:o2Mhf3d9Qo8Xr2pyQt2jax-->起始 --</span><span data-page-node-id="JsWsaN29ZnfKQQ0gZWwiZI" id="quickGap"></span><span data-page-node-id="n6HjfV2XvuL6bG4DeU4zA0" id="lblGoal"><!--pnid:E0Qp6gKdDXjfSnbE4SpV4J-->目标 --</span></div>
+        <div class="progress-wrap">
+          <div class="progress"><i id="quickBar" style="width:0%"></i></div>
+          <div class="progress-label"><span id="lblStart"><!--pnid:o2Mhf3d9Qo8Xr2pyQt2jax-->起始 --</span><span id="quickGap"></span><span id="lblGoal"><!--pnid:E0Qp6gKdDXjfSnbE4SpV4J-->目标 --</span></div>
         </div>
       </div>
     </section>
 
-    <section data-page-node-id="O8lUlo4Mppl1mdmR8hSdvH" class="page" id="page-plan">
-      <div data-page-node-id="lyD4iId1uBzOFuPi89FEhW" class="seg">
-        <button data-page-node-id="8Od9l9PvhI0hB0czxD1iLM" class="on" onclick="switchSeg('body',this)"><!--pnid:JzIADDu872HZDFW4WYS5pN-->体测</button>
-        <button data-page-node-id="iUovSCR3m5COjBwO0FL9bh" onclick="switchSeg('diet',this)"><!--pnid:jh7Xo8HlgkM1rBr85NPhV3-->饮食</button>
-        <button data-page-node-id="qDf0dKS3jbRYMMRtY24XWi" onclick="switchSeg('train',this)"><!--pnid:o4v3qt8hoMQuKk9QiGzR2Z-->训练</button>
-        <button data-page-node-id="Lc43jie5PtjVWCE0npsqK1" onclick="switchSeg('log',this)"><!--pnid:ti84A2euPgylduA9iLIhux-->记录</button>
-        <button data-page-node-id="j3qELR3qCSMowXvqLXDi1b" onclick="switchSeg('ai',this)"><!--pnid:JGafOADv5yqsyfY874Fev9-->AI</button>
+    <section class="page" id="page-plan">
+      <div class="seg">
+        <button class="on" onclick="switchSeg('body',this)"><!--pnid:JzIADDu872HZDFW4WYS5pN-->体测</button>
+        <button onclick="switchSeg('diet',this)"><!--pnid:jh7Xo8HlgkM1rBr85NPhV3-->饮食</button>
+        <button onclick="switchSeg('train',this)"><!--pnid:o4v3qt8hoMQuKk9QiGzR2Z-->训练</button>
+        <button onclick="switchSeg('log',this)"><!--pnid:ti84A2euPgylduA9iLIhux-->记录</button>
+        <button onclick="switchSeg('ai',this)"><!--pnid:JGafOADv5yqsyfY874Fev9-->AI</button>
       </div>
-      <div data-page-node-id="NC8uzPREA3pPWNDak6eyfc" id="seg-body"></div>
-      <div data-page-node-id="v0e3ZnpMvw1A26FFM76OrS" id="seg-diet" style="display:none"></div>
-      <div data-page-node-id="BWTOFcfasCxWTFojjdAKoL" id="seg-train" style="display:none"></div>
-      <div data-page-node-id="4uCgm9qGlAdM9HLI0d6PoP" id="seg-log" style="display:none">
-        <div data-page-node-id="J0glX1W09jpsIMKUqK5Zos" class="card">
-          <h3 data-page-node-id="SQpOpSYevc53szzuiDYGcU"><span data-page-node-id="US1HyVL54qqZem2shHDMuT" class="dot"></span><!--pnid:yYPWwoJ4RSmAcv1U7A4SWk-->体重概况</h3>
-          <div data-page-node-id="WtjXKuOasfGwDckEwNQQn9" class="stats">
-            <div data-page-node-id="fUriv0jN6odrEzFwmUVtmC" class="stat"><div data-page-node-id="Z8aCeY6gZGzySuUAScERBl" class="v" id="stCur"><!--pnid:gumTfHoNqgIYOExu9ZQtcG-->--</div><div data-page-node-id="XWAZpbqeUazxp692SGJgHp" class="l"><!--pnid:NAigsYbPYKZcbyVpsNARiA-->当前体重</div></div>
-            <div data-page-node-id="5uPW17eEAht8DmAw4Zii11" class="stat"><div data-page-node-id="hzh3LybWkmnXXJwizDN58P" class="v" id="stChange"><!--pnid:JXb10anMxWmN8doSQcODJd-->--</div><div data-page-node-id="TkJp366loUhylEsXe5rSaV" class="l"><!--pnid:PcpsVOkwNFs7cOcoMKm0kj-->累计变化</div></div>
-            <div data-page-node-id="fxsTwxYjt8KCJPVBbUWM3M" class="stat"><div data-page-node-id="YK9nV0cB9FezqhyFrIYFkp" class="v" id="stGap"><!--pnid:fQYHqgHzFy7l2T1sIq1yaL-->--</div><div data-page-node-id="P1CrSDxthhoRYFOb1QeCEZ" class="l"><!--pnid:FXbDQnEMZ6EaMebkVKOMGN-->距目标</div></div>
-            <div data-page-node-id="yQSFBrBPXefADQ5zX5VW5i" class="stat"><div data-page-node-id="H0aJvjE55FNdqncCrTor3J" class="v" id="stCount"><!--pnid:vxqV0AmyNd9LUvEWCek8DB-->0</div><div data-page-node-id="7goTm1OjcBhapkrp9bwiIH" class="l"><!--pnid:JTXTHkNj3Vi5PlvFcjrTV1-->记录次数</div></div>
+      <div id="seg-body"></div>
+      <div id="seg-diet" style="display:none"></div>
+      <div id="seg-train" style="display:none"></div>
+      <div id="seg-log" style="display:none">
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:yYPWwoJ4RSmAcv1U7A4SWk-->体重概况</h3>
+          <div class="stats">
+            <div class="stat"><div class="v" id="stCur"><!--pnid:gumTfHoNqgIYOExu9ZQtcG-->--</div><div class="l"><!--pnid:NAigsYbPYKZcbyVpsNARiA-->当前体重</div></div>
+            <div class="stat"><div class="v" id="stChange"><!--pnid:JXb10anMxWmN8doSQcODJd-->--</div><div class="l"><!--pnid:PcpsVOkwNFs7cOcoMKm0kj-->累计变化</div></div>
+            <div class="stat"><div class="v" id="stGap"><!--pnid:fQYHqgHzFy7l2T1sIq1yaL-->--</div><div class="l"><!--pnid:FXbDQnEMZ6EaMebkVKOMGN-->距目标</div></div>
+            <div class="stat"><div class="v" id="stCount"><!--pnid:vxqV0AmyNd9LUvEWCek8DB-->0</div><div class="l"><!--pnid:JTXTHkNj3Vi5PlvFcjrTV1-->记录次数</div></div>
           </div>
         </div>
-        <div data-page-node-id="uebJjHvQP3uc3p6YuMt8f9" class="card">
-          <h3 data-page-node-id="NELD9KEKu9wDVTyhjD3mZu"><span data-page-node-id="5Dlf4b7f2a4HBJxzUMhcVT" class="dot"></span><!--pnid:fXMelqoUs3nhgqAJyKSDmp-->趋势洞察</h3>
-          <div data-page-node-id="4w7ItozlMF3RX89Dl39Tu9" class="insight" id="weightInsight"></div>
-          <div data-page-node-id="0Gd8xfQbj4MWmpm3N9g2gS" class="sub" id="insightNote" style="margin-top:8px"></div>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:fXMelqoUs3nhgqAJyKSDmp-->趋势洞察</h3>
+          <div class="insight" id="weightInsight"></div>
+          <div class="sub" id="insightNote" style="margin-top:8px"></div>
         </div>
-        <div data-page-node-id="hyJRNb5oihCJHRHinibmXU" class="card">
-          <h3 data-page-node-id="uJv1aJBUfcIHOsXw3mgv2g"><span data-page-node-id="lFUklp8PE641Laif8UpsrI" class="dot"></span><!--pnid:cWHJH4XODAvLoyK293EVS1-->体重趋势 <span data-page-node-id="SsiKiKRlOIIQ8PfE7WVAT0" class="sub" style="margin-left:auto; font-weight:400"><!--pnid:2Y3s3PcE1z9FWkQI9Jg8nB-->点数据点看数值</span></h3>
-          <div data-page-node-id="9zCr3iwxzrJHGA8g6nh2md" class="chart-range" id="chartRange"></div>
-          <div data-page-node-id="T2uVi8GO0b91RZwk1EGm2A" class="chart-box" id="chart"></div>
-          <div data-page-node-id="KYZiJietVrzVy9ZbqGrcNO" class="sub" id="chartNote" style="text-align:center"></div>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:cWHJH4XODAvLoyK293EVS1-->体重趋势 <span class="sub" style="margin-left:auto; font-weight:400"><!--pnid:2Y3s3PcE1z9FWkQI9Jg8nB-->点数据点看数值</span></h3>
+          <div class="chart-range" id="chartRange"></div>
+          <div class="chart-box" id="chart"></div>
+          <div class="sub" id="chartNote" style="text-align:center"></div>
         </div>
-        <div data-page-node-id="zk07mBuoqSJffzblZd5aoN" class="card">
-          <h3 data-page-node-id="XIKVxt9MLfHkpquhtf6BY5"><span data-page-node-id="fvzkZLfWcdnhxPkcmZZHtb" class="dot"></span><!--pnid:0vNCUylPq1kAwT8HKj7aav-->新增记录</h3>
-          <div data-page-node-id="n5IsXVRGlYkn5dcQjwgyKg" class="input-row stack">
-            <div data-page-node-id="G7JJkgYEABl3pzrlLlzWG6" class="field"><label data-page-node-id="cH2Say8jjZOkaKTA94lu28"><!--pnid:YQuDgCEZNi5SqUiIwExk5W-->日期</label><input data-page-node-id="hYC1Vh4VxL7cGBZdkBz4q9" id="logDate" type="date"></div>
-            <div data-page-node-id="gWBT5QbKHDmVbZ8OL0iGYx" class="field"><label data-page-node-id="pfxMuwIwVAT3jj3bART5m1"><!--pnid:BUHrskLghkYErNpVZQNP4S-->体重 (kg)</label><input data-page-node-id="G6dVqvz47HymdInZ1so4EG" id="logWeight" max="150" min="30" placeholder="59.0" step="0.1" type="number"></div>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:0vNCUylPq1kAwT8HKj7aav-->新增记录</h3>
+          <div class="input-row stack">
+            <div class="field"><label><!--pnid:YQuDgCEZNi5SqUiIwExk5W-->日期</label><input id="logDate" type="date"></div>
+            <div class="field"><label><!--pnid:BUHrskLghkYErNpVZQNP4S-->体重 (kg)</label><input id="logWeight" max="150" min="30" placeholder="59.0" step="0.1" type="number"></div>
           </div>
-          <button data-page-node-id="64WDfPwrQvlkU0FE85c9UB" class="btn full" onclick="addRecord()" style="margin:11px auto 0; max-width:280px; display:block"><!--pnid:19LGjWcRX9T3OBz9o9Jknr-->保存记录</button>
+          <button class="btn full" onclick="addRecord()" style="margin:11px auto 0; max-width:280px; display:block"><!--pnid:19LGjWcRX9T3OBz9o9Jknr-->保存记录</button>
         </div>
-        <div data-page-node-id="N6NKpBnANZ8ponqob1d0VA" class="card">
-          <h3 data-page-node-id="UcBAm06xJb5FeAAaqLs5qw"><span data-page-node-id="XwDH6q6fASnSxWein6Pq1L" class="dot"></span><!--pnid:ttMm6I5qx9LSe4PATmp5Vm-->历史记录 <span data-page-node-id="9glDBevVMOasJimNC6w2qV" class="sub" style="margin-left:auto; font-weight:400"><!--pnid:IiAGlX5kJRAsTMIN8gasDO-->可修改 / 删除</span></h3>
-          <div data-page-node-id="ZZWgPMlOifdbDqFz6E8Qa3" class="undobar" id="undoDel"><!--pnid:h54RlyqJNIVXQZgI2UimET-->已删除 <b data-page-node-id="BBHtePaKqsVrgW68aP7Sc8" id="undoDelName"></b><button data-page-node-id="oRJPzR7eZ3KqogKUCnveHw" onclick="undoDelete()"><!--pnid:LDkDMPbLXY6oktM90udGSr-->撤销</button></div>
-          <div data-page-node-id="UOwoRZFXpn8hbRJzf6d9dK" id="recList"></div>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:ttMm6I5qx9LSe4PATmp5Vm-->历史记录 <span class="sub" style="margin-left:auto; font-weight:400"><!--pnid:IiAGlX5kJRAsTMIN8gasDO-->可修改 / 删除</span></h3>
+          <div class="undobar" id="undoDel"><!--pnid:h54RlyqJNIVXQZgI2UimET-->已删除 <b id="undoDelName"></b><button onclick="undoDelete()"><!--pnid:LDkDMPbLXY6oktM90udGSr-->撤销</button></div>
+          <div id="recList"></div>
         </div>
       </div>
-      <div data-page-node-id="5iBoa07EK9KwYBAZA6bpQ6" id="seg-ai" style="display:none">
-        <div data-page-node-id="qyvhomR9cX4bFmSFZgjKPB" class="card">
-          <h3 data-page-node-id="teVv3duk7PSIhHIxFuSjt4"><span data-page-node-id="ob3VbOmuT84Ru4k9GTyzhH" class="dot"></span><!--pnid:OGCGz2DtFADaTEhezhK7Ik-->AI 教练分析 <span data-page-node-id="cF3tQxu1tB6QZILcKvgpdG" class="edit" onclick="switchTab('settings')"><!--pnid:fGLZBWWPzpYFdYgAMuY3Xc-->设置密钥 ›</span></h3>
-          <div data-page-node-id="7OIRzWC2vXWFD1gCRT0rLD" class="sub"><!--pnid:QDsIgzrR44bFn6j39dNoP0-->基于你的体测数据、体重趋势、训练打卡和当前计划生成分析。选「计划调整」可直接得到能应用到计划里的修改建议。数据只发给你选择的 AI 服务商。</div>
-          <div data-page-node-id="9bOzgaNBADkmRRfneXdu63" class="chips" id="aiTypes" style="margin-top:12px"></div>
-          <div data-page-node-id="5n6giMzYML1XC7y09rijkc" class="mf"><label data-page-node-id="oxo6bTKgnzFiBYCVKNK19M"><!--pnid:z1d5lGBG0dhcOrSX07Px6u-->想额外问的问题（可选）</label><textarea data-page-node-id="ozqy6w1AXGpIyDABr1F8sP" id="aiQuestion" placeholder="例如：最近腰围没变化，是不是训练强度不够？" rows="2"></textarea></div>
-          <button data-page-node-id="oWy7mqcdcTSjl2CtJ2uJwi" class="btn full" id="aiGen" onclick="aiGenerate()"><!--pnid:w9XwQlHgsMc2V6Mfd47Xjb-->✨ 生成分析</button>
+      <div id="seg-ai" style="display:none">
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:OGCGz2DtFADaTEhezhK7Ik-->AI 教练分析 <span class="edit" onclick="switchTab('settings')"><!--pnid:fGLZBWWPzpYFdYgAMuY3Xc-->设置密钥 ›</span></h3>
+          <div class="sub"><!--pnid:QDsIgzrR44bFn6j39dNoP0-->基于你的体测数据、体重趋势、训练打卡和当前计划生成分析。选「计划调整」可直接得到能应用到计划里的修改建议。数据只发给你选择的 AI 服务商。</div>
+          <div class="chips" id="aiTypes" style="margin-top:12px"></div>
+          <div class="mf"><label><!--pnid:z1d5lGBG0dhcOrSX07Px6u-->想额外问的问题（可选）</label><textarea id="aiQuestion" placeholder="例如：最近腰围没变化，是不是训练强度不够？" rows="2"></textarea></div>
+          <button class="btn full" id="aiGen" onclick="aiGenerate()"><!--pnid:w9XwQlHgsMc2V6Mfd47Xjb-->✨ 生成分析</button>
         </div>
-        <div data-page-node-id="xWPbNrHf6IVvafKvxaTsFL" class="card">
-          <h3 data-page-node-id="wCxQXbBrJCGW6pNDSr4S5h"><span data-page-node-id="mM52H0wLyDDg4t4GAu7tae" class="dot"></span><!--pnid:m8BseqfovBknWqDPZG4ZQP-->分析结果 <span data-page-node-id="Yq1cGYqI7t6d7buDi48r4F" class="edit" id="aiStop" onclick="aiStop()" style="display:none"><!--pnid:gJdhusnBmw9u7fvuB5PmmW-->停止</span></h3>
-          <div data-page-node-id="kClVeHfQ1Jqhrmapogj8aB" class="ai-out" id="aiOut"><!--pnid:wkrdjSsl2M59s2blvRUtQ7-->点击上方「生成分析」，结果会显示在这里。</div>
-        <div data-page-node-id="7dBt9CIVEvO5d4Wb00D3hd" style="display:flex; gap:8px; margin-top:10px">
-          <button data-page-node-id="GJ4QCtLDWYLJgecflKqEqf" class="btn ghost sm" onclick="copyAI()" style="flex:1"><!--pnid:TmwXVrSwjfGvmjVHGkQyvQ-->复制结果</button>
-          <button data-page-node-id="NmG4asx1sRRffoeY9ThGuw" class="btn ghost sm" onclick="saveAI()" style="flex:1"><!--pnid:WnKBJBvqp3xRwDhV6vbjHp-->存入历史</button>
-          <button data-page-node-id="Thr6zYsCdsUIjhgzb6fb1C" class="btn ghost sm" id="undoAutoBtn" onclick="undoPatch()" style="flex:1; display:none"><!--pnid:OBhXr5uLwKs7gPMbMUoqN9-->↩ 撤销</button>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:m8BseqfovBknWqDPZG4ZQP-->分析结果 <span class="edit" id="aiStop" onclick="aiStop()" style="display:none"><!--pnid:gJdhusnBmw9u7fvuB5PmmW-->停止</span></h3>
+          <div class="ai-out" id="aiOut"><!--pnid:wkrdjSsl2M59s2blvRUtQ7-->点击上方「生成分析」，结果会显示在这里。</div>
+        <div style="display:flex; gap:8px; margin-top:10px">
+          <button class="btn ghost sm" onclick="copyAI()" style="flex:1"><!--pnid:TmwXVrSwjfGvmjVHGkQyvQ-->复制结果</button>
+          <button class="btn ghost sm" onclick="saveAI()" style="flex:1"><!--pnid:WnKBJBvqp3xRwDhV6vbjHp-->存入历史</button>
+          <button class="btn ghost sm" id="undoAutoBtn" onclick="undoPatch()" style="flex:1; display:none"><!--pnid:OBhXr5uLwKs7gPMbMUoqN9-->↩ 撤销</button>
         </div>
-          <div data-page-node-id="zg4OF70Xbg0gB7AdiK5wUQ" class="pbox" id="aiPatchBox" style="display:none">
-            <div data-page-node-id="U3xzEyrMr2Sf27nDnDcvEN" class="ph"><!--pnid:nccfk8MKY9tQM2GQjngnKo-->✏️ AI 计划修改建议 <small data-page-node-id="a2CfgsyByQ6GhOjqlSGk8y"><!--pnid:sXrM02HEsdlwWM4n0tpMO1-->勾选后应用 · 可先微调</small></div>
-            <div data-page-node-id="7BT5avRRFkzihthvTcQX10" class="pl" id="aiPatchList"></div>
-            <div data-page-node-id="Wc0F1SpRqSfk7tFBsVaqqM" class="pf">
-              <button data-page-node-id="I8QOjHo6wc1QJUn7jLJKVp" class="btn sm" onclick="applyPatches()"><!--pnid:lxJ781TebQ2p4lkEAfRVFi-->应用到计划</button>
-              <button data-page-node-id="CZR17Ch0cbjJEeVv6CO3xF" class="btn ghost sm" onclick="undoPatch()"><!--pnid:YIyGVvKkZBfeBVW9Q4BR6j-->撤销上次应用</button>
+          <div class="pbox" id="aiPatchBox" style="display:none">
+            <div class="ph"><!--pnid:nccfk8MKY9tQM2GQjngnKo-->✏️ AI 计划修改建议 <small><!--pnid:sXrM02HEsdlwWM4n0tpMO1-->勾选后应用 · 可先微调</small></div>
+            <div class="pl" id="aiPatchList"></div>
+            <div class="pf">
+              <button class="btn sm" onclick="applyPatches()"><!--pnid:lxJ781TebQ2p4lkEAfRVFi-->应用到计划</button>
+              <button class="btn ghost sm" onclick="undoPatch()"><!--pnid:YIyGVvKkZBfeBVW9Q4BR6j-->撤销上次应用</button>
             </div>
           </div>
-          <div data-page-node-id="ZCdJgW1xsOYmB6yCNDPEbY" class="note b" style="font-size:11px"><!--pnid:ZRAyEmy00g4XGuQIyQ3arQ-->AI 建议只是草稿，应用后仍可在各分段或「我的」页面手动改任何内容；应用前会自动保存快照，可一键撤销。</div>
+          <div class="note b" style="font-size:11px"><!--pnid:ZRAyEmy00g4XGuQIyQ3arQ-->AI 建议只是草稿，应用后仍可在各分段或「我的」页面手动改任何内容；应用前会自动保存快照，可一键撤销。</div>
         </div>
-        <div data-page-node-id="ASr1OWI5LOUxeVl6knZaI7" class="card">
-          <h3 data-page-node-id="7DrlV6aEdUaSn0HIzCvp13"><span data-page-node-id="CPzNx0KsnYxIbhdXuFNJTw" class="dot"></span><!--pnid:pzdlSAxde846iLgviks1JF-->分析历史</h3>
-          <div data-page-node-id="vcKr5kD0h45SFM5iSw0ZGq" id="aiHistory"></div>
+        <div class="card">
+          <h3><span class="dot"></span><!--pnid:pzdlSAxde846iLgviks1JF-->分析历史</h3>
+          <div id="aiHistory"></div>
         </div>
       </div>
     </section>
 
-    <section data-page-node-id="pwNBF0QJ3q3e0oNLUq9MzS" class="page" id="page-me">
-      <div data-page-node-id="deX1gJPUrbn72X78jvBIRk" class="card">
-        <h3 data-page-node-id="wnpcMowl3EISgWcboKOz51"><span data-page-node-id="tv8EbDxpN5q2HYjhuFvSWc" class="dot"></span><!--pnid:zLKHVTexV91OiOzyYqN4Vw-->个人档案 <span data-page-node-id="55hyLIYIyhFRVtrq1HLi9Y" class="edit" onclick="editProfile()"><!--pnid:g30TEGivtRuPYgDpe5JXXs-->编辑</span></h3>
-        <div data-page-node-id="UFTHXVvsbNKXqqoxwhFc0a" id="profileView"></div>
+    <section class="page" id="page-me">
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:zLKHVTexV91OiOzyYqN4Vw-->个人档案 <span class="edit" onclick="editProfile()"><!--pnid:g30TEGivtRuPYgDpe5JXXs-->编辑</span></h3>
+        <div id="profileView"></div>
       </div>
-      <div data-page-node-id="lPorrs6cVESnPCGeefnxEz" class="card">
-        <h3 data-page-node-id="uxr66SP19mNSvMR3AiGei9"><span data-page-node-id="d7LZ8ameyRpa3U7mGEicjv" class="dot"></span><!--pnid:ZXLivC7CHcnzfqN9NTcDaU-->训练日安排 <span data-page-node-id="X9jLRyvB0FxDZXW9lBOybo" class="edit" onclick="editWeek()"><!--pnid:WyrQItVv66BJYNlx1ToNHI-->编辑</span></h3>
-        <div data-page-node-id="mvH22eFeuDbfLGKExRDZJP" id="weekView"></div>
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:ZXLivC7CHcnzfqN9NTcDaU-->训练日安排 <span class="edit" onclick="editWeek()"><!--pnid:WyrQItVv66BJYNlx1ToNHI-->编辑</span></h3>
+        <div id="weekView"></div>
       </div>
-      <div data-page-node-id="0g84ek87GvWhBnxOEPwhKZ" class="card" onclick="switchTab('settings')" style="cursor:pointer">
-        <h3 data-page-node-id="3vHUFWLUciOp7bYf5VUzxJ"><span data-page-node-id="cWMFfjdAoDR0IOpIdBOgJd" class="dot"></span><!--pnid:hgOrDKs2J0CfmeDMUBUthY-->设置 <span data-page-node-id="unj2wkATkpsN3BfMld3LxS" style="margin-left:auto; color:var(--muted); font-size:12px; font-weight:400"><!--pnid:oPelWQ6pW1zvKRmWlEtw1q-->AI 接口 / 数据 / 关于 ›</span></h3>
-        <div data-page-node-id="e5nWqPrqbnZT7QfY271LZz" class="sub"><!--pnid:8Bo66PR3LlIQn0jlctLRrE-->API 密钥、备份导入导出、关于说明已移到独立的「设置」页</div>
+      <div class="card" onclick="switchTab('settings')" style="cursor:pointer">
+        <h3><span class="dot"></span><!--pnid:hgOrDKs2J0CfmeDMUBUthY-->设置 <span style="margin-left:auto; color:var(--muted); font-size:12px; font-weight:400"><!--pnid:oPelWQ6pW1zvKRmWlEtw1q-->AI 接口 / 数据 / 关于 ›</span></h3>
+        <div class="sub"><!--pnid:8Bo66PR3LlIQn0jlctLRrE-->API 密钥、备份导入导出、关于说明已移到独立的「设置」页</div>
       </div>
     </section>
 
-    <section data-page-node-id="9pZ38LQxO6Vc0CxSZpJZdk" class="page" id="page-settings">
-      <div data-page-node-id="dAWMw0gkjzDKZARSNpzAz6" class="card">
-        <h3 data-page-node-id="mmf6IhC9atuwSjXxPFzRrS"><span data-page-node-id="SQaHRNQQvH9BMABUOKR9AQ" class="dot"></span><!--pnid:lVkFbbdzWCw3RscIWDDi7n-->AI 接口设置</h3>
-        <div data-page-node-id="ograJKj7kzUs6IcuQCSAqG" class="mf"><label data-page-node-id="lIj47TQ70t3M9lk0aUpZXd"><!--pnid:ZvWjaDWzTtY7hOILFxN7v1-->服务商</label><select data-page-node-id="pOnrZNkWjuZrxyT488w5NU" id="aiProvider" onchange="onProviderChange()"><option data-page-node-id="fJc3nSQN7PvseHcmkCHXfU" value="deepseek"><!--pnid:SKwFup5EouqGvsDAdkiB5r-->DeepSeek</option><option data-page-node-id="RZnrNLZRoBp9ifshFx4beK" value="silicon"><!--pnid:OnQS4Uga3PVHIW2p8cXc5i-->硅基流动 SiliconFlow</option><option data-page-node-id="mpOzVIzS39LljdkpaaJPJc" value="custom"><!--pnid:9jnIjjGqRi68DrAEIC5EOj-->自定义接口</option></select></div>
-        <div data-page-node-id="mo0fquaz718RNjYQrWjlOt" class="mf"><label data-page-node-id="oGVHPUq9hB2TscwiMAelhF" id="keyLabel"><!--pnid:Mpq9EHlW5S2GvPJeWMcTy3-->API Key</label><input data-page-node-id="u3klvHEolzBZFkzzd2g7KJ" id="aiKey" placeholder="sk-..." type="password"><div data-page-node-id="Ticg1r0syODd2fBCaj9pCJ" class="hint" id="keyHint"></div></div>
-        <div data-page-node-id="P5XgsvA2ZmcHInxj6suANU" class="mf"><label data-page-node-id="vS4FVAyDqXUttpUDkblJTN"><!--pnid:RAmqOfRhWec9HSNuKfCZsG-->模型名称（文字分析用）</label><select data-page-node-id="FvIz0DrSJ60GA9Kzs8k9YK" id="aiModel" onchange="onModelPick()"><option data-page-node-id="pDqnrxyJ4mv4GsKYd78C7e" value><!--pnid:6RhqzWGL79LLP2fkndrRIR-->— 请先拉取模型 —</option></select><input data-page-node-id="LwKtCmqDRXk19ozeqteqtO" id="aiModelCustom" oninput="onModelPick()" placeholder="或手动输入模型名" type="text" style="display:none; margin-top:6px"><div data-page-node-id="IT57oU159rH6Sk1kTEgpKy" class="hint" id="modelHint"></div></div>
-        <div data-page-node-id="FFiOGdER5LGSx1ZpsRzltO" class="mf"><label data-page-node-id="wf1MdTGBexbX07JWbxzBSJ"><!--pnid:p25aYzw16Z2f1EsGplZi2w-->视觉模型（识别体测图片用）</label><select data-page-node-id="TtBV97j4eL9T3TtFGGKlOt" id="aiVision" onchange="onModelPick()"><option data-page-node-id="3ELeoZ3rShqrrCKNEIbtvo" value><!--pnid:Dv5U9SsvGVvpBa1qZFgHrM-->— 请先拉取模型 —</option></select><input data-page-node-id="aN53W0vGROZlgpyiKaUs7w" id="aiVisionCustom" oninput="onModelPick()" placeholder="或手动输入视觉模型名" type="text" style="display:none; margin-top:6px"><div data-page-node-id="3LVT4bVa8jHZeD0m6MyTkJ" class="hint" id="visionHint"><!--pnid:6xSXTlAtsW15qegHMhQugr-->需支持图片输入；拉取后从列表中选择</div></div>
-        <div data-page-node-id="z9uAkfA388FXSYm1KhEEX6" class="mf"><button data-page-node-id="ROEsbXnHl1VUZej8EFOfIS" class="btn blue" id="fetchModelsBtn" onclick="fetchModels(event)" style="width:100%"><!--pnid:lDCczyP49lzcMF8X5Ym8jn-->🔄 拉取可用模型</button><div data-page-node-id="reGYb4oC1kcPuMgJZanrOH" class="hint" id="fetchHint"><!--pnid:MgSAwjsNlkqenHL9H2BHpO-->填好 API Key（自定义接口还需填地址）后点击，自动获取该账户可用模型，再在上方选择。</div></div>
-        <div data-page-node-id="3i4XEPIdFvTpOVMAOSe1S0" class="mf" id="urlWrap" style="display:none"><label data-page-node-id="n462jAIo93FyjPNPboYkYP"><!--pnid:03WHAxBdbI5qXKP0PlSpZS-->接口地址</label><input data-page-node-id="U3nT2ccirmZEmX2XOOP0yl" id="aiUrl" placeholder="https://.../v1" type="text"><div data-page-node-id="RlwIqkqPh7jLdtm4XzpkZV" class="hint"><!--pnid:RNFH0IIiPOA04ElqlZ5Xvp-->以 /v1 结尾，程序会自动补 /chat/completions</div></div>
-        <div data-page-node-id="NVLj1jvZ4ZWMn2GPRgKEcs" style="display:flex; gap:8px">
-          <button data-page-node-id="SJsk2Le04nUnH2J5wYQSdd" class="btn ghost" onclick="saveAIConfig()" style="flex:1"><!--pnid:abSv70y1Q62RK3vwiADkz8-->保存配置</button>
-          <button data-page-node-id="Dktokshw46D8fDcmbCsNzk" class="btn blue" onclick="testAI(event)" style="flex:1"><!--pnid:2jrw8fw4U74SjGxa5qbUwm-->测试连接</button>
+    <section class="page" id="page-settings">
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:lVkFbbdzWCw3RscIWDDi7n-->AI 接口设置</h3>
+        <div class="mf"><label><!--pnid:ZvWjaDWzTtY7hOILFxN7v1-->服务商</label><select id="aiProvider" onchange="onProviderChange()"><option value="deepseek"><!--pnid:SKwFup5EouqGvsDAdkiB5r-->DeepSeek</option><option value="silicon"><!--pnid:OnQS4Uga3PVHIW2p8cXc5i-->硅基流动 SiliconFlow</option><option value="custom"><!--pnid:9jnIjjGqRi68DrAEIC5EOj-->自定义接口</option></select></div>
+        <div class="mf"><label id="keyLabel"><!--pnid:Mpq9EHlW5S2GvPJeWMcTy3-->API Key</label><input id="aiKey" placeholder="sk-..." type="password"><div class="hint" id="keyHint"></div></div>
+        <div class="mf"><label>模型名称（文字分析用）</label><select id="aiModel" onchange="onModelPick()"><option value="">— 请先拉取模型 —</option></select><input id="aiModelCustom" placeholder="或手动输入模型名" type="text" style="display:none;margin-top:6px" oninput="onModelPick()"><div class="hint" id="modelHint"></div></div>
+        <div class="mf"><label>视觉模型（识别体测图片用）</label><select id="aiVision" onchange="onModelPick()"><option value="">— 请先拉取模型 —</option></select><input id="aiVisionCustom" placeholder="或手动输入视觉模型名" type="text" style="display:none;margin-top:6px" oninput="onModelPick()"><div class="hint" id="visionHint">需支持图片输入；拉取后从列表中选择</div></div>
+        <div class="mf"><button class="btn blue" onclick="fetchModels(event)" id="fetchModelsBtn" style="width:100%">🔄 拉取可用模型</button><div class="hint" id="fetchHint">填好 API Key（自定义接口还需填地址）后点击，自动获取该账户可用模型，再在上方选择。</div></div>
+        <div class="mf" id="urlWrap" style="display:none"><label><!--pnid:03WHAxBdbI5qXKP0PlSpZS-->接口地址</label><input id="aiUrl" placeholder="https://.../v1" type="text"><div class="hint"><!--pnid:RNFH0IIiPOA04ElqlZ5Xvp-->以 /v1 结尾，程序会自动补 /chat/completions</div></div>
+        <div style="display:flex; gap:8px">
+          <button class="btn ghost" onclick="saveAIConfig()" style="flex:1"><!--pnid:abSv70y1Q62RK3vwiADkz8-->保存配置</button>
+          <button class="btn blue" onclick="testAI(event)" style="flex:1"><!--pnid:2jrw8fw4U74SjGxa5qbUwm-->测试连接</button>
         </div>
-        <div data-page-node-id="OWPvBH7exC5KQtZkPICuDg" class="note b"><!--pnid:hQoULKVrQDoGPlCoR66MdQ-->密钥只保存在这台设备的浏览器里，不会上传到任何服务器，也不会写进分享链接。请勿在公用电脑保存密钥。若浏览器直接调用被跨域(CORS)拦截，可在「自定义接口」里填自己的中转地址。</div>
+        <div class="note b"><!--pnid:hQoULKVrQDoGPlCoR66MdQ-->密钥只保存在这台设备的浏览器里，不会上传到任何服务器，也不会写进分享链接。请勿在公用电脑保存密钥。若浏览器直接调用被跨域(CORS)拦截，可在「自定义接口」里填自己的中转地址。</div>
       </div>
-      <div data-page-node-id="YyQMGImema91SBIqxhLZpW" class="card">
-        <h3 data-page-node-id="1ZsCP4eT9OJxTxYtISZRgT"><span data-page-node-id="JzjNcB8r2gykWM91PdolPZ" class="dot"></span><!--pnid:ZmNp9N25izirXwcLhy6vjg-->数据管理</h3>
-        <div data-page-node-id="uqQZfLog1BMVrGdJ4uMqCU" class="input-row" style="margin-bottom:10px">
-          <button data-page-node-id="nizzymAiH9URRKWCLeuVQE" class="btn ghost" onclick="exportJSON()" style="flex:1"><!--pnid:Bm2cQb6HAWuwGDfNuK22gM-->📥 导出备份</button>
-          <button data-page-node-id="42E3qdfj5zJihKQPOB9PDK" class="btn ghost" onclick="document.getElementById('importFile').click()" style="flex:1"><!--pnid:tF7Z0v83rIB0R9cOnF1f42-->📤 导入备份</button>
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:ZmNp9N25izirXwcLhy6vjg-->数据管理</h3>
+        <div class="input-row" style="margin-bottom:10px">
+          <button class="btn ghost" onclick="exportJSON()" style="flex:1"><!--pnid:Bm2cQb6HAWuwGDfNuK22gM-->📥 导出备份</button>
+          <button class="btn ghost" onclick="document.getElementById('importFile').click()" style="flex:1"><!--pnid:tF7Z0v83rIB0R9cOnF1f42-->📤 导入备份</button>
         </div>
-        <input data-page-node-id="Q9cpKb644vSmhOME2hHHyv" accept=".json" id="importFile" onchange="importJSON(event)" type="file" style="display:none">
-        <div data-page-node-id="xF4gevwfGiQYlVAssHtUCv" class="input-row" style="margin-bottom:10px">
-          <button data-page-node-id="wA50onBLSREdl5otY1TnwD" class="btn ghost" onclick="exportCSV()" style="flex:1"><!--pnid:Zcxdy2IZIyIVbAMpS2TO0L-->导出体重 CSV</button>
-          <button data-page-node-id="yH1CSonLg6aeKnK7nMxkHI" class="btn ghost" onclick="document.getElementById('importCsvFile').click()" style="flex:1"><!--pnid:CDcU11tO4LDeYse7PydKDa-->导入体重 CSV</button>
+        <input accept=".json" id="importFile" onchange="importJSON(event)" type="file" style="display:none">
+        <div class="input-row" style="margin-bottom:10px">
+          <button class="btn ghost" onclick="exportCSV()" style="flex:1"><!--pnid:Zcxdy2IZIyIVbAMpS2TO0L-->导出体重 CSV</button>
+          <button class="btn ghost" onclick="document.getElementById('importCsvFile').click()" style="flex:1"><!--pnid:CDcU11tO4LDeYse7PydKDa-->导入体重 CSV</button>
         </div>
-        <input data-page-node-id="oo36FCA3epD4sHfvvCpfvV" accept=".csv" id="importCsvFile" onchange="importCSV(event)" type="file" style="display:none">
-        <button data-page-node-id="AgNmynmdLJNSKF7EmHymTd" class="btn ghost full" onclick="undoImport()" style="margin-bottom:10px"><!--pnid:lCXDFcplOoCHQ4jlLvN118-->↩ 撤销上次导入 / 重置</button>
-        <button data-page-node-id="yqZ348FdhFJG9GKQ6GsRj2" class="btn warn full" onclick="resetAll()"><!--pnid:u9cyGJ4zbwN57MzkPxUhVR-->恢复默认数据</button>
-        <div data-page-node-id="COPqIy3pHU519nyL8eqg8c" class="sub" style="margin-top:9px"><!--pnid:nmUi0ImCbBqWwAJFigCjgu-->所有数据（档案、计划、饮食、体重、历史）都存本地；换设备可用「导出备份 / 导入备份」迁移。</div>
+        <input accept=".csv" id="importCsvFile" onchange="importCSV(event)" type="file" style="display:none">
+        <button class="btn ghost full" onclick="undoImport()" style="margin-bottom:10px"><!--pnid:lCXDFcplOoCHQ4jlLvN118-->↩ 撤销上次导入 / 重置</button>
+        <button class="btn warn full" onclick="resetAll()"><!--pnid:u9cyGJ4zbwN57MzkPxUhVR-->恢复默认数据</button>
+        <div class="sub" style="margin-top:9px"><!--pnid:nmUi0ImCbBqWwAJFigCjgu-->所有数据（档案、计划、饮食、体重、历史）都存本地；换设备可用「导出备份 / 导入备份」迁移。</div>
       </div>
-      <div data-page-node-id="qexFrlBc4tWcUEmVVDmrgc" class="card">
-        <h3 data-page-node-id="gCWGVXhD8VIZ3reezdj5po"><span data-page-node-id="xgehhOr1GIYPWaFx5NgypD" class="dot"></span><!--pnid:y0htfHHiI4heAk6mDl3RoB-->关于</h3>
-        <div data-page-node-id="v0hJlcr2vNuoVemvqWmUkS" class="about"><!--pnid:GCC4fCUESMuYfgruj0HLXb-->
-          根据示例体测数据与已学会的动作制定，全部内容都可自行编辑。<br data-page-node-id="FIEBpZFKYWigRz3HtKfqeT"><!--pnid:G7U0PwEruSMQNDNMAkwifP-->
-          髋 / 肩关节卡压明显，训练只在无痛范围内做，出现卡压或刺痛立即停止。<br data-page-node-id="j5oV51VSwHlJbCvNeA9HCI"><!--pnid:rgTsgP9wYx1kCPTsMfiaRW-->
-          体重有日常波动，请关注每周趋势而非单日数字。<br data-page-node-id="I3TXWTyJMqPB0LKmLrHcvS"><!--pnid:iUHeVl0xQKQnbl1Odl4ZZG-->
+      <div class="card">
+        <h3><span class="dot"></span><!--pnid:y0htfHHiI4heAk6mDl3RoB-->关于</h3>
+        <div class="about"><!--pnid:GCC4fCUESMuYfgruj0HLXb-->
+          所有内容均为通用示例，可自行编辑并填入自己的数据。<br><!--pnid:G7U0PwEruSMQNDNMAkwifP-->
+          训练只在无痛范围内进行，出现疼痛或刺痛请立即停止。<br><!--pnid:rgTsgP9wYx1kCPTsMfiaRW-->
+          体重有日常波动，请关注每周趋势而非单日数字。<br><!--pnid:iUHeVl0xQKQnbl1Odl4ZZG-->
           AI 分析仅供参考，不能替代医生或专业教练的诊断。
         </div>
       </div>
     </section>
   </main>
 
-  <nav data-page-node-id="S6qkNZk1nB5dMzqo300l2s" class="tabbar">
-    <button data-page-node-id="bxEtlN0SUg3M1tSOp1o7sJ" class="on" data-tab="today" onclick="switchTab('today')"><span data-page-node-id="ZwWQtbrQXetW0LZsfFTXID" class="ic"><!--pnid:YYiuGYTuScEcR8rHiK5RXW-->📅</span><!--pnid:BCyGRn3Il1AvECsyHjcxCA-->今日</button>
-    <button data-page-node-id="ZmpCvjGjLBKU0fzrJJTPNe" data-tab="plan" onclick="switchTab('plan')"><span data-page-node-id="Pb6McK1rNMMwY3U2rccveg" class="ic"><!--pnid:aKOEKr9KsCyY647kdnzQP2-->📋</span><!--pnid:uJ3HoSfeiITol7sBFDCCSy-->计划</button>
-    <button data-page-node-id="gFaA41bvOiUtpYuE6oxYDx" data-tab="me" onclick="switchTab('me')"><span data-page-node-id="r7rgtkjx44EHiEgitAXqyd" class="ic"><!--pnid:GQBPWGVqKC62Wp0cuJljRB-->👤</span><!--pnid:wA6t6fxUdQGcULL7G70rJJ-->我的</button>
-    <button data-page-node-id="KXKO6wdKIkJXkaW7XmYuLi" data-tab="settings" onclick="switchTab('settings')"><span data-page-node-id="aIhQ6wnL15jLVXuTPqCuIr" class="ic"><!--pnid:MA7uFADhfAoNCniuWxqJ58-->⚙️</span><!--pnid:poIWieXok7H75Tyi7NCjOd-->设置</button>
+  <nav class="tabbar">
+    <button class="on" data-tab="today" onclick="switchTab('today')"><span class="ic"><!--pnid:YYiuGYTuScEcR8rHiK5RXW-->📅</span><!--pnid:BCyGRn3Il1AvECsyHjcxCA-->今日</button>
+    <button data-tab="plan" onclick="switchTab('plan')"><span class="ic"><!--pnid:aKOEKr9KsCyY647kdnzQP2-->📋</span><!--pnid:uJ3HoSfeiITol7sBFDCCSy-->计划</button>
+    <button data-tab="me" onclick="switchTab('me')"><span class="ic"><!--pnid:GQBPWGVqKC62Wp0cuJljRB-->👤</span><!--pnid:wA6t6fxUdQGcULL7G70rJJ-->我的</button>
+    <button data-tab="settings" onclick="switchTab('settings')"><span class="ic"><!--pnid:MA7uFADhfAoNCniuWxqJ58-->⚙️</span><!--pnid:poIWieXok7H75Tyi7NCjOd-->设置</button>
   </nav>
-  <div data-page-node-id="dYvFqbY0gw0kxmS52Rg9Xk" class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 </div>
 
-<div data-page-node-id="rUopUAQofJ5jPMgOk0XsH2" class="modal" id="modal" onclick="if(event.target===this)closeModal()">
-  <div data-page-node-id="oe36bK75335rmQjYbBU4LC" class="modal-box">
-    <div data-page-node-id="6vbGcD7JZT7ONRUASilyC7" class="modal-head"><span data-page-node-id="eV0ePZaDqYFJgiGHpjvfAP" id="modalTitle"><!--pnid:ugbtrpU1LBLNMhmb2pzcLU-->编辑</span><button data-page-node-id="505eYN5t0niwtP2MTzyPEG" class="x" onclick="closeModal()"><!--pnid:EaPVV3Ko7vvFRDhMsnTzSX-->×</button></div>
-    <div data-page-node-id="0WphdcMiXY8gXpCLztomtu" class="modal-body" id="modalBody"></div>
-    <div data-page-node-id="MJtu6xY77kQeaVEbAxBi9J" class="modal-foot"><button data-page-node-id="zRGYhuaScIsF2e2eA1MzJs" class="btn ghost" onclick="closeModal()"><!--pnid:pPzQWuMTwog3m4SLDKx6eh-->取消</button><button data-page-node-id="8ozYjSW4lhbhZ48q1hrUV3" class="btn" id="modalOk"><!--pnid:R0bo6QwR0vvnEvy0xbH1pB-->保存</button></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-head"><span id="modalTitle"><!--pnid:ugbtrpU1LBLNMhmb2pzcLU-->编辑</span><button class="x" onclick="closeModal()"><!--pnid:EaPVV3Ko7vvFRDhMsnTzSX-->×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()"><!--pnid:pPzQWuMTwog3m4SLDKx6eh-->取消</button><button class="btn" id="modalOk"><!--pnid:R0bo6QwR0vvnEvy0xbH1pB-->保存</button></div>
   </div>
 </div>
 
-<script data-page-node-id="TYLns0VOG5zk6TgqeZkDQG" data-pnid-children="OxeadqxrBlCZvlwaRNj6fy">
+<script>
 'use strict';
 var KEY='miaoFitness_v2';
 var DEFAULT={
-  profile:{gender:'女',age:30,height:170,start:65,bmi:22.5,bodyFat:25,whr:0.80,muscle:24,bmr:1500,healthScore:80,bodyAge:30,goal:60,goalFat:22,goalWhr:0.75,
-    issues:['肌肉力量 / 耐力较弱','心肺体能较弱','动作关节不够稳定','柔韧性不足（上交叉）','骨盆前倾','力量不平衡','髋 / 肩关节卡压明显']},
-  weights:[{date:'2026-01-01',value:65}],
+  profile:{gender:'',age:0,height:0,start:0,bmi:0,bodyFat:0,whr:0,muscle:0,bmr:0,healthScore:0,bodyAge:0,goal:0,goalFat:0,goalWhr:0,
+    issues:[]},
+  weights:[],
   checks:{},
   extraMoves:{},
-  week:['R','M','A','R','B','R','C'],
+  week:['R','R','R','R','R','R','R'],
   plans:{
-    A:{title:'方案 A · 核心 + 肩稳定',sub:'约 30–35 分钟 · 改善骨盆前倾 / 上交叉',moves:[
-      ['跑步机快走','10 分钟','热身，心率微微上来即可'],
-      ['弹力带绕肩伸展','2 组 × 15 次','打开肩关节'],
-      ['手触耳朵俯身外旋','2 组 × 12 次/侧','缓慢，不卡不痛'],
-      ['站姿哑铃肩外旋','2 组 × 15 次/侧','轻重量，肩袖激活'],
-      ['侧平举','2 组 × 12–15 次','不耸肩'],
-      ['EPTC 举腿','2 组 × 12 次','腰贴地，慢速控制'],
-      ['死虫式','2 组 × 10 次/侧','腰不离地，宁慢勿多']]},
-    B:{title:'方案 B · 背部 + 体态',sub:'约 30–35 分钟 · 对抗上交叉、圆肩',moves:[
-      ['跑步机快走','10 分钟','热身'],
-      ['弹力带绕肩伸展','2 组 × 15 次','肩关节打开'],
-      ['绳索划船','2 组 × 12–15 次','肩胛后缩，中背发力'],
-      ['坐姿绳索下拉背','2 组 × 12–15 次','挺胸，拉到锁骨附近'],
-      ['手触耳朵俯身外旋','2 组 × 12 次/侧','肩关节灵活'],
-      ['站姿哑铃肩外旋','2 组 × 15 次/侧','稳定肩关节'],
-      ['死虫式','2 组 × 10 次/侧','核心收尾']]},
-    C:{title:'方案 C · 心肺 + 灵活性',sub:'约 30 分钟 · 从低强度起步',moves:[
-      ['跑步机','20 分钟','快走为主；1′稍快+2′常速交替，能说话为准'],
-      ['弹力带绕肩伸展','2 组 × 15 次','肩关节活动'],
-      ['手触耳朵俯身外旋','2 组 × 12 次/侧','缓慢、无痛范围'],
-      ['侧平举','2 组 × 12 次','轻重量'],
-      ['EPTC 举腿','2 组 × 12 次','腰贴地'],
-      ['死虫式','2 组 × 10 次/侧','慢速控制']]},
-    M:{title:'器械自学',sub:'约 30 分钟 · 最轻配重熟悉轨迹',moves:[
-      ['先看器械图示','1 分钟','确认是学过的绳索划船 / 坐姿下拉'],
-      ['空手模拟','2–3 次','最轻档，感受轨迹，肩颈别耸、腰别塌'],
-      ['绳索划船','2 组 × 12 次','最轻配重，肩胛后缩'],
-      ['坐姿绳索下拉背','2 组 × 12 次','最轻配重，挺胸'],
-      ['弹力带绕肩伸展','2 组 × 15 次','收尾放松']]},
+    A:{title:'方案 A',sub:'',moves:[]},
+    B:{title:'方案 B',sub:'',moves:[]},
+    C:{title:'方案 C',sub:'',moves:[]},
     R:{title:'休息 / 主动恢复',sub:'不安排训练 · 让身体恢复',moves:[]}
   },
   library:[
-    ['跑步机','快走 10′ 起，能说话的强度'],
+    ['跑步机','坡度 3–6，速度 4.5–5.5，5–10 分钟热身'],
+    ['椭圆机','中等阻力，5–10 分钟，心率微微加快'],
     ['弹力带绕肩伸展','训练第一步，打开肩关节'],
-    ['手触耳朵俯身外旋','缓慢，不卡不痛'],
-    ['站姿哑铃肩外旋','大臂贴身，只转小臂'],
-    ['侧平举','举到与肩同高，不耸肩'],
-    ['绳索划船','肩胛后缩，感受中背发力'],
+    ['肩关节环绕','前后各 15 次，动作慢而充分'],
+    ['猫牛式','脊柱逐节活动，配合呼吸，10–15 次'],
+    ['髋关节环绕','单腿绕环，两侧各 12 次'],
+    ['徒手深蹲热身','不负重，20 次，找发力感'],
+    ['弓步转体','手持轻物，左右各 10 次'],
+    ['杠铃卧推','肩胛收紧下沉，杠铃落在乳头连线'],
+    ['哑铃卧推','大臂与躯干约 45°，下放至胸部有拉伸感'],
+    ['上斜哑铃卧推','靠背 30°，重点练上胸，别耸肩'],
+    ['坐姿器械推胸','调整座椅使把手与胸中部齐平'],
+    ['蝴蝶机夹胸','手肘微屈固定，靠胸发力合拢'],
+    ['绳索夹胸','身体略前倾，感受胸部挤压'],
+    ['俯卧撑','核心收紧，身体成一条直线'],
+    ['跪姿俯卧撑','力量不足时用跪姿，保证动作标准'],
+    ['双杠臂屈伸','身体略前倾练胸，直立练三头'],
+    ['高位下拉宽握','挺胸，拉到锁骨上沿，肩胛后缩'],
+    ['高位下拉窄握','对握，拉到下胸，肘靠近身体'],
+    ['绳索划船','肩胛后缩，拉到下腹，挺胸不后仰'],
+    ['哑铃单臂划船','一手撑凳，肘沿身体两侧向后拉'],
+    ['杠铃俯身划船','背部挺直约 45°，拉至下胸'],
     ['坐姿绳索下拉背','挺胸，拉到锁骨附近'],
+    ['辅助引体向上','用弹力带辅助，下巴过杠'],
+    ['直臂下压','手臂微屈固定，用背阔肌压下'],
+    ['面拉 Face Pull','绳索拉向面部，外旋肩膀，练后束'],
+    ['T 杠划船','胸贴垫，肘贴身向后拉'],
+    ['硬拉','髋膝联动，背部始终挺直，杠贴腿走'],
+    ['哑铃推举','核心收紧，推起时别耸肩'],
+    ['器械推举','调整座椅，把手与肩齐平'],
+    ['侧平举','举到与肩同高，不耸肩'],
+    ['绳索侧平举','低位起始，保持手肘微屈'],
+    ['前平举','举到与肩同高，控制下落'],
+    ['俯身反向飞鸟','俯身 45°，打开肩后束'],
+    ['站姿哑铃肩外旋','大臂贴身，只转小臂'],
+    ['手触耳朵俯身外旋','缓慢，不卡不痛'],
+    ['耸肩','只做肩胛上提，别用头代偿'],
+    ['哑铃弯举','大臂固定不动，只有小臂动'],
+    ['锤式弯举','拳眼朝上，练肱肌和前臂'],
+    ['绳索下压','大臂贴身，肘固定，伸直时外旋'],
+    ['杠铃弯举','握距与肩同宽，避免身体借力'],
+    ['集中弯举','坐在凳上，肘撑膝，顶峰收缩'],
+    ['过顶臂屈伸','大臂靠近耳朵，伸展到头顶'],
+    ['牧师凳弯举','大臂贴垫，缓慢下放'],
+    ['杠铃深蹲','膝盖对准脚尖，蹲到大腿平行或更低'],
+    ['高脚杯深蹲','抱哑铃于胸前，帮助挺直上身'],
+    ['腿举','脚掌全踩踏板，膝盖不要内扣'],
+    ['罗马尼亚硬拉','膝微屈，髋向后推，感受腘绳肌拉伸'],
+    ['臀推','下巴微收，顶峰夹臀停 1 秒，别用腰顶'],
+    ['臀桥','腰不离地，宁慢勿多'],
+    ['保加利亚分腿蹲','后脚垫高，前膝不超过脚尖'],
+    ['箭步蹲','步幅适中，前膝对准脚尖，后膝下沉'],
+    ['腿屈伸','坐稳，缓慢伸直，顶峰绷紧股四头'],
+    ['腿弯举','俯卧，勾起小腿，感受腘绳肌收缩'],
+    ['站姿提踵','踮起脚尖停 1 秒，缓慢下落'],
+    ['相扑深蹲','双脚外展，脚尖外八，重点练内侧'],
+    ['侧弓步','向侧迈步下沉，感受大腿内侧拉伸'],
+    ['蚌式开合','侧卧屈膝，膝盖打开，激活臀中肌'],
+    ['绳索后踢腿','身体略前倾，向后上方踢，夹臀'],
+    ['髋外展机','坐稳，缓慢打开双腿，顶峰停 1 秒'],
+    ['平板支撑','肘在肩下方，身体成直线，别塌腰'],
+    ['侧平板支撑','髋部抬起，身体成一条直线'],
+    ['死虫式','腰不离地，宁慢勿多'],
     ['EPTC 举腿','重点：腰贴地，不是抬多高'],
-    ['死虫式','腰不离地，宁慢勿多']
+    ['卷腹','下背贴地，肩胛离地即可，别抱头拽脖子'],
+    ['悬垂举腿','身体稳定不摆动，用腹部卷起骨盆'],
+    ['俄罗斯转体','转体时呼气，感受腹斜肌收缩'],
+    ['鸟狗式','对侧手脚伸展，骨盆不晃动'],
+    ['登山跑','核心收紧，膝盖快速交替靠向胸口'],
+    ['仰卧抬腿','下背贴地，缓慢起落，别用惯性'],
+    ['爬坡快走','坡度 6–12，速度 4.5–5.5，持续 20–40 分钟'],
+    ['动感单车','中等阻力，保持节奏，注意座椅高度'],
+    ['划船机','蹬腿→后拉→还原，动作连贯不耸肩'],
+    ['跳绳','前脚掌轻触地，膝盖微屈缓冲'],
+    ['HIIT 间歇','快 30 秒 + 慢 60 秒，循环 8–10 组'],
+    ['开合跳','落地屈膝缓冲，节奏均匀'],
+    ['髂腰肌拉伸','弓步下沉，感受髋前侧拉伸，每侧 30 秒'],
+    ['腘绳肌拉伸','直腿屈髋，背部挺直，每侧 30 秒'],
+    ['鸽子式','臀部坐正，前腿弯曲，放松髋外侧'],
+    ['胸大肌拉伸','手扶墙，身体前倾转体，每侧 30 秒'],
+    ['婴儿式','跪坐前趴，手臂前伸，放松下背'],
+    ['泡沫轴放松','缓慢滚动，痛点停留 20–30 秒']
   ],
   diet:{cal:1600,protein:110,fat:50,carb:178,fiber:25,water:2,
     meals:[
@@ -481,6 +545,34 @@ var DEFAULT={
     custom:{key:'',model:'',vision:'',url:'',models:[],modelsAt:0}
   },history:[],undo:[],lastType:'comprehensive'}
 };
+var CATS=['热身激活','胸','背','肩','手臂','腿臀','核心','有氧','拉伸放松','其他'];
+var CAT_OF={'跑步机':'热身激活','椭圆机':'热身激活','弹力带绕肩伸展':'热身激活','肩关节环绕':'热身激活','猫牛式':'热身激活','髋关节环绕':'热身激活','徒手深蹲热身':'热身激活','弓步转体':'热身激活','杠铃卧推':'胸','哑铃卧推':'胸','上斜哑铃卧推':'胸','坐姿器械推胸':'胸','蝴蝶机夹胸':'胸','绳索夹胸':'胸','俯卧撑':'胸','跪姿俯卧撑':'胸','双杠臂屈伸':'胸','高位下拉宽握':'背','高位下拉窄握':'背','绳索划船':'背','哑铃单臂划船':'背','杠铃俯身划船':'背','坐姿绳索下拉背':'背','辅助引体向上':'背','直臂下压':'背','面拉 Face Pull':'背','T 杠划船':'背','硬拉':'背','哑铃推举':'肩','器械推举':'肩','侧平举':'肩','绳索侧平举':'肩','前平举':'肩','俯身反向飞鸟':'肩','站姿哑铃肩外旋':'肩','手触耳朵俯身外旋':'肩','耸肩':'肩','哑铃弯举':'手臂','锤式弯举':'手臂','绳索下压':'手臂','杠铃弯举':'手臂','集中弯举':'手臂','过顶臂屈伸':'手臂','牧师凳弯举':'手臂','杠铃深蹲':'腿臀','高脚杯深蹲':'腿臀','腿举':'腿臀','罗马尼亚硬拉':'腿臀','臀推':'腿臀','臀桥':'腿臀','保加利亚分腿蹲':'腿臀','箭步蹲':'腿臀','腿屈伸':'腿臀','腿弯举':'腿臀','站姿提踵':'腿臀','相扑深蹲':'腿臀','侧弓步':'腿臀','蚌式开合':'腿臀','绳索后踢腿':'腿臀','髋外展机':'腿臀','平板支撑':'核心','侧平板支撑':'核心','死虫式':'核心','EPTC 举腿':'核心','卷腹':'核心','悬垂举腿':'核心','俄罗斯转体':'核心','鸟狗式':'核心','登山跑':'核心','仰卧抬腿':'核心','爬坡快走':'有氧','动感单车':'有氧','划船机':'有氧','跳绳':'有氧','HIIT 间歇':'有氧','开合跳':'有氧','髂腰肌拉伸':'拉伸放松','腘绳肌拉伸':'拉伸放松','鸽子式':'拉伸放松','胸大肌拉伸':'拉伸放松','婴儿式':'拉伸放松','泡沫轴放松':'拉伸放松'};
+function catOf(m){var c=m&&m[2];if(c)return c;return CAT_OF[m&&m[0]]||'其他';}
+function planKeys(){return Object.keys(state.plans||{}).filter(function(k){return k!=='R';}).sort();}
+function planLabel(k){var p=state.plans[k];return (p&&p.title)||('方案 '+k);}
+function addPlan(){
+  var used={};planKeys().forEach(function(k){used[k]=1;});
+  var opts=[];for(var i=0;i<26;i++){var c=String.fromCharCode(65+i);if(c!=='R'&&!used[c])opts.push([c,'方案 '+c]);}
+  if(!opts.length){toast('方案代号已用完');return;}
+  openEditor('添加训练方案',[
+    {label:'方案代号',v:opts[0][0],type:'select',opts:opts},
+    {label:'方案标题',v:opts[0][1],type:'text'},
+    {label:'副标题 / 时长',v:'',type:'text'}
+  ],function(v){
+    var code=(v[0]||opts[0][0]).toUpperCase();
+    if(!/^[A-Z]$/.test(code)||code==='R'||used[code]){toast('代号无效或已存在');return;}
+    state.plans[code]={title:v[1]||('方案 '+code),sub:v[2]||'',moves:[]};
+    save();renderAll();toast('已添加方案 '+code);
+  });
+}
+function delPlan(k){
+  if(k==='R')return;
+  var p=state.plans[k];
+  if(!p||!confirm('删除方案「'+(p.title||k)+'」？'))return;
+  delete state.plans[k];
+  for(var d=0;d<7;d++){if(state.week[d]===k)state.week[d]='R';}
+  save();renderAll();toast('方案已删除');
+}
 var AI_TYPES=[['comprehensive','综合评估'],['plan','计划调整'],['trend','体重趋势'],['diet','饮食调整'],['train','训练调整'],['free','自由提问']];
 var WEEKNAME=['周日','周一','周二','周三','周四','周五','周六'];
 var state,modalCb=null,aiAbort=null,aiType='comprehensive',aiLast='',aiPatch=null,chartRange='all',lastDeleted=null;
@@ -555,6 +647,8 @@ function load(){
     save();
   }
   sortW();
+  upgradeLibrary();
+  purgePersonalData();
 }
 function merge(base,over){
   if(!over||typeof over!=='object')return base;
@@ -565,6 +659,33 @@ function merge(base,over){
   return base;
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('本地存储写入失败');}}
+function purgePersonalData(){
+  // 一次性迁移：清除旧版本残留的个人数据（排期/体重/打卡/临时动作/AI历史和密钥），
+  // 恢复为出厂干净模板。只执行一次，之后用户自己填写的数据不会被动。
+  try{
+    if(localStorage.getItem('miaoFitness_purged_v1'))return;
+    var d=clone(DEFAULT);
+    state.profile=d.profile;state.weights=[];state.checks={};state.extraMoves={};
+    state.plans=clone(d.plans);state.week=['R','R','R','R','R','R','R'];
+    state.ai.history=[];state.ai.undo=[];
+    Object.keys(state.ai.providers||{}).forEach(function(k){state.ai.providers[k].key='';});
+    save();
+    localStorage.setItem('miaoFitness_purged_v1','1');
+  }catch(e){}
+}
+function upgradeLibrary(){
+  // 一次性迁移：为旧版本用户补全标准动作，保留其已有（含自定义）动作与顺序
+  try{
+    if(localStorage.getItem('miaoFitness_lib_v2'))return;
+    var have={};
+    (state.library||[]).forEach(function(m){if(m&&m[0])have[m[0]]=true;});
+    var added=0;
+    (DEFAULT.library||[]).forEach(function(m){if(!have[m[0]]){state.library.push([m[0],m[1]]);added++;}});
+    save();
+    localStorage.setItem('miaoFitness_lib_v2','1');
+    if(added)console.log('动作库已补全 '+added+' 个动作');
+  }catch(e){}
+}
 
 function openEditor(title,fields,cb){
   modalCb=cb;
@@ -585,39 +706,88 @@ function openEditor(title,fields,cb){
 }
 function closeModal(){document.getElementById('modal').classList.remove('show');modalCb=null;movePicker=false;}
 var movePicker=false;
+var pickCatFilter='全部',pickSelected={},pickGroupOpen={};
+function pickJsStr(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 function openMovePicker(title,cb){
-  modalCb=cb;movePicker=true;
+  modalCb=cb;movePicker=true;pickCatFilter='全部';pickSelected={};pickGroupOpen={};
   document.getElementById('modalTitle').textContent=title;
-  var list=state.library.map(function(m,i){
-    return '<label class="pick-item" id="pi'+i+'"><input type="checkbox" class="pickcb" value="'+i+'" onchange="syncPickItem('+i+')"><span class="pi-name">'+esc(m[0])+'</span><span class="pi-desc">'+esc(m[1]||'')+'</span></label>';
-  }).join('');
+  var counts={};
+  (state.library||[]).forEach(function(m){var c=catOf(m);counts[c]=(counts[c]||0)+1;});
+  var order=CATS.filter(function(c){return counts[c];});
+  Object.keys(counts).forEach(function(c){if(order.indexOf(c)<0)order.push(c);});
+  var chips='<span class="pick-cat on" data-cat="全部" onclick="setPickCat(\'全部\')">全部 '+(state.library||[]).length+'</span>';
+  chips+=order.map(function(c){return '<span class="pick-cat" data-cat="'+esc(c)+'" onclick="setPickCat(\''+pickJsStr(c)+'\')">'+esc(c)+' '+counts[c]+'</span>';}).join('');
   document.getElementById('modalBody').innerHTML=
+    '<input id="pickSearch" class="lib-search" type="text" placeholder="🔍 搜索动作（名称或要点）" oninput="renderPickList()">'+
+    '<div class="pick-cats" id="pickCats">'+chips+'</div>'+
     '<div class="pick-bar"><span class="n" id="pickCount">动作库 · 可多选</span><span class="op" onclick="pickAll(true)">全选</span><span class="op" onclick="pickAll(false)">清空</span></div>'+
-    '<div class="pick-list" id="pickList">'+list+'</div>'+
+    '<div class="pick-list" id="pickList"></div>'+
     '<div class="pick-sec">统一组数 / 次数（可选，应用于所选动作）</div>'+
     '<div class="mf"><input id="pickSets" type="text" value="" placeholder="留空则用动作库要点，或填如：3 组 × 12 次"></div>'+
     '<div class="pick-sec">自定义动作（库里没有时填，可只填名称）</div>'+
     '<div class="mf"><input id="mf0" type="text" value="" placeholder="动作名称，如：臀桥"></div>'+
     '<div class="mf"><input id="mf1" type="text" value="" placeholder="组数 / 次数（可选）"></div>'+
     '<div class="mf"><input id="mf2" type="text" value="" placeholder="要点说明（可选）"></div>';
+  renderPickList();
   document.getElementById('modalOk').textContent='添加';
   document.getElementById('modal').classList.add('show');
 }
+function setPickCat(c){
+  pickCatFilter=c;
+  var chips=document.querySelectorAll('#pickCats .pick-cat');
+  for(var i=0;i<chips.length;i++)chips[i].classList.toggle('on',chips[i].getAttribute('data-cat')===esc(c));
+  renderPickList();
+}
+function renderPickList(){
+  var box=document.getElementById('pickList');if(!box)return;
+  var q=((document.getElementById('pickSearch')||{}).value||'').trim().toLowerCase();
+  var groups={},order=[];
+  (state.library||[]).forEach(function(m,i){
+    if(!m||!m[0])return;
+    var c=catOf(m);
+    if(pickCatFilter!=='全部'&&c!==pickCatFilter)return;
+    if(q&&(m[0]+' '+(m[1]||'')).toLowerCase().indexOf(q)<0)return;
+    if(!groups[c]){groups[c]=[];order.push(c);}
+    groups[c].push(i);
+  });
+  if(!order.length){box.innerHTML='<div class="lib-empty">没有匹配的动作</div>';return;}
+  box.innerHTML=order.map(function(c){
+    var open=pickGroupOpen[c]!==false,jc=pickJsStr(c);
+    var items=groups[c].map(function(i){
+      var m=state.library[i],on=!!pickSelected[i];
+      return '<label class="pick-item'+(on?' sel':'')+'" id="pi'+i+'"><input type="checkbox" class="pickcb" value="'+i+'"'+(on?' checked':'')+' onchange="syncPickItem('+i+')"><span class="pi-name">'+esc(m[0])+'</span><span class="pi-desc">'+esc(m[1]||'')+'</span></label>';
+    }).join('');
+    return '<div class="pick-group'+(open?'':' collapsed')+'">'+
+      '<div class="pick-group-head" onclick="togglePickGroup(\''+jc+'\')">'+
+        '<span class="pg-cat">'+esc(c)+'</span><span class="pg-n">'+groups[c].length+'</span>'+
+        '<span class="pg-op" onclick="event.stopPropagation();pickCatAll(\''+jc+'\',true)">全选</span>'+
+        '<span class="pg-op" onclick="event.stopPropagation();pickCatAll(\''+jc+'\',false)">清空</span>'+
+        '<span class="pg-arrow">▾</span>'+
+      '</div><div class="pick-group-body">'+items+'</div></div>';
+  }).join('');
+}
+function togglePickGroup(c){pickGroupOpen[c]=pickGroupOpen[c]===false;renderPickList();}
+function pickCatAll(c,on){
+  (state.library||[]).forEach(function(m,i){if(catOf(m)===c)pickSelected[i]=on;});
+  renderPickList();updatePickCount();
+}
 function syncPickItem(i){
   var cb=document.querySelector('#pi'+i+' .pickcb'),row=document.getElementById('pi'+i);
-  if(row)row.classList.toggle('sel',!!(cb&&cb.checked));
+  var on=!!(cb&&cb.checked);pickSelected[i]=on;
+  if(row)row.classList.toggle('sel',on);
   updatePickCount();
 }
 function updatePickCount(){
-  var n=document.querySelectorAll('.pickcb:checked').length;
-  document.getElementById('pickCount').textContent='动作库 · 已选 '+n+' 个';
+  var n=0;for(var k in pickSelected)if(pickSelected[k])n++;
+  var el=document.getElementById('pickCount');
+  if(el)el.textContent='动作库 · 已选 '+n+' 个';
 }
 function pickAll(on){
-  var cbs=document.querySelectorAll('.pickcb');
+  var box=document.getElementById('pickList');if(!box)return;
+  var cbs=box.querySelectorAll('.pickcb');
   for(var i=0;i<cbs.length;i++){
-    cbs[i].checked=on;
-    var row=document.getElementById('pi'+cbs[i].value);
-    if(row)row.classList.toggle('sel',on);
+    var idx=parseInt(cbs[i].value,10);pickSelected[idx]=on;cbs[i].checked=on;
+    var row=document.getElementById('pi'+idx);if(row)row.classList.toggle('sel',on);
   }
   updatePickCount();
 }
@@ -627,11 +797,9 @@ document.getElementById('modalOk').onclick=function(){
   if(movePicker){
     var rows=[];
     var sets=(document.getElementById('pickSets').value||'').trim();
-    var cbs=document.querySelectorAll('.pickcb:checked');
-    for(var i=0;i<cbs.length;i++){
-      var m=state.library[parseInt(cbs[i].value)];
-      if(m)rows.push([m[0],sets,m[1]||'']);
-    }
+    (state.library||[]).forEach(function(m,i){
+      if(pickSelected[i]&&m)rows.push([m[0],sets,m[1]||'']);
+    });
     var nm=(document.getElementById('mf0').value||'').trim();
     if(nm)rows.push([nm,(document.getElementById('mf1').value||'').trim(),(document.getElementById('mf2').value||'').trim()]);
     closeModal();
@@ -663,15 +831,15 @@ function editProfile(){
     {label:'需要改善的问题（每行一条）',v:p.issues.join('\n'),type:'textarea',rows:6}
   ],function(v){
     var p2=state.profile;
-    p2.gender=v[0];p2.age=+v[1]||30;p2.height=+v[2]||170;p2.start=+v[3]||65;p2.goal=+v[4]||60;
-    p2.goalFat=+v[5]||22;p2.goalWhr=+v[6]||0.75;p2.bmi=+v[7]||22.5;p2.bodyFat=+v[8]||25;
-    p2.whr=+v[9]||0.80;p2.muscle=+v[10]||24;p2.bmr=+v[11]||1500;p2.healthScore=+v[12]||80;
-    p2.bodyAge=+v[13]||30;p2.issues=lines(v[14]);
+    p2.gender=v[0];p2.age=+v[1]||0;p2.height=+v[2]||0;p2.start=+v[3]||0;p2.goal=+v[4]||0;
+    p2.goalFat=+v[5]||0;p2.goalWhr=+v[6]||0;p2.bmi=+v[7]||0;p2.bodyFat=+v[8]||0;
+    p2.whr=+v[9]||0;p2.muscle=+v[10]||0;p2.bmr=+v[11]||0;p2.healthScore=+v[12]||0;
+    p2.bodyAge=+v[13]||0;p2.issues=lines(v[14]);
     save();renderAll();toast('档案已更新');
   });
 }
 function editWeek(){
-  var opts=[['R','休息 / 主动恢复'],['M','器械自学'],['A','方案 A · 核心+肩'],['B','方案 B · 背部+体态'],['C','方案 C · 心肺+灵活']];
+  var opts=[['R','休息 / 主动恢复']];planKeys().forEach(function(k){opts.push([k,planLabel(k)]);});
   var f=[];for(var i=0;i<7;i++)f.push({label:WEEKNAME[i],v:state.week[i],type:'select',opts:opts});
   openEditor('编辑每周训练安排',f,function(v){state.week=v.slice(0,7);save();renderAll();toast('周安排已更新');});
 }
@@ -699,9 +867,47 @@ function delPlanMove(k,i){
   m.splice(i,1);
   save();renderPlan();toast('已删除');
 }
+var libCatFilter='全部';
+function setLibCat(c){
+  libCatFilter=c;
+  var chips=document.querySelectorAll('#libCats .pick-cat');
+  for(var i=0;i<chips.length;i++)chips[i].classList.toggle('on',chips[i].getAttribute('data-cat')===esc(c));
+  renderLibRows();
+}
+function renderLibRows(){
+  var box=document.getElementById('libList');if(!box)return;
+  var q=((document.getElementById('libSearch')||{}).value||'').trim().toLowerCase();
+  var counts={},seen=[];
+  (state.library||[]).forEach(function(m){var c=catOf(m);counts[c]=(counts[c]||0)+1;if(seen.indexOf(c)<0)seen.push(c);});
+  var cats=CATS.filter(function(c){return counts[c];});
+  seen.forEach(function(c){if(cats.indexOf(c)<0)cats.push(c);});
+  var chipsBox=document.getElementById('libCats');
+  if(chipsBox){
+    var chips='<span class="pick-cat'+(libCatFilter==='全部'?' on':'')+'" data-cat="全部" onclick="setLibCat(\'全部\')">全部 '+(state.library||[]).length+'</span>';
+    chips+=cats.map(function(c){return '<span class="pick-cat'+(libCatFilter===c?' on':'')+'" data-cat="'+esc(c)+'" onclick="setLibCat(\''+pickJsStr(c)+'\')">'+esc(c)+'</span>';}).join('');
+    chipsBox.innerHTML=chips;
+  }
+  var groups={},gorder=[];
+  (state.library||[]).forEach(function(m){
+    if(!m||!m[0])return;
+    var c=catOf(m);
+    if(libCatFilter!=='全部'&&c!==libCatFilter)return;
+    if(q&&(m[0]+' '+(m[1]||'')).toLowerCase().indexOf(q)<0)return;
+    if(!groups[c]){groups[c]=[];gorder.push(c);}
+    groups[c].push(m);
+  });
+  gorder.sort(function(x,y){var a=cats.indexOf(x),bb=cats.indexOf(y);return (a<0?99:a)-(bb<0?99:bb);});
+  if(!gorder.length){box.innerHTML='<div class="lib-empty">没有匹配的动作</div>';return;}
+  box.innerHTML=gorder.map(function(c){
+    return '<div class="pick-group"><div class="pick-group-head" style="cursor:default"><span class="pg-cat">'+esc(c)+'</span><span class="pg-n">'+groups[c].length+' 个</span></div><div class="pick-group-body">'+groups[c].map(function(m){
+      return '<div class="kv"><span>'+esc(m[0])+'</span><b>'+esc(m[1])+'</b></div>';
+    }).join('')+'</div></div>';
+  }).join('');
+}
 function editLibrary(){
-  openEditor('编辑动作库',[{label:'每行：动作 | 要点',v:state.library.map(function(m){return m.join(' | ');}).join('\n'),type:'textarea',rows:14,hint:'用竖线 | 分隔两列。'}],function(v){
-    state.library=rows(v[0]).filter(function(r){return r[0];}).map(function(r){return [r[0],r[1]];});save();renderAll();toast('动作库已更新');
+  var hint='用竖线 | 分隔三列；分类可留空（留空时标准动作自动归类，自定义动作归「其他」）。可选：'+CATS.slice(0,-1).join(' / ');
+  openEditor('编辑动作库',[{label:'每行：动作 | 要点 | 分类（可选）',v:state.library.map(function(m){var c=m[2]||'';if(!c){var d=CAT_OF[m[0]];if(d&&d!=='其他')c=d;}return [m[0],m[1]||'',c].join(' | ');}).join('\n'),type:'textarea',rows:14,hint:hint}],function(v){
+    state.library=rows(v[0]).filter(function(r){return r[0];}).map(function(r){return [r[0],r[1],(r[2]||'').trim()];});save();renderAll();toast('动作库已更新');
   });
 }
 function editDiet(){
@@ -773,7 +979,7 @@ function renderToday(){
   var d=new Date(),key=todayKey(),code=state.week[d.getDay()],p=state.plans[code]||state.plans.R;
   document.getElementById('todayDate').textContent=key+' '+WEEKNAME[d.getDay()];
   document.getElementById('todayTitle').textContent=p.title;
-  document.getElementById('todayTags').innerHTML='<span class="tag">'+esc(p.sub)+'</span>'+(code==='R'?'':'<span class="tag o">强度 40% 起步 · 关节不卡不痛</span>');
+  document.getElementById('todayTags').innerHTML='<span class="tag">'+esc(p.sub)+'</span>'+(code==='R'?'':'<span class="tag o">循序渐进 · 动作标准优先</span>');
   var ts=trainingStats();
   document.getElementById('streakText').innerHTML='连续 '+ts.streak+' 次训练<small>本周完成 '+ts.done+' / '+ts.planned+' 次计划训练</small>';
   document.getElementById('weekDots').innerHTML=ts.dots.map(function(x){
@@ -879,18 +1085,22 @@ function renderPlan(){
   }).join('')+'</div>';
   h+='<div class="card"><h3><span class="dot"></span>饮食原则 <span class="edit" onclick="editDiet()">编辑</span></h3><ul class="tips">'+d.principles.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>';
   document.getElementById('seg-diet').innerHTML=h;
-  h='<div class="card"><h3><span class="dot"></span>动作库 <span class="edit" onclick="editLibrary()">编辑</span></h3>'+state.library.map(function(m){
-    return '<div class="kv"><span>'+esc(m[0])+'</span><b>'+esc(m[1])+'</b></div>';
-  }).join('')+'</div>';
-  ['A','B','C','M'].forEach(function(k){
+  h='<div class="card"><h3><span class="dot"></span>动作库 <span class="edit" onclick="editLibrary()">编辑</span></h3>'+
+    '<input id="libSearch" class="lib-search" type="text" placeholder="🔍 搜索动作（名称或要点）" oninput="renderLibRows()">'+
+    '<div class="pick-cats" id="libCats"></div>'+
+    '<div id="libList" class="lib-list"></div></div>';
+  planKeys().forEach(function(k){
     var pl=state.plans[k];
-    h+='<div class="plan-block"><div class="head"><span>'+esc(pl.title)+'</span><span class="pedit" onclick="editPlan(\''+k+'\')">✎ 编辑</span></div><table>'+
+    h+='<div class="plan-block"><div class="head"><span>'+esc(pl.title)+'</span><span class="pedit" onclick="editPlan(\''+k+'\')">✎ 编辑</span><span class="pdel" style="font-size:11px;margin-left:8px" onclick="delPlan(\''+k+'\')">删除</span></div><table>'+
       '<tr style="background:#f6faf6"><td colspan="3" style="color:#78909c;font-size:11px">'+esc(pl.sub)+'</td></tr>'+
-      pl.moves.map(function(m,i){
+      (pl.moves.length?pl.moves.map(function(m,i){
         return '<tr><td>'+esc(m[0])+'</td><td>'+esc(m[1])+'</td><td>'+esc(m[2])+' <span class="pdel" onclick="delPlanMove(\''+k+'\','+i+')" title="删除">×</span></td></tr>';
-      }).join('')+'</table><button class="padd" onclick="addPlanMove(\''+k+'\')">+ 添加动作</button></div>';
+      }).join(''):'<tr><td colspan="3" style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0">暂无动作，点下方「+ 添加动作」从动作库勾选</td></tr>')+
+      '</table><button class="padd" onclick="addPlanMove(\''+k+'\')">+ 添加动作</button></div>';
   });
+  h+='<button class="padd" style="width:100%;margin-top:4px" onclick="addPlan()">+ 添加方案（D / E / F ...）</button>';
   document.getElementById('seg-train').innerHTML=h;
+  renderLibRows();
 }
 function renderLog(){
   sortW();
@@ -900,7 +1110,7 @@ function renderLog(){
   document.getElementById('stGap').innerHTML=gap>0?gap.toFixed(1)+'<small> kg</small>':'达成';
   document.getElementById('stCount').textContent=ws.length;
   document.getElementById('recList').innerHTML=ws.slice().reverse().map(function(w){
-    return '<div class="rec"><div><div class="val">'+w.value.toFixed(1)+' kg</div><div class="date">'+w.date+(w.date==='2026-11-21'?' · 体测日':'')+'</div></div><div class="acts"><button class="e" onclick="editWeight(\''+w.date+'\')">修改</button><button onclick="deleteRecord(\''+w.date+'\')">删除</button></div></div>';
+    return '<div class="rec"><div><div class="val">'+w.value.toFixed(1)+' kg</div><div class="date">'+w.date+''+'</div></div><div class="acts"><button class="e" onclick="editWeight(\''+w.date+'\')">修改</button><button onclick="deleteRecord(\''+w.date+'\')">删除</button></div></div>';
   }).join('')||'<div class="empty">还没有记录</div>';
   var ins=weightInsight();
   var nm={down:'下降中',flat:'平台期',up:'上升中'};
@@ -961,7 +1171,7 @@ function renderMe(){
     '<div class="kv"><span>体脂率目标</span><b>'+Number(p.bodyFat).toFixed(1)+'% → '+Number(p.goalFat).toFixed(1)+'%</b></div>'+
     '<div class="kv"><span>腰臀比目标</span><b>'+Number(p.whr).toFixed(2)+' → '+Number(p.goalWhr).toFixed(2)+'</b></div>'+
     '<div class="kv"><span>基础代谢 / 健康评分</span><b>'+p.bmr+' kcal · '+p.healthScore+' 分</b></div>';
-  var names={R:'休息',M:'器械自学',A:'方案 A',B:'方案 B',C:'方案 C'};
+  var names={R:'休息'};planKeys().forEach(function(k){names[k]=planLabel(k);});
   document.getElementById('weekView').innerHTML=state.week.map(function(c,i){
     return '<div class="kv"><span>'+WEEKNAME[i]+'</span><b>'+(names[c]||c)+'</b></div>';
   }).join('');
@@ -1074,7 +1284,7 @@ function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById(
 
 function getPath(path){return path.split('.').reduce(function(o,k){return o[k];},state);}
 function setPath(path,v){var ps=path.split('.'),o=state;for(var i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=v;}
-var PATCH_FIELDS=(function(){
+function buildPatchFields(){
   var f={
     'profile.goal':{label:'目标体重 (kg)',type:'num',min:30,max:150},
     'profile.goalFat':{label:'目标体脂率 (%)',type:'num',min:10,max:40},
@@ -1091,19 +1301,20 @@ var PATCH_FIELDS=(function(){
     'diet.meals':{label:'每日食谱',type:'meals'},
     'diet.principles':{label:'饮食原则',type:'lines'}
   };
-  ['A','B','C','M'].forEach(function(k){
+  planKeys().forEach(function(k){
     f['plans.'+k+'.title']={label:'方案 '+k+' 标题',type:'text'};
     f['plans.'+k+'.sub']={label:'方案 '+k+' 副标题',type:'text'};
     f['plans.'+k+'.moves']={label:'方案 '+k+' 动作清单',type:'moves'};
   });
-  var hints={moves:'每行：动作 | 组数次数 | 说明',meals:'每行：餐次 | 时间 | 热量 | 内容',pairs2:'每行：动作 | 要点',week:'每行：周一：A，代号 A=核心肩 B=背体态 C=心肺 M=器械自学 R=休息',lines:'每行一条'};
+  var hints={moves:'每行：动作 | 组数次数 | 说明',meals:'每行：餐次 | 时间 | 热量 | 内容',pairs2:'每行：动作 | 要点',week:'每行：周一：A；代号为已添加的方案字母，R=休息',lines:'每行一条'};
   Object.keys(f).forEach(function(k){
     f[k].get=function(){return getPath(k);};
     f[k].set=function(v){setPath(k,v);};
     f[k].hint=hints[f[k].type]||'';
   });
   return f;
-})();
+}
+var PATCH_FIELDS={};
 function normRows(raw,n){
   var arr=Array.isArray(raw)?raw:lines(raw);
   return arr.map(function(r){
@@ -1115,8 +1326,9 @@ function normRows(raw,n){
   }).filter(function(r){return r[0];});
 }
 function codeOf(x){
-  var s=String(x==null?'':x).replace(/休息/g,'R').replace(/器械/g,'M').toUpperCase();
-  var m=s.match(/[ABCMR]/);return m?m[0]:'R';
+  var s=String(x==null?'':x).replace(/休息/g,'R').toUpperCase();
+  var m=s.match(/[A-Z]/);if(!m)return 'R';
+  return state.plans[m[0]]?m[0]:'R';
 }
 function normPatchValue(f,raw){
   if(f.type==='num'){
@@ -1254,7 +1466,7 @@ function ocrPrompt(){
   return '你是一个体测报告数据提取助手。请仔细读取这张健身房身体成分报告图片，把能识别到的数值提取出来。\n'+
     '【输出格式】只输出一个 JSON 对象（不要 markdown 代码块、不要解释文字），键名和值如下，识别不到就填 null：\n'+
     '{"date":"测量日期YYYY-MM-DD","gender":"女或男","age":数字,"height":身高cm数字,"weight":体重kg数字,"bmi":数字,"bodyFat":体脂率百分数数字,"whr":腰臀比数字,"muscle":骨骼肌量kg数字,"bmr":基础代谢kcal数字,"healthScore":健康评分数字,"bodyAge":身体年龄数字}\n'+
-    '【规则】1) 只填图片里明确出现的数字，不要估算或编造；2) 体脂率填百分数（如 25.0，不是 0.275）；3) "骨骼肌"和"肌肉量"不同，优先取骨骼肌量；4) 若有多个日期，取报告测量日期；5) gender 只填"女"或"男"。';
+    '【规则】1) 只填图片里明确出现的数字，不要估算或编造；2) 体脂率填百分数（如 25，不是 0.25）；3) "骨骼肌"和"肌肉量"不同，优先取骨骼肌量；4) 若有多个日期，取报告测量日期；5) gender 只填"女"或"男"。';
 }
 function parseOcrFields(text){
   var t=String(text||'').replace(/```(?:json)?/gi,'').trim();
@@ -1401,7 +1613,7 @@ function endpoint(){
 }
 function planSnapshot(){
   var s=state,pl={};
-  ['A','B','C','M'].forEach(function(k){pl[k]={title:s.plans[k].title,sub:s.plans[k].sub,moves:s.plans[k].moves};});
+  planKeys().forEach(function(k){var q=s.plans[k];pl[k]={title:q.title,sub:q.sub,moves:q.moves};});
   return JSON.stringify({
     profile:{goal:s.profile.goal,goalFat:s.profile.goalFat,goalWhr:s.profile.goalWhr,issues:s.profile.issues},
     week:WEEKNAME.map(function(n,i){return n+':'+s.week[i];}),
@@ -1415,16 +1627,16 @@ function buildPrompt(){
   var recent=[];
   for(var i=0;i<7;i++){var dt=new Date();dt.setDate(dt.getDate()-i);var k=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');recent.push(WEEKNAME[dt.getDay()]+' 完成'+(state.checks[k]||[]).length+'项');}
   var q=document.getElementById('aiQuestion').value.trim();
-  var base='你是一位专业的女性健身与营养教练。请基于以下真实数据，用中文给出具体、可执行的建议，语气亲切，分点作答，避免泛泛而谈。\n\n【身体数据】'+p.gender+'，'+p.age+'岁，身高'+p.height+'cm，起始体重'+p.start+'kg，当前体重'+curWeight().toFixed(1)+'kg，目标'+p.goal+'kg；BMI '+p.bmi+'，体脂率'+p.bodyFat+'%，腰臀比'+p.whr+'，骨骼肌'+p.muscle+'kg，基础代谢'+p.bmr+'kcal，健康评分'+p.healthScore+'。\n【目标】体脂率→'+p.goalFat+'%，腰臀比→'+p.goalWhr+'。\n【动作问题】'+p.issues.join('；')+'。\n【饮食计划】每日'+d.cal+'kcal，蛋白'+d.protein+'g/脂肪'+d.fat+'g/碳水'+d.carb+'g，饮水'+d.water+'L。\n【近期体重】\n'+(trend||'暂无记录')+'\n【趋势洞察（由 App 计算）】'+insightText()+'\n【近7天训练打卡】'+recent.join('；')+'。\n【当前计划（JSON，供你调整）】\n'+planSnapshot()+'\n\n';
+  var base='你是一位专业的健身与营养教练。请基于以下数据，用中文给出具体、可执行的建议，语气亲切，分点作答，避免泛泛而谈。\n\n【身体数据】'+p.gender+'，'+p.age+'岁，身高'+p.height+'cm，起始体重'+p.start+'kg，当前体重'+curWeight().toFixed(1)+'kg，目标'+p.goal+'kg；BMI '+p.bmi+'，体脂率'+p.bodyFat+'%，腰臀比'+p.whr+'，骨骼肌'+p.muscle+'kg，基础代谢'+p.bmr+'kcal，健康评分'+p.healthScore+'。\n【目标】体脂率→'+p.goalFat+'%，腰臀比→'+p.goalWhr+'。\n【动作问题】'+p.issues.join('；')+'。\n【饮食计划】每日'+d.cal+'kcal，蛋白'+d.protein+'g/脂肪'+d.fat+'g/碳水'+d.carb+'g，饮水'+d.water+'L。\n【近期体重】\n'+(trend||'暂无记录')+'\n【趋势洞察（由 App 计算）】'+insightText()+'\n【近7天训练打卡】'+recent.join('；')+'。\n【当前计划（JSON，供你调整）】\n'+planSnapshot()+'\n\n';
   var task={
     comprehensive:'请综合评估当前状态，指出最需要改善的2-3点，并给出未来2周的饮食+训练整体建议。',
-    plan:'请直接给出对当前计划的调整方案：哪些地方保留、哪些地方改、为什么这样改。只使用计划的 JSON 里已经出现的动作与食物，不要引入她没学过的大动作；如确有必要新增，务必说明风险且保持轻强度。',
+    plan:'请直接给出对当前计划的调整方案：哪些地方保留、哪些地方改、为什么这样改。只使用计划的 JSON 里已经出现的动作与食物，不要引入用户没学过的大动作；如确有必要新增，务必说明风险且保持轻强度。',
     trend:'请重点分析体重变化趋势（是否平台期、速度是否合理），并给出调整建议。',
     diet:'请重点评估饮食计划是否匹配减脂塑形目标，指出可优化处并给出具体调整。',
-    train:'请重点评估训练安排（针对上交叉、骨盆前倾、髋肩卡压），给出动作与强度调整建议。',
+    train:'请重点评估训练安排的动作选择与强度，给出调整建议。',
     free:'请回答我的问题。'
   }[aiType];
-  var tail='\n\n【输出格式（必须严格遵守）】\n先写文字分析（分点、具体），然后在最后另起一行输出修改建议块。若本次不需要改计划，输出 {"changes":[]}。建议块格式严格如下：\n<<<PLAN_PATCH>>>\n{"changes":[{"target":"diet.cal","value":1550,"label":"每日热量","reason":"当前减脂速度偏慢，小幅下调热量"}]}\n<<<END_PATCH>>>\n规则：\n1) target 只能是：profile.goal / profile.goalFat / profile.goalWhr / profile.issues / week / plans.A.title / plans.A.sub / plans.A.moves / plans.B.title / plans.B.sub / plans.B.moves / plans.C.title / plans.C.sub / plans.C.moves / plans.M.title / plans.M.sub / plans.M.moves / library / diet.cal / diet.protein / diet.fat / diet.carb / diet.fiber / diet.water / diet.meals / diet.principles。\n2) value 类型：profile.goal、profile.goalFat、profile.goalWhr 和 diet.cal/protein/fat/carb/fiber/water 为数字；profile.issues、diet.principles 为字符串数组；week 为 7 个代号(A/B/C/M/R)的数组；plans.*.moves 为二维数组，每行 [动作, 组数次数, 说明]；diet.meals 为二维数组，每行 [餐次, 时间, 热量, 内容]；library 为二维数组，每行 [动作, 要点]；plans.*.title/sub 为字符串。\n3) 只列确实要改的项，未列出的保持原样；label、reason 用中文简短说明；不要输出 from 字段；不要用 markdown 代码块包住 JSON。\n\n注意：如有肩髋卡压，避免大重量复合动作；建议以保守、安全、可持续为主。';
+  var tail='\n\n【输出格式（必须严格遵守）】\n先写文字分析（分点、具体），然后在最后另起一行输出修改建议块。若本次不需要改计划，输出 {"changes":[]}。建议块格式严格如下：\n<<<PLAN_PATCH>>>\n{"changes":[{"target":"diet.cal","value":1550,"label":"每日热量","reason":"当前减脂速度偏慢，小幅下调热量"}]}\n<<<END_PATCH>>>\n规则：\n1) target 只能是：profile.goal / profile.goalFat / profile.goalWhr / profile.issues / week / plans.<方案代号>.title / plans.<方案代号>.sub / plans.<方案代号>.moves（代号以计划 JSON 中实际存在的方案为准，如 A/B/C/D）/ library / diet.cal / diet.protein / diet.fat / diet.carb / diet.fiber / diet.water / diet.meals / diet.principles。\n2) value 类型：profile.goal、profile.goalFat、profile.goalWhr 和 diet.cal/protein/fat/carb/fiber/water 为数字；profile.issues、diet.principles 为字符串数组；week 为 7 个代号(A/B/C/M/R)的数组；plans.*.moves 为二维数组，每行 [动作, 组数次数, 说明]；diet.meals 为二维数组，每行 [餐次, 时间, 热量, 内容]；library 为二维数组，每行 [动作, 要点]；plans.*.title/sub 为字符串。\n3) 只列确实要改的项，未列出的保持原样；label、reason 用中文简短说明；不要输出 from 字段；不要用 markdown 代码块包住 JSON。\n\n注意：如有疼痛或不适，避免大重量复合动作；建议以保守、安全、可持续为主。';
   return base+'【本次任务】'+task+(q?'\n【我的补充问题】'+q:'')+tail;
 }
 async function callAI(){
@@ -1564,7 +1776,7 @@ function switchSeg(name,btn){
   ['body','diet','train','log','ai'].forEach(function(n){document.getElementById('seg-'+n).style.display=n===name?'':'none';});
   btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');
 }
-function renderAll(){renderTop();renderToday();renderPlan();renderLog();renderMe();renderAITypes();renderAIHistory();renderPatch();}
+function renderAll(){PATCH_FIELDS=buildPatchFields();renderTop();renderToday();renderPlan();renderLog();renderMe();renderAITypes();renderAIHistory();renderPatch();}
 
 load();aiType=state.ai.lastType||'comprehensive';renderAll();renderAIConfig();
 document.getElementById('logDate').value=todayKey();
