@@ -16,8 +16,30 @@
 
 ---
 
+## 界面预览
+
+界面走的是**印刷台账风**：暖纸底、墨黑字、发丝线、宋体数字，只保留一个朱红强调色。以下截图均为 iPhone 尺寸下的实际界面。
+
+| 今日 | 体测 | 饮食 |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/01-today.png" width="210" alt="今日"> | <img src="docs/screenshots/02-body.png" width="210" alt="体测"> | <img src="docs/screenshots/03-diet.png" width="210" alt="饮食"> |
+| 今日方案、连续训练、动作勾选 | 身体成分、核心策略、拍照识别 | 每日营养目标与一日食谱 |
+
+| 训练 | 记录 | AI 教练 |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/04-train.png" width="210" alt="训练"> | <img src="docs/screenshots/05-log.png" width="210" alt="记录"> | <img src="docs/screenshots/06-ai.png" width="210" alt="AI 教练"> |
+| 动作库与方案 A–D | 体重概况、趋势洞察、趋势图 | 六种分析类型、流式输出 |
+
+| 我的 | 设置 | 动作选择器 |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/07-me.png" width="210" alt="我的"> | <img src="docs/screenshots/08-settings.png" width="210" alt="设置"> | <img src="docs/screenshots/09-picker.png" width="210" alt="动作选择器"> |
+| 个人档案与训练日安排 | AI 接口与数据管理 | 分类筛选、搜索、批量勾选 |
+
+---
+
 ## 目录
 
+- [界面预览](#界面预览)
 - [界面地图](#界面地图)
 - [功能详解](#功能详解)
   - [今日：今天的训练与打卡](#今日今天的训练与打卡)
