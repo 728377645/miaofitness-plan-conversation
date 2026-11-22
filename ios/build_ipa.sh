@@ -87,6 +87,7 @@ echo "Xcode: $(xcodebuild -version | head -1)"
 if [[ -z "$TEAM_ID" ]]; then
   echo "[1/4] 编译 Release (arm64, CODE_SIGNING_ALLOWED=NO) ..."
   rm -rf "$OUT" "$BUILD/FitnessPlan.build"
+  mkdir -p "$BUILD"
   xcodebuild -project "$PROJECT" -target "$TARGET" \
     -configuration "$CONFIG" -sdk iphoneos \
     CODE_SIGNING_ALLOWED=NO \

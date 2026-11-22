@@ -43,6 +43,8 @@
 .
 ├── README.md
 ├── conversation-data.json        # 脱敏后的会话导出记录
+├── .github/workflows/
+│   └── build-ios.yml             # macOS runner 自动构建 IPA
 ├── android/
 │   ├── AndroidManifest.xml
 │   ├── src/                      # WebView 壳 Activity
@@ -62,12 +64,18 @@
 从本仓库 Releases 下载 `fitness-plan-v1.1.apk`，在 Android 5.0（API 21）及以上设备安装。首次安装需允许安装未知来源应用。APK 为自签名，包名 `com.fitnessplan.app`，与 v1.0 使用同一签名，可直接覆盖升级。
 
 ### iOS
-`ios/` 目录为完整 Xcode 工程。在 macOS + Xcode 环境下打开 `ios/FitnessPlan.xcodeproj` 即可编译，或在 `ios/` 目录运行 `./build_ipa.sh` 生成 IPA。当前 Releases 提供的是 iOS 源码工程；可访问文件中没有已编译的 IPA 二进制，因此未附带 IPA 安装包。
+Releases 提供 `fitness-plan-v1.1.ipa`，由 GitHub Actions 的 macOS runner 构建，版本 1.1（build 2），arm64，ad-hoc 签名。`ios/` 目录同时提供完整 Xcode 工程，可在 macOS + Xcode 下打开 `ios/FitnessPlan.xcodeproj` 编译，或运行 `ios/build_ipa.sh` 出包。
+
+ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltStore 配合免费 Apple ID 重签名，或用 Xcode 登录免费账号后直接 ▶ Run。
 
 ## 从源码构建
 
 - Android：需要 JDK 21、Android SDK（platform android-34、build-tools 35.0.0）。按本机环境设置 `ANDROID_SDK_ROOT` / `JAVA_HOME` 后运行 `python android/build_apk.py`。
 - iOS：macOS + Xcode，运行 `ios/build_ipa.sh`。
+
+## GitHub Actions 自动出包
+
+`.github/workflows/build-ios.yml` 在 `macos-latest` runner 上运行 `ios/build_ipa.sh`，生成 `FitnessPlan.ipa` 并上传为 artifact。可在 Actions 页手动触发，也会随 `ios/` 变更自动执行。私有仓库若遇到 macOS runner 不可用，可在公开仓库运行同一工作流，再把 IPA 附加到本仓库 Release。
 
 ## 隐私说明
 
