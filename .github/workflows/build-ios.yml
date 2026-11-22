@@ -12,6 +12,12 @@ permissions:
   contents: read
 
 jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner check
+        run: echo "ubuntu runner ok"
+
   build-ios:
     runs-on: macos-14
     timeout-minutes: 30
