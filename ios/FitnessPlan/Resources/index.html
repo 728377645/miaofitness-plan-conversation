@@ -709,7 +709,7 @@ function delPlan(k){
 }
 var AI_TYPES=[['comprehensive','综合评估'],['plan','计划调整'],['trend','体重趋势'],['diet','饮食调整'],['train','训练调整'],['free','自由提问']];
 var WEEKNAME=['周日','周一','周二','周三','周四','周五','周六'];
-var state,modalCb=null,aiAbort=null,aiType='comprehensive',aiLast='',aiPatch=null,chartRange='all',lastDeleted=null;
+var state,modalCb=null,aiAbort=null,aiType='comprehensive',aiLast='',aiLastQ='',aiPatch=null,chartRange='all',lastDeleted=null;
 var ocrImage=null,ocrFields=null,ocrBusy=false;
 
 function clone(o){return JSON.parse(JSON.stringify(o));}
@@ -1430,7 +1430,7 @@ function renderAIHistory(){
       +'<button class="hf" onclick="event.stopPropagation();fillFromHistory('+idx+')">一键填写'+(cnt?' ('+cnt+')':'')+'</button></span></div>';
   }).join(''):'<div class="empty">还没有分析记录</div>';
 }
-function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析，可点「一键填写」');}}
+function viewHistory(i){var h=state.ai.history[i];if(h){document.getElementById('aiOut').textContent=h.answer;aiLast=h.answer;aiLastQ=h.q||'';aiPatch=h.patch?{changes:clone(h.patch.changes)}:null;renderPatch();toast('已载入历史分析，可点「一键填写」');}}
 
 function getPath(path){return path.split('.').reduce(function(o,k){return o[k];},state);}
 function setPath(path,v){var ps=path.split('.'),o=state;for(var i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=v;}
@@ -1934,6 +1934,8 @@ async function callAI(){
 }
 async function aiGenerate(){
   var out=document.getElementById('aiOut'),btn=document.getElementById('aiGen'),stop=document.getElementById('aiStop');
+  var qEl=document.getElementById('aiQuestion');
+  aiLastQ=qEl?qEl.value.trim():'';
   out.innerHTML='<span class="cursor"></span>';btn.disabled=true;stop.style.display='';
   aiPatch=null;renderPatch();
   var full='';
@@ -1964,6 +1966,8 @@ async function aiGenerate(){
       var text=full.split('<<<PLAN_PATCH>>>')[0].trim();
       out.textContent=text||'（AI 未返回文字分析，请查看下方的计划修改建议）';
       aiPatch=extractPatch(full);renderPatch();
+      // 本轮问答已完成：清空输入框，问题本身已存入 aiLastQ，保存历史时不会丢
+      clearQuestion();
       toast(aiPatch?('分析完成，生成 '+aiPatch.changes.length+' 条修改建议'):'分析完成');
     }
   }catch(e){
@@ -1972,11 +1976,19 @@ async function aiGenerate(){
   }finally{btn.disabled=false;stop.style.display='none';aiAbort=null;}
 }
 function aiStop(){if(aiAbort)aiAbort.abort();}
+function clearQuestion(){
+  var el=document.getElementById('aiQuestion');
+  if(!el)return;
+  el.value='';
+  if(el.blur)el.blur();
+}
 function copyAI(){var t=document.getElementById('aiOut').textContent;if(!t)return toast('暂无内容');if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){toast('已复制');},function(){toast('复制失败，请长按选择');});else toast('请长按选择复制');}
 function saveAI(){
   var t=document.getElementById('aiOut').textContent;
   if(!t||t.indexOf('请求失败：')===0)return toast('暂无可保存的分析');
-  var q=document.getElementById('aiQuestion').value.trim(),changes=[];
+  // 输入框在生成成功后会清空，历史里记录的是当时真正提问的那一句
+  var qEl=document.getElementById('aiQuestion');
+  var q=aiLastQ||(qEl?qEl.value.trim():''),changes=[];
   if(aiPatch&&aiPatch._valid)changes=aiPatch._valid.map(function(x){var c=clone(x.c);c.value=clone(x.v);return c;});
   state.ai.history.push({type:aiType,q:q,answer:t,time:new Date().toLocaleString('zh-CN'),patch:changes.length?{changes:changes}:null});
   if(state.ai.history.length>30)state.ai.history.shift();save();renderAIHistory();toast('已存入历史（含建议）');
