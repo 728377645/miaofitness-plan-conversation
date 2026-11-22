@@ -75,7 +75,7 @@ ad-hoc 签名包不能直接安装到未越狱 iPhone：可用 Sideloadly / AltS
 
 ## GitHub Actions 自动出包
 
-`.github/workflows/build-ios.yml` 在 `macos-latest` runner 上运行 `ios/build_ipa.sh`，生成 `FitnessPlan.ipa` 并上传为 artifact。可在 Actions 页手动触发，也会随 `ios/` 变更自动执行。私有仓库若遇到 macOS runner 不可用，可在公开仓库运行同一工作流，再把 IPA 附加到本仓库 Release。
+`.github/workflows/build-ios.yml` 在 `macos-latest` runner 上运行 `ios/build_ipa.sh`，生成 `FitnessPlan.ipa` 并上传为 artifact。可在 Actions 页手动触发，也会随 `ios/` 变更自动执行。当前账号下 `macos-14` 标签会因无法分配 runner 而立即取消，工作流统一使用 `macos-latest`。
 
 ## 隐私说明
 
